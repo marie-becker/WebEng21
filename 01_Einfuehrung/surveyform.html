@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Survey Form</title>
+    <style>
+        body {
+            background: #b2d6d1;
+            text-align: center;
+            font-family: "Ubuntu", sans-serif;
+        }
+
+        .row {
+            position: static;
+            display: block;
+        }
+
+        .left {
+            display: inline-block;
+            text-align: right;
+            width: 45%;
+            padding-right: 1em;
+            padding-bottom: 2em;
+
+        }
+
+        .right {
+            display: inline-block;
+            text-align: left;
+            width: 45%;
+            padding-left: 1em;
+            padding-bottom: 2em;
+        }
+
+        .right div div label {
+            vertical-align: middle;
+
+        }
+
+        .right div div input {
+            vertical-align: middle;
+        }
+
+        input {
+            height: 20px;
+        }
+
+        input[type=radio] {
+            border-radius: 0;
+        }
+
+        select {
+            height: 25px;
+        }
+
+        .form {
+            padding-top: 1em;
+            margin-left: 2em;
+            margin-right: 2em;
+            background: white;
+        }
+
+    </style>
+</head>
+<body>
+<h1>Survey Form</h1>
+<div class="form">
+    <p>Let us know how we can improve freeCodeCamp!</p><br>
+    <form>
+        <div class="row">
+            <div class="left">
+                <label for="name">* Name:</label>
+            </div>
+            <div class="right">
+                <input id="name" placeholder="Enter your name" type="text">
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="left">
+                <label for="email">* Email:</label>
+            </div>
+            <div class="right">
+                <input id="email" placeholder="Enter your Email" type="text">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="left">
+                <label for="age">* Age:</label>
+            </div>
+            <div class="right">
+                <input id="age" placeholder="Age" type="number">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="left" style="vertical-align: top">
+                <label for="role">Which option best describes your current role?</label>
+            </div>
+            <div class="right">
+                <select id="role">
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div id="radio">
+                <div class="left" style="vertical-align: top">
+                    <label for="radio">* How likely is that you would recommend <br> freeCodeCamp to a friend?</label>
+                </div>
+                <div class="right">
+                    <div style="display: block">
+                        <div>
+                            <input id="def" name="recommend" type="radio">
+                            <label for="def">Definitely</label><br>
+                        </div>
+                        <div>
+                            <input id="maybe" name="recommend" type="radio">
+                            <label for="maybe">Maybe</label><br>
+                        </div>
+                        <div>
+                            <input id="unsure" name="recommend" type="radio">
+                            <label for="unsure">Not Sure</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="left">
+                <label for="fcc">What do you like most in FCC:
+                </label>
+            </div>
+            <div class="right">
+                <select id="fcc">
+                    <option disabled hidden selected value="">Select an option</option>
+                    <option value="challenges">Code Challenges</option>
+                    <option value="yt">YouTube-Tutorials</option>
+                    <option value="community">Community</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="left" style="vertical-align: top">
+                <label for="radio2">Things that should be improved in the future
+                    <br>(Check all that apply):</label>
+            </div>
+            <div class="right">
+                <div id="radio2" style="">
+                    <div>
+                        <input id="frontend" type="checkbox">
+                        <label for="frontend">Front-end Projects</label><br>
+                    </div>
+                    <div>
+                        <input id="backend" type="checkbox">
+                        <label for="backend">Back-end Projects</label><br>
+                    </div>
+                    <div>
+                        <input id="data" type="checkbox">
+                        <label for="data">Data Visualization</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+</body>
+</html>

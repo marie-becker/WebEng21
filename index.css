@@ -1,0 +1,108 @@
+/* Sidebar taken from W3Schools https://www.w3schools.com/howto/howto_css_fixed_sidebar.asp ; Changed slightly */
+
+/* The sidebar menu */
+.sidenav {
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    width: 160px; /* Set the width of the sidebar */
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: #022431; /* Black */
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 20px;
+}
+
+/* The navigation menu links */
+.sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #d3d3d3;
+;
+    display: block;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+    color: #31abec;
+}
+
+/* Style page content */
+.main {
+    margin-left: 160px; /* Same as the width of the sidebar */
+    padding: 0px 10px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+
+/* Styles for foldout accordion design by Vladimir Simović
+ https://www.perun.net/2021/04/08/akkordeon-effekt-nur-mit-html/
+ https://codepen.io/vladimir-simovic/pen/OJWONJr
+ Partly customized */
+
+details {
+    background: #022431;
+    border: 1px solid #666;
+    border-radius: 3px;
+    margin-bottom: 1.5rem;
+}
+
+linkdetails{
+    background: #022431;
+    border: 1px solid transparent;
+}
+
+summary {
+    background: #1f4560;
+    color: #d3d3d3;
+    cursor: pointer;
+    padding: 1rem;
+}
+
+.akkordeon-inhalt {
+    padding: 1rem 1rem 1px 1rem;
+}
+
+/* Der verzögerungseffekt */
+details[open] summary ~ * {
+    animation: sweep .7s ease-in-out;
+}
+
+linkdetails[open] summary ~ *  {
+    animation: sweep .7s ease-in-out;
+
+}
+linkdetails summary::marker{
+    color: white;
+    font-size: 1.5em;
+}
+
+@keyframes sweep {
+    0% {
+        opacity: 0;
+        margin-left: -20px
+    }
+    100% {
+        opacity: 1;
+        margin-left: 0
+    }
+}
+
+/* Own styles */
+a{
+    color: #d3d3d3;
+    text-decoration: none;
+    display: block;
+}
+
+body{
+    padding: 2rem;
+    font-family: Tisa, sans-serif;
+    background: #394146;
+    color: #d3d3d3;
+}

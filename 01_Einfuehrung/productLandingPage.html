@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Landing Page</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Economica&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+
+        html {
+            height: 100%;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Open Sans", sans-serif;
+            height: 100%;
+            overflow: hidden;
+            background: #ebeae6;
+        }
+
+        .header {
+            background: #363636;
+            text-align: center;
+            color: #dcdbdb;
+            height: 3em;
+            vertical-align: central;
+            line-height: 3em;
+            position: sticky;
+            font-weight: bold;
+        }
+
+        .header span {
+            padding: 1em;
+        }
+
+        h1 {
+            text-align: center;
+            font-family: Roboto, sans-serif;
+            font-weight: bold;
+        }
+
+        .main {
+            height: calc(100% - 350px);
+            display: flex;
+        }
+
+        .footer {
+            background: #011826;
+            text-align: center;
+            color: white;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+
+        }
+
+        button {
+            background: #f88e37;
+            color: white;
+            border-radius: 8px;
+            border: none;
+            height: 2em;
+            font-family: "Economica", sans-serif;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        img {
+            border: 1px solid black;
+            border-radius: 10px;
+            height: 100%;
+        }
+
+        p{
+            padding-bottom: 2em;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+<div class="header">
+    <span>The book series</span>
+    <span>Testimonials</span>
+    <span>The Author</span>
+    <span>Free resources</span>
+</div>
+<h1>You don't know JavaScript</h1>
+
+<div class="main">
+    <div style="display: inline-block; width: 49%;  text-align: center;">
+        <img alt="Picture of a book named You don't know JS, Complete Series by Kyle Simpson" src="https://kaul.inf.h-brs.de/wem/assets/img/landing-img.png">
+    </div>
+
+    <div style="display: inline-block; width: 49%;  text-align: center; align-content: center">
+        <p style="padding-top: 3em">Don't just drift through Javascript.</p>
+        <p>Understand how Javascript works</p>
+        <p>Start your journey through the bumpy side of Javascript.</p>
+        <button style="width: 40%;">ORDER YOUR COPY NOW</button>
+    </div>
+</div>
+
+<div class="footer">
+    <p style="margin-bottom: 0; margin-top: 4em; padding-bottom: 1em;">The first ebook in the book series is absolutely
+        free.</p>
+    <button style="margin-bottom: 2em; width: 50%">FIND OUT MORE ABOUT THIS OFFER</button>
+</div>
+</body>
+</html>
