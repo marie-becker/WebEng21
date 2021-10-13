@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Landing Page Grid</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Economica&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            font-family: "Open Sans", sans-serif;
+            margin: 0;
+            height: 100vh;
+            width: 100vw;
+            display: grid;
+            grid-template-rows: 0.5fr 7fr 2.5fr;
+            grid-template-areas:
+                "nav"
+                "main"
+                "footi";
+        }
+
+        button {
+            background: #f88e37;
+            color: white;
+            border-radius: 8px;
+            border: none;
+            font-family: "Economica", sans-serif;
+            font-size: 3vh;
+            font-weight: bold;
+            width: 50%;
+        }
+
+        .main {
+            grid-area: main;
+            display: grid;
+            height: 70vh;
+            grid-template-columns: 50% 50%;
+            grid-template-rows: 5vh 65vh;
+            grid-template-areas: "heading heading" "pic text";
+            text-align: center;
+            background: #ebeae6;
+
+        }
+
+        nav {
+            grid-area: nav;
+            background: #363636;
+            text-align: center;
+            color: #dcdbdb;
+            font-weight: bold;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+
+        }
+
+        nav span {
+            display: inline-block;
+            padding: 0 1em;
+        }
+
+        footer {
+            grid-area: footi;
+            background: #011826;
+            text-align: center;
+            color: white;
+            padding-top: 3em;
+            font-size: 2vh;
+        }
+
+        .pic {
+            grid-area: pic;
+            vertical-align: middle;
+        }
+
+        .pic>img{
+            max-height: 90%;
+            max-width: 90%;
+            border: 1px solid black;
+            border-radius: 10px;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .text {
+            padding-top: 3em;
+            grid-area: text;
+        }
+
+        h1 {
+            text-align: center;
+            font-family: Roboto, sans-serif;
+            font-weight: bold;
+            grid-area: heading;
+            margin: 0;
+            font-size: 4vh;
+
+        }
+
+        .text p {
+            font-weight: bold;
+            padding-bottom: 2em;
+            font-size: 2vh;
+        }
+
+        /* mid-size devices like tablets <= 800px
+            works without adjustements */
+
+
+        /* small devices like smartphones <= 500px */
+        @media screen and (max-width: 500px) {
+            h1{
+                font-size: 1.5em;
+            }
+
+            nav span {
+                display: block;
+                position: static;
+                top: auto;
+                transform: none;
+            }
+
+            .main{
+                grid-template-columns: 100%;
+                grid-template-rows: 10% 50% 40%;
+                grid-template-areas: "heading" "pic" "text";
+
+            }
+            .text p{
+                padding: 0;
+                font-size: 0.8em;
+            }
+            .text{
+                padding: 0;
+            }
+            button{
+                font-size: 1em;
+            }
+            footer{
+                padding: 0;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+<nav>
+    <span>The book series</span>
+    <span>Testimonials</span>
+    <span>The Author</span>
+    <span>Free resources</span>
+</nav>
+
+
+<div class="main">
+    <h1>You don't know JavaScript</h1>
+    <div class="pic">
+        <img alt="Picture of a book named You don't know JS, Complete Series by Kyle Simpson"
+             src="https://kaul.inf.h-brs.de/wem/assets/img/landing-img.png">
+    </div>
+
+    <div class="text">
+        <p>Don't just drift through Javascript.</p>
+        <p>Understand how Javascript works</p>
+        <p>Start your journey through the bumpy side of Javascript.</p>
+        <button>ORDER YOUR COPY NOW</button>
+    </div>
+</div>
+
+
+<footer>
+    <p>The first ebook in the book series is absolutely
+        free.</p>
+    <button>FIND OUT MORE ABOUT THIS OFFER</button>
+</footer>
+</body>
+</html>
