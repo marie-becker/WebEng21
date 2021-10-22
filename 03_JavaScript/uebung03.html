@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>03 JavaScript</title>
+    <link href="../index.css" rel="stylesheet">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/311699e670.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/monokai-sublime.min.css"
+          rel="stylesheet">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+    <script>hljs.configure({languages: ['javascript']})</script>
+    <script>hljs.highlightAll();</script>
+    <style>
+        pre {
+            margin: 0;
+        }
+
+        pre code.hljs {
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="sidenav">
+    <a href="../01_Einfuehrung/uebung01.html">Übung 01</a>
+    <a href="../02_RWD/uebung02.html">Übung 02</a>
+    <a href="uebung03.html">Übung 03</a>
+</div>
+<div class="main">
+    <h1>Übung 03 - JavaScript</h1>
+
+    <details>
+        <summary>3.1 Funktionen in JavaScript</summary>
+        <div class="akkordeon-inhalt">
+            <details>
+                <summary>Schreiben Sie eine Funktion <b>identity_function()</b>, die ein Argument als Parameter entgegen
+                    nimmt
+                    und eine Funktion zurück gibt, die dieses Argument zurück gibt.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+    function identity_function(param){
+        return function(){
+            return param;
+        }
+    }
+
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Schreiben Sie eine Addier-Funktion addf(), so dass addf(x)(y) genau x + y zurück gibt.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+    function addf(x){
+        return function(y){
+            return x+y;
+        }
+    }
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Schreiben Sie eine Funktion applyf(), die aus einer binären Funktion wie add(x,y) eine Funktion
+                    addfberechnet, die mit zwei Aufrufen das gleiche Ergebnis liefert.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+    function applyf(f){
+        return function(x){
+            return function(y){
+                return f(x,y);
+            }
+        }
+    }
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Schreiben Sie eine Funktion curry(), die eine binäre Funktion und ein Argument
+                    nimmt, um daraus eine Funktion zu erzeugen, die ein zweites Argument entgegen nimmt.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+    function curry(f, arg){
+        return function (argtwo){
+            return f(arg, argtwo)
+        }
+    }
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Erzeugen Sie die inc-Funktion mit Hilfe einer der Funktionen addf, applyf und curry aus den
+                    letzten Aufgaben, ohne die Funktion inc() selbst zu implementieren.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+    // Version 1
+    function inc1(arg){
+        return addf(arg)(1);
+    }
+    // Version 2
+    function inc2(arg){
+        return applyf(add)(arg)(1);
+    }
+    // Version 3
+    function inc3(arg){
+        return curry(add, arg)(1);
+    }
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Schreiben Sie eine Funktion methodize(), die eine binäre Funktion (z.B. add, mul) in eine unäre
+                    Methode verwandelt. Nach Number.prototype.add = methodize(add); soll (3).add(4) genau 7 ergeben.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+    function methodize(f){
+        return function(x){
+            return f(this,x)
+        }
+    }
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Schreiben Sie eine Funktion demethodize(), die eine unäre Methode (z.B. add, mul) in eine
+                    binäre Funktion umwandelt. demethodize(Number.prototype.add)(5, 6) soll 11 ergeben.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+    function demethodize(f){
+        return function(x, y){
+            return f.call(x,y);
+        }
+    }
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Schreiben Sie eine Funktion twice(), die eine binäre Funktion in eine unäre Funktion umwandelt,
+                    die den einen Parameter zweimal weiter reicht.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+function twice(f){
+    return function(x){
+        return f(x,x);
+    }
+}
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Schreiben Sie eine Funktion composeu(), die zwei unäre Funktionen in eine einzelne unäre
+                    Funktion transformiert, die beide nacheinander aufruft.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+    function composeu(f1, f2){
+        return function(x){
+            return f2(f1(x));
+        }
+    }
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Schreiben Sie eine Funktion composeb(), die zwei binäre Funktionen in eine einzelne Funktion
+                    transformiert, die beide nacheinander aufruft.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+    function composeb(f1, f2){
+        return function(x,y,z){
+            return f2(f1(x,y),z);
+        }
+    }
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Schreiben Sie eine Funktion once(), die einer anderen Funktion nur einmal erlaubt, aufgerufen
+                    zu werden.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+    function once(func) {
+        return function () {
+            var f = func;
+            func = null;
+            return f.apply(this, arguments);
+        };
+    }
+                        </code>
+                    </pre>
+                </div>
+            </details>
+        </div>
+    </details>
+
+    <details>
+        <summary>3.2 Advanced Functional JavaScript Programming</summary>
+        <div class="akkordeon-inhalt">
+            <details>
+                <summary>Make a function that makes a publish/subscribe object. It will reliably deliver all
+                    publications to all subscribers in the right order.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+    function pubsub(){
+        var subs = []
+        return {
+            subscribe: function (f){
+                subs.push(f);
+            },
+            publish: function (arg){
+                for(let s of subs){
+                    s(arg);
+                }
+            }
+        }
+    }
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Make a factory that makes functions that generate unique symbols.</summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+    function gensymf(sym) {
+        var counter = 0;
+        return function () {
+            counter = counter + 1;
+            return `${sym}${counter - 1}`;
+        }
+    }
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Make a function that returns a function that will return the next fibonacci number.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+    function fibonaccif(x, y) {
+        return function() {
+            var next = x;
+            x = y;
+            y += next;
+            return next;
+        }
+    }
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>
+                    Write a function that adds from many invocations, until it sees an empty invocation.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+    function addg(a){
+        if(!a){
+            return undefined;
+        }
+        return function plus(b){
+            if(!b){
+                return a;
+            }
+            if(b){
+                a += b;
+                return plus;
+            }
+        }
+    }
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Write a function that will take a binary function and apply it to many invocations.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+    function applyg(f) {
+        return function (a) {
+            if (!a) return a;
+
+            return function cont(b) {
+                if (!b) return a;
+                a = f(a, b);
+                return cont;
+            }
+        }
+    }
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Write a function m that takes a value and an optional source string and returns them in an object.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+    function m(value, source){
+        return {"value": value, "source": (source || value).toString()};
+    }
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Write a function addm that takes two m objects and returns an m object.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+    function addm(m1, m2){
+        return m(m1.value+m2.value, m1.source + m2.source);
+    }
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Write a function binarymf that takes a binary function and a string and returns a function that acts on m objects.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Modify function binarymf so that the functions it produces can accept arguments that are either numbers or m objects.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Write function unarymf, which is like binarymf except that it acts on unary functions.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Write a function that takes the lengths of two sides of a triangle and computes the length of the hypotenuse. (Hint: c2 = a2 + b2)
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Write a function that evaluates array expressions.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Make a function that stores a value in a variable.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Make a function that takes a binary function, two functions that provide operands, and a function that takes the result.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Make a function that takes a unary function, and returns a function that takes an argument and a callback.
+                </summary>
+                <div class="akkordeon-inhalt">
+                    <pre>
+                        <code>
+
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Make a function that takes a binary function, and returns a function that takes two arguments and a callback.
+                </summary>
+                <div class="akkordeon-inhalt">
+
+                </div>
+            </details>
+        </div>
+    </details>
+
+</div>
+
+</body>
+</html>
