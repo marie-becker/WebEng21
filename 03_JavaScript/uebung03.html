@@ -362,7 +362,11 @@ function twice(f){
                 <div class="akkordeon-inhalt">
                     <pre>
                         <code>
-
+    function binarymf(f, s) {
+        return function (m1, m2) {
+            return m(f(m1.value, m2.value), `(${m1.value}${s}${m2.value})`);
+        }
+    }
                         </code>
                     </pre>
                 </div>
@@ -373,7 +377,15 @@ function twice(f){
                 <div class="akkordeon-inhalt">
                     <pre>
                         <code>
-
+    function binarymf2(f, s){
+        return function(m1, m2){
+            if(m1.value){
+                return m(f(m1.value, m2.value), `(${m1.value}${s}${m2.value})`);
+            }else{
+                return m(f(m1,m2), `(${m1}${s}${m2})`);
+            }
+        }
+    }
                         </code>
                     </pre>
                 </div>
@@ -384,7 +396,11 @@ function twice(f){
                 <div class="akkordeon-inhalt">
                     <pre>
                         <code>
-
+    function unarymf(f, s){
+        return function(a){
+            return m(f(a), `(${s} ${a})`);
+        }
+    }
                         </code>
                     </pre>
                 </div>
