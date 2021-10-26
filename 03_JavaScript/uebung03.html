@@ -331,7 +331,8 @@ function twice(f){
                 </div>
             </details>
             <details>
-                <summary>Write a function m that takes a value and an optional source string and returns them in an object.
+                <summary>Write a function m that takes a value and an optional source string and returns them in an
+                    object.
                 </summary>
                 <div class="akkordeon-inhalt">
                     <pre>
@@ -357,7 +358,8 @@ function twice(f){
                 </div>
             </details>
             <details>
-                <summary>Write a function binarymf that takes a binary function and a string and returns a function that acts on m objects.
+                <summary>Write a function binarymf that takes a binary function and a string and returns a function that
+                    acts on m objects.
                 </summary>
                 <div class="akkordeon-inhalt">
                     <pre>
@@ -372,7 +374,8 @@ function twice(f){
                 </div>
             </details>
             <details>
-                <summary>Modify function binarymf so that the functions it produces can accept arguments that are either numbers or m objects.
+                <summary>Modify function binarymf so that the functions it produces can accept arguments that are either
+                    numbers or m objects.
                 </summary>
                 <div class="akkordeon-inhalt">
                     <pre>
@@ -406,12 +409,15 @@ function twice(f){
                 </div>
             </details>
             <details>
-                <summary>Write a function that takes the lengths of two sides of a triangle and computes the length of the hypotenuse. (Hint: c2 = a2 + b2)
+                <summary>Write a function that takes the lengths of two sides of a triangle and computes the length of
+                    the hypotenuse. (Hint: c2 = a2 + b2)
                 </summary>
                 <div class="akkordeon-inhalt">
                     <pre>
                         <code>
-
+function hyp(a, b) {
+    return Math.sqrt(square(a) + square(b));
+}
                         </code>
                     </pre>
                 </div>
@@ -422,7 +428,32 @@ function twice(f){
                 <div class="akkordeon-inhalt">
                     <pre>
                         <code>
-
+    function exp(arr) {
+        function iter(subarr){
+            for(let i in subarr){
+                if(subarr[i] instanceof Array){
+                    subarr[i] = iter(subarr[i]);
+                }else{
+                    if(typeof subarr[1] === "number"){
+                        return calc(subarr);
+                    }
+                }
+            }
+            return subarr;
+        }
+        function calc(arri){
+            if(arri.length === 2){
+                return arri[0](arri[1]);
+            }
+            if(arri.length === 3){
+                return arri[0](arri[1], arri[2]);
+            }
+        }
+        while(arr.some(e => e instanceof Array)){
+            iter(arr);
+        }
+        return calc(arr);
+    }
                         </code>
                     </pre>
                 </div>
@@ -433,38 +464,57 @@ function twice(f){
                 <div class="akkordeon-inhalt">
                     <pre>
                         <code>
-
+    function store(n) {
+        variable = n;
+    }
                         </code>
                     </pre>
                 </div>
             </details>
             <details>
-                <summary>Make a function that takes a binary function, two functions that provide operands, and a function that takes the result.
+                <summary>Make a function that takes a binary function, two functions that provide operands, and a
+                    function that takes the result.
                 </summary>
                 <div class="akkordeon-inhalt">
                     <pre>
                         <code>
-
+    function quatre(binary, op1, op2, res){
+        res(binary(op1, op2));
+    }
                         </code>
                     </pre>
                 </div>
             </details>
             <details>
-                <summary>Make a function that takes a unary function, and returns a function that takes an argument and a callback.
+                <summary>Make a function that takes a unary function, and returns a function that takes an argument and
+                    a callback.
                 </summary>
                 <div class="akkordeon-inhalt">
                     <pre>
                         <code>
-
+    function unaryc(unary){
+        return function (arg, cb){
+            cb(unary(arg));
+        }
+    }
                         </code>
                     </pre>
                 </div>
             </details>
             <details>
-                <summary>Make a function that takes a binary function, and returns a function that takes two arguments and a callback.
+                <summary>Make a function that takes a binary function, and returns a function that takes two arguments
+                    and a callback.
                 </summary>
                 <div class="akkordeon-inhalt">
-
+                    <pre>
+                        <code>
+    function binaryc(binary){
+        return function (a, b, cb){
+            cb(binary(a,b));
+        }
+    }
+                        </code>
+                    </pre>
                 </div>
             </details>
         </div>
