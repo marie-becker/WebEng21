@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tabellenkalkulation</title>
+    <script src="tabellenkalkulation.js"></script>
+    <style>
+        table, td {
+            border: 1px solid black;
+        }
+
+        table {
+            width: 25%;
+            border-collapse: collapse;
+        }
+
+        td {
+            width: 50%;
+            height: 16px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<h1>Tabellenkalkulation mit contentEditable</h1>
+<p>Mögliche Funktionen: sum, sub, mul, div nach dem Schema =SUM(A2,B2)</p>
+<h3>Wie groß soll die Tabelle sein?</h3>
+<label for="reihen">Reihen: </label><input id="reihen" min="1" required type="number">
+<button onclick="createTable()" type="submit">Erstelle Tabelle</button>
+<br><br>
+<div id="tablewrapper"></div>
+</body>
+</html>
