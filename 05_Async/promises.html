@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Promises</title>
+    <script>
+        fetch('https://www2.inf.h-brs.de/~mbeck32s/A.txt')
+        .then(response => response.text())
+        .then(a => {
+            fetch('https://www2.inf.h-brs.de/~mbeck32s/B.txt')
+            .then(resb => resb.text())
+            .then(b => {
+                let arra = a.split('\r');
+                let arrb = b.split('\r');
+                const interleave = ([ x, ...xs ], ys = []) =>
+                    x === undefined
+                        ? ys                             // base: no x
+                        : [ x, ...interleave (ys, xs) ]  // inductive: some x
+                const text = interleave(arra, arrb);
+                document.getElementById("text").innerHTML = text.join('<br />');
+            })
+                .catch(error => console.log(error))
+        })
+        .catch(error => console.log(error))
+    </script>
+</head>
+<body>
+<p style="text-align: center" id="text"></p>
+</body>
+</html>

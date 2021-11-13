@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Worker</title>
+    <style>
+        div {
+            width: 100%;
+            height: 4em;
+        }
+
+        #container {
+            background-color: lightgrey;
+        }
+
+        #animate {
+            background-color: yellow;
+        }
+    </style>
+
+</head>
+<body>
+<div id="container">
+    <div id="animate"></div>
+</div>
+<div id="prime" style="overflow-wrap: break-word"></div>
+</body>
+<script>
+    function anim() {
+        const animate = document.getElementById("animate");
+        let width = 1;
+        let animation = requestAnimationFrame(step);
+
+        function step() {
+            width += 1;
+            if (width === 100) width = 1; // repeat
+            animate.style.width = width + '%';
+            animation = requestAnimationFrame(step);
+        }
+    }
+
+    anim();
+    const worker = new Worker('primeWorker.js')
+    worker.postMessage('letsgo');
+    worker.onmessage = function (event){
+        document.getElementById("prime").innerHTML = event.data;
+    }
+</script>
+</html>

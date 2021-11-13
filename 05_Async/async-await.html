@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Async/Await</title>
+    <script>
+        async function mixTexts() {
+            const [a, b] = await Promise.all([
+                fetch('https://www2.inf.h-brs.de/~mbeck32s/A.txt'),
+                fetch('https://www2.inf.h-brs.de/~mbeck32s/B.txt')
+            ]);
+            let arra = (await a.text()).split('\r');
+            let arrb = (await b.text()).split('\r');
+            const interleave = ([x, ...xs], ys = []) =>
+                x === undefined
+                    ? ys                             // base: no x
+                    : [x, ...interleave(ys, xs)]  // inductive: some x
+            const text = interleave(arra, arrb);
+            document.getElementById("text").innerHTML = text.join('<br />');
+        }
+        mixTexts();
+    </script>
+</head>
+<body>
+<p id="text" style="text-align: center"></p>
+</body>
+</html>

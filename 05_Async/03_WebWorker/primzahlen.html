@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!--suppress InfiniteLoopJS -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Primzahlen</title>
+    <style>
+        div {
+            width: 100%;
+            height: 4em;
+        }
+
+        #container {
+            background-color: lightgrey;
+        }
+
+        #animate {
+            background-color: yellow;
+        }
+    </style>
+
+</head>
+<body>
+<div id="container">
+    <div id="animate"></div>
+</div>
+<div id="prime" style="overflow-wrap: break-word"></div>
+</body>
+<script>
+
+    function fib(max) {
+        let cache = [];
+        /*
+        Endlosschleife:
+        let i = 0;
+        for (;;){
+         */
+        for (let i = 0; i < max ; i++) {
+            if (i === 0 || i === 1) {
+                cache.push(BigInt(i));
+                document.getElementById("prime").innerText = "Index: " + i + " Fibonacci: " + i;
+                continue;
+            }
+            const next = cache[cache.length - 2] + cache[cache.length - 1];
+            cache.push(next);
+            console.log("Index: " + i + " Fibonacci: " + next);
+            document.getElementById("prime").innerText = "Index: " + i + " Fibonacci: " + next;
+        }
+    }
+
+    function anim() {
+        const animate = document.getElementById("animate");
+        let width = 1;
+        let animation = requestAnimationFrame(step);
+
+        function step() {
+            width += 1;
+            if (width === 100) width = 1; // repeat
+            animate.style.width = width + '%';
+            animation = requestAnimationFrame(step);
+        }
+    }
+    anim();
+    setTimeout(function (){
+        // fib()
+        fib(10000);
+    }, 3000);
+
+</script>
+</html>

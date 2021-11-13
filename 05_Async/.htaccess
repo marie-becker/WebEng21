@@ -1,0 +1,4 @@
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Methods "GET, OPTIONS"
+Header set Access-Control-Allow-Headers "content-type"
+Header set Referrer-Policy "no-referrer"
