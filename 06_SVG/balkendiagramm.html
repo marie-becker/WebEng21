@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Statistik-Balkendiagramm in SVG</title>
+    <style>
+        .bar{
+            animation-name: barAnim;
+            animation-duration: 1.5s;
+            animation-iteration-count: 1;
+            animation-timing-function: ease;
+            animation-play-state: running;
+        }
+        @keyframes barAnim {
+            0%{
+                width: 0;
+            }
+        }
+    </style>
+
+</head>
+<body>
+<h2>Die 736 Sitze des 20. Deutschen Bundestages verteilen sich wie folgt:</h2>
+<svg height="500" id="dia" width="600" xmlns="http://www.w3.org/2000/svg">
+    <line x1="99" y1="25" x2="99" y2="240" stroke-width="2" stroke="#85adad" /><text x="95" y="260">0</text>
+    <line x1="200" y1="25" x2="200" y2="240" stroke-width="2" stroke="#85adad" /><text x="192" y="260">50</text>
+    <line x1="300" y1="25" x2="300" y2="240" stroke-width="2" stroke="#85adad" /><text x="288" y="260">100</text>
+    <line x1="400" y1="25" x2="400" y2="240" stroke-width="2" stroke="#85adad" /><text x="388" y="260">150</text>
+    <line x1="500" y1="25" x2="500" y2="240" stroke-width="2" stroke="#85adad" /><text x="488" y="260">200</text>
+    <text font-family='Arial' font-size="12" x="350" y="280">Sitze im deutschen Parlament</text>
+</svg>
+</body>
+<script>
+    let data = {
+        "spd": {
+            name: "SPD",
+            sitze: 206,
+            color: "red"
+        },
+        "cdu/cdsu": {
+            name: "CDU/CSU",
+            sitze: 197,
+            color: "black"
+        },
+        gruen:{
+            name: "Die Grünen",
+            sitze: 118,
+            color: "green",
+        },
+        fdp:{
+            name: "FDP",
+            sitze: 92,
+            color: "yellow",
+        },
+        afd:{
+            name: "AfD",
+            sitze: 82,
+            color: "#4d2600",
+        },
+        linke:{
+            name: "Die Linke",
+            sitze: 39,
+            color: "#e60e98",
+        },
+        franktionslos:{
+            name: "franktionslos",
+            sitze: 2,
+            color: "grey"
+        }
+    }
+    let stat= document.getElementById("dia");
+    let y = 35;
+    for (let d in data) {
+        stat.innerHTML += `
+                <text font-family='Arial' font-size='14' x='10' y=${y+15}>${data[d].name}</text>
+                <rect class="bar" onmouseover="highlight(this);" onmouseout="reversehighlight()" fill='${data[d].color}' height='20' width='${data[d].sitze*2}' x='100' y='${y}'/>
+                <text font-family='Arial' font-size='12' font-weight="bold" x='${110+data[d].sitze*2 }' y='${y+15}'>${data[d].sitze}</text>
+
+            `
+        y +=30;
+    }
+    function reversehighlight(el){
+        const rects = document.getElementById("dia").getElementsByTagName('rect');
+        for(let rect of rects){
+            if (rect.id !== "bg") rect.style.opacity = 1.0;
+        }
+    }
+
+    function highlight(el){
+       const rects = document.getElementById("dia").getElementsByTagName('rect');
+       for(let rect of rects){
+           if (rect.id !== "bg") rect.style.opacity = 0.5;
+       }
+       el.style.opacity = 1.0;
+    }
+</script>
+</html>

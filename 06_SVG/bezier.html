@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" style="width:100%;height:100%;">
+<head>
+    <meta charset="UTF-8">
+    <title>Quadratic Bézier</title>
+    <style>
+        .draggable {
+            cursor: move;
+        }
+
+        .static {
+            cursor: not-allowed;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+
+            draw();
+            for (const draggable of document.querySelectorAll('.draggable')) {
+                makeDraggable(draggable);
+            }
+        }
+
+// Draggable functionality by Peter Collingridge https://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/
+
+        function makeDraggable(elem) {
+            elem.addEventListener('mousedown', startDrag);
+            elem.addEventListener('mousemove', drag);
+            elem.addEventListener('mouseup', endDrag);
+            elem.addEventListener('mouseleave', endDrag);
+
+            let selectedElement, offset;
+
+            function startDrag(evt) {
+                console.log("drag")
+                if (evt.target.classList.contains('draggable')) {
+                    selectedElement = evt.target;
+                    offset = getMousePosition(evt);
+                    offset.x -= parseFloat(selectedElement.getAttribute("cx"));
+                    offset.y -= parseFloat(selectedElement.getAttribute("cy"));
+                }
+            }
+
+
+            function drag(evt) {
+                if (selectedElement) {
+                    evt.preventDefault();
+                    var coord = getMousePosition(evt);
+                    selectedElement.setAttribute("cx", coord.x - offset.x);
+                    selectedElement.setAttribute("cy", coord.y - offset.y);
+                }
+                draw();
+            }
+
+            function endDrag(evt) {
+                selectedElement = null;
+                draw();
+            }
+
+            function getMousePosition(evt) {
+                const CTM = svg.getScreenCTM();
+                return {
+                    x: (evt.clientX - CTM.e) / CTM.a,
+                    y: (evt.clientY - CTM.f) / CTM.d
+                };
+            }
+        }
+
+        function draw() {
+            const green = document.getElementById('green');
+            const blue = document.getElementById('blue');
+            const red = document.getElementById('red');
+            let path = `M${red.getAttribute("cx")},${red.getAttribute("cy")} L${green.getAttribute("cx")},${green.getAttribute("cy")} L${blue.getAttribute("cx")},${blue.getAttribute("cy")} M${red.getAttribute("cx")},${red.getAttribute("cy")} Q${green.getAttribute("cx")},${green.getAttribute("cy")} ${blue.getAttribute("cx")},${blue.getAttribute("cy")}`
+            document.getElementById("lines").innerHTML = `<path class="static" d="${path}" stroke="black" stroke-width="3" fill="none"/>`
+        }
+
+    </script>
+</head>
+<body style="width:100%;height:100%;margin:0;"
+<svg height="100%" id="svg" style="margin-left: auto; margin-right: auto; display: block;" width="100%">
+    <circle class="draggable" cx="220" cy="60" fill="blue" id="blue" r="20"></circle>
+    <circle class="draggable" cx="102" cy="233" fill="red" id="red" r="20"></circle>
+    <circle class="draggable" cx="50" cy="110" fill="green" id="green" r="20"></circle>
+    <g id="lines">
+    </g>
+</svg>
+></body>
+</html>
