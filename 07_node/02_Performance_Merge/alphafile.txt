@@ -1,0 +1,10 @@
+Eins
+Zwei
+Drei
+Vier
+Fünf
+Sechs
+Sieben
+Acht
+Neun
+Zehn
