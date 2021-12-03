@@ -1,0 +1,50 @@
+<script type="module">
+    import {LitElement, html, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
+
+    customElements.define('menu-comp', class extends LitElement {
+        constructor() {
+            super();
+            this.listelements = [];
+            this.alignment = "";
+            this.buttonstyle = "";
+        }
+
+        static get properties() {
+            return {
+                listelements: {type: JSON},
+                alignment: {type: String},
+                buttonstyle: {type: String}
+            }
+        }
+
+        static get styles() {
+            return css`
+              button {
+                background-color: #6a709f;
+                color: black;
+                border-top-color: white;
+                border-left-color: white;
+                border-bottom-color: #9a9a9a;
+                border-right-color: #9a9a9a;
+                border-radius: 20px;
+                font-weight: bold;
+                padding: 0.3em 2em;
+                margin: 1em;
+              }
+
+              button:hover {
+                background-color: antiquewhite;
+              }`
+        }
+
+        render() {
+            return html`
+                ${JSON.parse(this.listelements).map((e) => html`
+                    <button style="display:${this.alignment}; margin: 10px">${e}</button>`)}
+            `
+        }
+
+    })
+</script>
+<menu-comp alignment="block"  listelements='["item_1", "item_2", "item_3"]'></menu-comp>
+

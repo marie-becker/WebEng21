@@ -1,0 +1,45 @@
+<script type="module">
+    import { render, html } from 'https://unpkg.com/lit-html?module';
+    class ShoppingList extends HTMLElement {
+        constructor(){
+            super();
+            let liste = [];
+            const addItem = () => {
+                let item = document.getElementById('item').value
+                if(item !== ""){
+                    liste.push(item);
+                    document.getElementById('item').value = "";
+                    render( this.template(), this );
+                }
+            }
+            const clearall = () =>{
+                liste = [];
+                render( this.template(), this );
+            }
+
+            const myKeyup = (ev) => {
+                if (ev.key === "Enter") {
+                    addItem();
+                    document.getElementById('item').value = "";
+                }
+            }
+            const deleteItem = (parent) => {
+                liste.splice(parent, 1)
+                render( this.template(), this );
+
+            }
+
+
+            this.template = () => html`<h1>Einkaufsliste</h1>
+<label for="item">Enter a new item: </label><input id="item" type="text" @keyup="${e => myKeyup(e)}">
+<button id="add" @click="${addItem}">Add item</button>
+<button id="clear" @click="${clearall}">Clear all</button>
+<ul id="liste">${liste.map(((i, index) => html`<li id="${index}">${i}&nbsp;<button @click="${() => deleteItem(index)}">Delete</button></li>`))}</ul>`;
+        }
+        connectedCallback(){
+            render( this.template(), this );
+        }
+    }
+    customElements.define('shopping-list', ShoppingList);
+</script>
+<shopping-list></shopping-list>

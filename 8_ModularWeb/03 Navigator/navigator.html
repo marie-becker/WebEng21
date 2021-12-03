@@ -1,0 +1,221 @@
+<script type="module">
+
+    import {LitElement, html, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
+
+    customElements.define('footer-comp', class extends LitElement {
+        constructor() {
+            super();
+        }
+
+        static get styles() {
+            return css`footer {
+              background: black;
+            }`
+        }
+
+        render() {
+            return html`
+                <footer>
+                    <span style="font-size: 30px">Footer:</span>
+                    <a href="">Sitemap</a>
+                    <a href="">Home</a>
+                    <a href="">News</a>
+                    <a href="">Contact</a>
+                    <a href="">About</a></footer>
+            `;
+        }
+
+    })
+</script>
+<script type="module">
+    import {LitElement, html, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
+
+    customElements.define('header-comp', class extends LitElement {
+        constructor() {
+            super();
+        }
+
+        static get styles() {
+            return css`
+              header {
+                background-color: #c14f4f;
+                text-align: left;
+              }
+
+              h1 {
+                text-align: center;
+                margin: 0;
+              }
+
+              button {
+                background-color: #6a709f;
+                color: black;
+                border-top-color: white;
+                border-left-color: white;
+                border-bottom-color: #9a9a9a;
+                border-right-color: #9a9a9a;
+                border-radius: 20px;
+                font-weight: bold;
+                padding: 0.3em 2em;
+                margin: 1em;
+              }
+
+              button:hover {
+                background-color: antiquewhite;
+              }`
+        }
+
+        render() {
+            return html`
+                <header>
+                    <h1>WWW-Navigator</h1>
+                    <button id='html' @click="${() => topnav('html')}">HTML</button>
+                    <button id='css' @click="${() => topnav('css')}">CSS</button>
+                    <button id='javascript' @click="${() => topnav('javascript')}">JavaScript</button>
+                    <button>Other</button>
+                </header>`
+        }
+    })
+</script>
+<script type="module">
+    import {LitElement, html, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
+
+    customElements.define('content-comp', class extends LitElement {
+        constructor() {
+            super();
+        }
+
+        static get styles() {
+            return css`
+              .content {
+                display: flex;
+                flex-direction: column;
+                overflow-y: auto;
+                height: 100vh;
+              }
+
+              .left-sidebar {
+                background-color: #c28281;
+              }
+
+              .left-sidebar button {
+                display: block;
+              }
+
+
+              .right-sidebar {
+                text-align: left;
+                background-color: #c28281;
+              }
+
+              .container {
+                display: flex;
+                width: 100%;
+                flex-direction: column;
+                height: 100vh;
+              }
+
+              main {
+                background-color: #6a9ebd;
+                font-size: 1.5rem;
+                color: black;
+              }
+
+              main a {
+                font-size: 1.5rem;
+                color: black;
+              }
+
+              button {
+                background-color: #6a709f;
+                color: black;
+                border-top-color: white;
+                border-left-color: white;
+                border-bottom-color: #9a9a9a;
+                border-right-color: #9a9a9a;
+                border-radius: 20px;
+                font-weight: bold;
+                padding: 0.3em 2em;
+                margin: 1em;
+              }
+
+              button:hover {
+                background-color: antiquewhite;
+              }
+
+
+              a {
+                color: white;
+                font-size: small;
+              }
+
+              @media all and (min-width: 768px) {
+                .content {
+                  flex-direction: row;
+                  flex-wrap: wrap;
+                }
+
+                main {
+                  flex: 5;
+                  order: 2;
+                }
+
+                .left-sidebar {
+                  order: 1;
+                  flex: 1;
+                  font-size: 2em;
+                }
+
+                .right-sidebar {
+                  flex: 1;
+                  order: 3;
+                  font-size: 2em;
+
+                }
+              }`
+        }
+
+        render() {
+            return html`
+                <content class="content">
+                    <aside class="left-sidebar" style="display: block">
+                    </aside>
+                    <main id="main">
+                    </main>
+                    <aside class="right-sidebar">
+                        <h6>External resources:</h6>
+                        <div id="urls"></div>
+                    </aside>
+                </content>`
+        }
+    })
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WWW Navigator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            color: white;
+            text-align: center;
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <header-comp></header-comp>
+    <content-comp></content-comp>
+    <footer-comp></footer-comp>
+</div>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<script type="module">
+    import {render, html} from 'https://unpkg.com/lit-html?module';
+
+    class Rednerliste extends HTMLElement {
+        constructor() {
+            super();
+            let liste = [];
+            let starttime;
+            let elapsedtime = 0;
+            let timerinterval;
+            let running;
+            const timeToString = (time) => {
+                let diffInHrs = time / 3600000;
+                let hh = Math.floor(diffInHrs);
+
+                let diffInMin = (diffInHrs - hh) * 60;
+                let mm = Math.floor(diffInMin);
+
+                let diffInSec = (diffInMin - mm) * 60;
+                let ss = Math.floor(diffInSec);
+
+                let diffInMs = (diffInSec - ss) * 100;
+                let ms = Math.floor(diffInMs);
+
+                let formattedMM = mm.toString().padStart(2, "0");
+                let formattedSS = ss.toString().padStart(2, "0");
+                let formattedMS = ms.toString().padStart(2, "0");
+
+                return `${formattedMM}:${formattedSS}:${formattedMS}`;
+            }
+            const start = (id) => {
+                if (running !== undefined) {
+                    stop(running);
+                }
+                running = id;
+                starttime = Date.now() - liste[id].time;
+                timerinterval = setInterval(function printtime() {
+                    elapsedtime = Date.now() - starttime;
+                    document.getElementById(id).innerHTML = timeToString(elapsedtime)
+                }, 10);
+
+                const btn = document.getElementById(id).nextElementSibling;
+                btn.style.display = "none";
+                btn.nextElementSibling.style.display = "inline";
+            }
+            const stop = (id) => {
+                console.log("stop", document.getElementById(id).nextElementSibling)
+                clearInterval(timerinterval);
+                liste[id].time = elapsedtime;
+                const btn = document.getElementById(id).nextElementSibling;
+                btn.style.display = "inline";
+                btn.nextElementSibling.style.display = "none";
+            }
+            const addItem = async () => {
+                console.log("addItem")
+                let redner = {name: document.getElementById('item').value, time: 0}
+                liste.push(redner);
+                document.getElementById('item').value = "";
+                if (liste.length !== 0) {
+                    if (running !== undefined) {
+                        stop(running);
+                    }
+                    console.log(this);
+
+                    render(this.template(), this);
+                    console.log("nach rendern")
+                    start(liste.length - 1);
+                }
+            }
+            const clearall = () => {
+                if(running !== undefined){
+                    stop(running);
+                    running = undefined;
+                }
+                liste = [];
+                render(this.template(), this)
+            }
+
+            const myKeyup = (ev) => {
+                if (ev.key === "Enter") {
+                    addItem();
+                    document.getElementById('item').value = "";
+                }
+            }
+
+            this.template = () => html`<h1>Rednerliste</h1>
+            <label for="item">Neuer Redner </label><input id="item" @keyup="${ev => myKeyup(ev)}" type="text">
+            <button @click="${addItem}">Add item</button>
+            <button @click="${clearall}">Clear all</button>
+            <ul id="liste">
+                ${liste.map(((i, index) => html`
+                    <li>${i.name}&nbsp;<span id="${index}">${timeToString(i.time)}</span>
+                        <button @click="${() => start(index)}">Start!</button>
+                        <button @click="${() => stop(index)}" style="display: none">Stop!</button>
+                    </li>`))}
+            </ul>`;
+        }
+
+        connectedCallback() {
+            render(this.template(), this);
+        }
+    }
+    customElements.define('redner-liste', Rednerliste);
+</script>
+<redner-liste></redner-liste>

@@ -1,0 +1,82 @@
+<script type="module">
+    import {html, render} from 'https://unpkg.com/lit-html?module';
+
+    class TabellenCalc extends HTMLElement {
+        constructor() {
+            super();
+            let formula;
+
+            const createTable = () => {
+                var reihen = document.getElementById("reihen").value;
+                let itemtemplates = [];
+                for (let i = 1; i <= reihen; i++) {
+                    itemtemplates.push(html`<tr><td>${toAbc(i)} = </td><td contenteditable="true" id="${toAbc(i)}2" @blur="${() => calc(false)}"></td>`);
+                }
+                itemtemplates.push(html`<tr><td>Sum = </td><td contenteditable="true" id="sumfield" @blur="${() => calc(true)}"></td></tr>`);
+                this.tablehtml = () => html`<table id="table">${itemtemplates}</table>`
+                render(this.tablehtml(), document.getElementById("tablewrapper"))
+
+                calc();
+            }
+
+            const calc = (b) => {
+                if (b) formula = document.getElementById("sumfield").innerHTML.toLowerCase();
+                if (formula) {
+                    const f = formula.slice(1, 4);
+                    const z = parseInt(document.getElementById(formula.slice(5, 7)).innerHTML);
+                    const w = parseInt(document.getElementById(formula.slice(8, 10)).innerHTML);
+                    document.getElementById("sumfield").innerHTML = eval(f)(z, w);
+                }
+            }
+
+            const toAbc = (i) => {
+                return ((i % 26) + 9).toString(36);
+            }
+
+            const sum = (x, y) =>{
+                return x + y;
+            }
+            const mul = (x, y) => {
+                return x * y;
+            }
+            const sub = (x, y) => {
+                return x - y;
+            }
+            const div = (x, y) => {
+                return x / y;
+            }
+
+
+            this.template = () => html`<h1>Tabellenkalkulation mit contentEditable</h1>
+            <p>Moegliche Funktionen: sum, sub, mul, div nach dem Schema =SUM(A2,B2)</p>
+            <h3>Wie gross soll die Tabelle sein?</h3>
+            <label for="reihen">Reihen: </label><input id="reihen" min="1" required type="number">
+            <button @click="${createTable}" type="submit">Erstelle Tabelle</button>
+            <br><br>
+            <div id="tablewrapper"></div>`;
+        }
+
+        connectedCallback() {
+            render(this.template(), this);
+        }
+    }
+
+    customElements.define('tabellen-comp', TabellenCalc);
+</script>
+<style>
+    table, td {
+        border: 1px solid black;
+    }
+
+    table {
+        width: 25%;
+        border-collapse: collapse;
+    }
+
+    td {
+        width: 50%;
+        height: 16px;
+        text-align: right;
+    }
+</style>
+<tabellen-comp style="width: 100%"></tabellen-comp>
