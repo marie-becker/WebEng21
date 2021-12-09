@@ -1,0 +1,22 @@
+{
+  "name": "09_PWA",
+  "short_name": "PWA",
+  "description": "Progressive Web App for Master's Web Engineering",
+  "icons": [
+    {
+      "src": "/../images/512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+        {
+          "src": "/../images/maskable_icon.png",
+          "sizes": "196x196",
+          "type": "image/png",
+          "purpose": "any maskable"
+        }
+  ],
+  "start_url": "/",
+  "display": "fullscreen",
+  "theme_color": "#6a9ebd",
+  "background_color": "#764ABC"
+}

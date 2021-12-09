@@ -1,0 +1,9 @@
+{
+  "name": "WebEng1",
+  "version": "1.0.0",
+  "dependencies": {
+    "express": "^4.17.1",
+    "lit": "^2.0.2",
+    "lit-element": "^3.0.2"
+  }
+}

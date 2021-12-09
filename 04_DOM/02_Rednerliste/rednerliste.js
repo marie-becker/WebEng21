@@ -16,30 +16,30 @@ function additem() {
     liste.push(redner);
     document.getElementById('item').value = "";
     renderlist();
-    start(liste.length-1);
+    start(liste.length - 1);
 }
 
 function renderlist() {
-    if(liste.length != 0){
-    if(running != undefined){
-        stop(running);
-    }
-    let str = '<ul id="renderedlist">';
-    let counter = 0;
-    liste.forEach(function (l) {
-        str += `<li>${l.name} ` + `<span id="${counter}">${timeToString(l.time)}</span>` +
-            ` <button onclick="start(${counter})">Start!</button>` +
-            ` <button onclick="stop(${counter})" style="display: none">Stop!</button>` +
-            '</li>';
-        counter++;
-    });
-    str += '</ul>';
-    document.getElementById("liste").innerHTML = str;
+    if (liste.length !== 0) {
+        if (running !== undefined) {
+            stop(running);
+        }
+        let str = '<ul id="renderedlist">';
+        let counter = 0;
+        liste.forEach(function (l) {
+            str += `<li>${l.name} ` + `<span id="${counter}">${timeToString(l.time)}</span>` +
+                ` <button onclick="start(${counter})">Start!</button>` +
+                ` <button onclick="stop(${counter})" style="display: none">Stop!</button>` +
+                '</li>';
+            counter++;
+        });
+        str += '</ul>';
+        document.getElementById("liste").innerHTML = str;
     }
 }
 
 function clearall() {
-    if(running != undefined){
+    if (running !== undefined) {
         stop(running);
         running = undefined;
     }
@@ -48,7 +48,7 @@ function clearall() {
 }
 
 function start(id) {
-    if(running != undefined){
+    if (running !== undefined) {
         stop(running);
     }
     running = id;

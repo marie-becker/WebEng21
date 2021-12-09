@@ -13,7 +13,10 @@ function createTable() {
 }
 
 function calc(b) {
+    console.log(formula)
     if(b) formula = document.getElementById("sumfield").innerHTML.toLowerCase();
+    console.log(formula.slice(5,7))
+
     var f = formula.slice(1,4)
     var z = parseInt(document.getElementById(formula.slice(5,7)).innerHTML);
     var w = parseInt(document.getElementById(formula.slice(8,10)).innerHTML);

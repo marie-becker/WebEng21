@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WWW Navigator</title>
+  <link rel="manifest" href="/js/pwa.webmanifest">
+  <link rel="apple-touch-icon" href="/images/192.png">
+  <meta name="theme-color" content="#6a709f"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script>
+    let content;
+    let selectedTop;
+    let t;
+    let selectedLeft;
+
+    async function getContent() {
+      fetch('https://www2.inf.h-brs.de/~mbeck32s/navigator_contents.json')
+              .then(res => res.json())
+              .then((js) => {
+                content = js;
+                selectedTop = js['html'];
+                selectedLeft = Object.keys(selectedTop)[0];
+                const urlParams = new URLSearchParams(window.location.search);
+                const top = urlParams.get('top');
+                const left = urlParams.get('left');
+                if(top !== null) topnav(top);
+                if(left !== null) sidenav(left);
+              })
+
+    }
+
+    getContent();
+
+    function sidenav(title) {
+      const btns = document.getElementsByClassName('left-sidebar')[0].getElementsByTagName('button');
+      for (let i of btns) {
+        i.style.backgroundColor = '#6a709f'
+      }
+      document.getElementById(`${title}`).style.backgroundColor = 'antiquewhite'
+      selectedLeft = content[t][title];
+      document.getElementById("main").innerHTML = selectedLeft.content;
+      document.getElementById("urls").innerHTML = "";
+      for (let el of selectedLeft.references) {
+        document.getElementById("urls").innerHTML += `<a style="overflow-wrap: anywhere" href="${el}">${el}</a>`;
+      }
+      setLinks();
+
+    }
+
+
+    function topnav(title) {
+      const btns = document.getElementsByTagName('header')[0].getElementsByTagName('button');
+      for (let i of btns) {
+        i.style.backgroundColor = '#6a709f'
+      }
+      document.getElementById(`${title}`).style.backgroundColor = 'antiquewhite'
+      t = title;
+      selectedTop = content[title.toLowerCase()]
+      document.getElementsByClassName('left-sidebar')[0].innerHTML = "";
+      for (let el in selectedTop) {
+        if (el !== 'basics') document.getElementsByClassName('left-sidebar')[0].innerHTML += `<button id="${el}" onclick="sidenav('${el}')">${el}</button>`
+      }
+      document.getElementById("main").innerHTML = content[t].basics.content;
+      document.getElementById("urls").innerHTML = "";
+
+      for (let el of content[t].basics.references) {
+        document.getElementById("urls").innerHTML += `<a style="overflow-wrap: anywhere" href="${el}">${el}</a>`;
+      }
+      setLinks();
+    }
+
+    function setLinks() {
+      let links = document.getElementById("main").getElementsByTagName("a");
+      for (let a of links) {
+        if (a.innerText.toLowerCase() === 'html' || a.innerText.toLowerCase() === 'css' || a.innerText.toLowerCase() ==='javascript') {
+          a.href = window.location.href.split('?')[0] + '?top=' + a.innerText.toLowerCase();
+          continue;
+        }
+        a.href = window.location.href.split('?')[0] + '?top=' + t + '&left=' + a.innerText.toLowerCase();
+      }
+    }
+  </script>
+  <style>
+    * {
+      box-sizing: border-box;
+      padding: 0;
+      margin: 0;
+    }
+
+    body {
+      color: white;
+      text-align: center;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #c14f4f;
+      text-align: left;
+
+    }
+
+    main {
+      background-color: #6a9ebd;
+      font-size: 1.5rem;
+      color: black;
+    }
+    main a{
+      font-size: 1.5rem;
+      color: black;
+    }
+
+    footer {
+      background: black;
+    }
+
+    .left-sidebar {
+      background-color: #c28281;
+      display: flex;
+      flex-wrap: wrap;
+
+    }
+
+    .right-sidebar {
+      text-align: left;
+      background-color: #c28281;
+    }
+
+    .container {
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      height: 100vh;
+    }
+
+    button {
+      background-color: #6a709f;
+      color: black;
+      border-top-color: white;
+      border-left-color: white;
+      border-bottom-color: #9a9a9a;
+      border-right-color: #9a9a9a;
+      border-radius: 20px;
+      font-weight: bold;
+      padding: 0.3em 2em;
+      margin: 1em;
+    }
+
+    button:hover {
+      background-color: antiquewhite;
+    }
+
+    .left-sidebar button {
+      display: block;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 0;
+    }
+
+    a {
+      color: white;
+      font-size: small;
+    }
+
+    @media all and (min-width: 768px) {
+      .content {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
+      main {
+        flex: 5;
+        order: 2;
+      }
+
+      .left-sidebar {
+        order: 1;
+        flex: 1;
+        display: block;
+        font-size: 2em;
+      }
+
+      .right-sidebar {
+        flex: 1;
+        order: 3;
+        font-size: 2em;
+
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+  <header>
+    <h1>WWW-Navigator</h1>
+    <button id='html' onclick="topnav('html')">HTML</button>
+    <button id='css' onclick="topnav('css')">CSS</button>
+    <button id='javascript' onclick="topnav('javascript')">JavaScript</button>
+    <button>Other</button>
+  </header>
+  <div class="content">
+    <aside class="left-sidebar">
+    </aside>
+    <main id="main">
+    </main>
+    <aside class="right-sidebar">
+      <h6>External resources:</h6>
+      <div id="urls"></div>
+    </aside>
+  </div>
+  <footer>
+    <span style="font-size: 30px">Footer:</span>
+    <a href="">Sitemap</a>
+    <a href="">Home</a>
+    <a href="">News</a>
+    <a href="">Contact</a>
+    <a href="">About</a>
+  </footer>
+</div>
+<script src="/js/pwa.js"></script>
+</body>
+</html>
