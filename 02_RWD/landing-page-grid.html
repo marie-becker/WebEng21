@@ -79,7 +79,7 @@
             vertical-align: middle;
         }
 
-        .pic>img{
+        .pic > img {
             max-height: 90%;
             max-width: 90%;
             border: 1px solid black;
@@ -110,13 +110,9 @@
             font-size: 2vh;
         }
 
-        /* mid-size devices like tablets <= 800px
-            works without adjustements */
-
-
         /* small devices like smartphones <= 500px */
         @media screen and (max-width: 500px) {
-            h1{
+            h1 {
                 font-size: 1.5em;
             }
 
@@ -127,23 +123,27 @@
                 transform: none;
             }
 
-            .main{
+            .main {
                 grid-template-columns: 100%;
                 grid-template-rows: 10% 50% 40%;
                 grid-template-areas: "heading" "pic" "text";
 
             }
-            .text p{
+
+            .text p {
                 padding: 0;
                 font-size: 0.8em;
             }
-            .text{
+
+            .text {
                 padding: 0;
             }
-            button{
+
+            button {
                 font-size: 1em;
             }
-            footer{
+
+            footer {
                 padding: 0;
             }
         }

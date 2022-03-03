@@ -4,7 +4,7 @@ const number = process.argv[process.argv.length -1]
 let text = "";
 
 for (let i = 1; i <= number; i++) {
-    text += numberToLetters(i) + "\n"
+    text += numbersToLetters(i) + "\n"
 }
 text = text.substring(0, text.length-1);
 
@@ -13,7 +13,9 @@ fs.writeFile('alphafile.txt', text, function (err) {
     console.log('Saved!');
 });
 
-function numberToLetters(number) {
+// function numbersToLetters from Flambino on Stackexchange
+// https://codereview.stackexchange.com/a/16129
+function numbersToLetters(number) {
     let baseChar = ("A").charCodeAt(0),
         letters = "";
     do {

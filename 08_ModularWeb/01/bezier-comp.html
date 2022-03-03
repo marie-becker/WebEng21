@@ -2,73 +2,9 @@
 
     import {LitElement, svg, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
 
-    function makeDraggable(elem) {
-        elem.addEventListener('mousedown', startDrag);
-        elem.addEventListener('mousemove', drag);
-        elem.addEventListener('mouseup', endDrag);
-        elem.addEventListener('mouseleave', endDrag);
-
-        let selectedElement, offset;
-
-        function startDrag(evt) {
-            console.log("drag")
-            if (evt.target.classList.contains('draggable')) {
-                selectedElement = evt.target;
-                offset = getMousePosition(evt);
-                offset.x -= parseFloat(selectedElement.getAttribute("cx"));
-                offset.y -= parseFloat(selectedElement.getAttribute("cy"));
-            }
-        }
-
-
-        function drag(evt) {
-            if (selectedElement) {
-                evt.preventDefault();
-                var coord = getMousePosition(evt);
-                selectedElement.setAttribute("cx", coord.x - offset.x);
-                selectedElement.setAttribute("cy", coord.y - offset.y);
-            }
-            draw();
-        }
-
-        function endDrag(evt) {
-            selectedElement = null;
-            draw();
-        }
-
-        function getMousePosition(evt) {
-            const CTM = svg.getScreenCTM();
-            return {
-                x: (evt.clientX - CTM.e) / CTM.a,
-                y: (evt.clientY - CTM.f) / CTM.d
-            };
-        }
-    }
-
-    function draw() {
-        const green = this.getElementById('green');
-        const blue = this.getElementById('blue');
-        const red = this.getElementById('red');
-        let path = `M${red.getAttribute("cx")},${red.getAttribute("cy")} L${green.getAttribute("cx")},${green.getAttribute("cy")} L${blue.getAttribute("cx")},${blue.getAttribute("cy")} M${red.getAttribute("cx")},${red.getAttribute("cy")} Q${green.getAttribute("cx")},${green.getAttribute("cy")} ${blue.getAttribute("cx")},${blue.getAttribute("cy")}`
-        document.getElementById("lines").innerHTML = `<path class="static" d="${path}" stroke="black" stroke-width="3" fill="none"/>`
-    }
-
-    customElements.define('statistik-comp', class extends LitElement {
+    customElements.define('bezier-comp', class extends LitElement {
         constructor() {
             super();
-            this.render()
-            draw();
-            for (const draggable of document.querySelectorAll('.draggable')) {
-                makeDraggable(draggable);
-            }
-
-        }
-
-        static get properties() {
-            return {
-                data: {type: Object},
-                y: {type: Number}
-            }
         }
 
         static get styles() {
@@ -82,19 +18,65 @@
               }`
         }
 
-
         render() {
             return svg`<svg height="100%" id="svg" style="margin-left: auto; margin-right: auto; display: block;" width="100%">
-    <circle class="draggable" cx="220" cy="60" fill="blue" id="blue" r="20"></circle>
-    <circle class="draggable" cx="102" cy="233" fill="red" id="red" r="20"></circle>
-    <circle class="draggable" cx="50" cy="110" fill="green" id="green" r="20"></circle>
+    <circle class="draggable" cx="220" cy="60" fill="blue" id="blue" r="20"
+    @mousedown="${evt => {this.startDrag(evt)}}" @mousemove="${evt => {this.drag(evt)}}" @mouseup="${_ => {this.endDrag()}}" @mouseleave="${_ => {this.endDrag()}}"></circle>
+    <circle class="draggable" cx="102" cy="233" fill="red" id="red" r="20"
+        @mousedown="${evt => {this.startDrag(evt)}}" @mousemove="${evt => {this.drag(evt)}}" @mouseup="${_ => {this.endDrag()}}" @mouseleave="${_ => {this.endDrag()}}"></circle>
+    <circle class="draggable" cx="50" cy="110" fill="green" id="green" r="20"
+        @mousedown="${evt => {this.startDrag(evt)}}" @mousemove="${evt => {this.drag(evt)}}" @mouseup="${_ => {this.endDrag()}}" @mouseleave="${_ => {this.endDrag()}}"></circle>
     <g id="lines">
     </g>
-</svg>`;
+    </svg>`;
+        }
+
+        updated(){
+            this.draw();
+        }
+
+        draw() {
+            const green = this.shadowRoot.getElementById('green');
+            const blue = this.shadowRoot.getElementById('blue');
+            const red = this.shadowRoot.getElementById('red');
+            let path = `M${red.getAttribute("cx")},${red.getAttribute("cy")} L${green.getAttribute("cx")},${green.getAttribute("cy")} L${blue.getAttribute("cx")},${blue.getAttribute("cy")} M${red.getAttribute("cx")},${red.getAttribute("cy")} Q${green.getAttribute("cx")},${green.getAttribute("cy")} ${blue.getAttribute("cx")},${blue.getAttribute("cy")}`
+            this.shadowRoot.getElementById("lines").innerHTML = `<path class="static" d="${path}" stroke="black" stroke-width="3" fill="none"/>`
+        }
+
+        selectedElement; offset;
+
+        startDrag(evt) {
+            console.log("drag")
+            if (evt.target.classList.contains('draggable')) {
+                this.selectedElement = evt.target;
+                this.offset = this.getMousePosition(evt);
+                this.offset.x -= parseFloat(this.selectedElement.getAttribute("cx"));
+                this.offset.y -= parseFloat(this.selectedElement.getAttribute("cy"));
+            }
+        }
+
+        drag(evt) {
+            console.log("drag")
+            if (this.selectedElement) {
+                evt.preventDefault();
+                const coord = this.getMousePosition(evt);
+                this.selectedElement.setAttribute("cx", coord.x - this.offset.x);
+                this.selectedElement.setAttribute("cy", coord.y - this.offset.y);
+            }
+            this.draw();
+        }
+
+        endDrag(evt) {
+            this.selectedElement = null;
+            this.draw();
+        }
+
+        getMousePosition(evt) {
+            const CTM = this.shadowRoot.querySelector('svg').getScreenCTM();
+            return {
+                x: (evt.clientX - CTM.e) / CTM.a,
+                y: (evt.clientY - CTM.f) / CTM.d
+            };
         }
     })
-
-    const demo = document.createElement('statistik-comp');
-    document.body.appendChild(demo);
-
 </script>

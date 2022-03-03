@@ -1,3 +1,5 @@
+/* timeToString() and some parts in start() and stop() from Osmar Benseddik on
+https://tinloof.com/blog/how-to-build-a-stopwatch-with-html-css-js-react-part-2 */
 let liste = [];
 let starttime;
 let elapsedtime = 0;

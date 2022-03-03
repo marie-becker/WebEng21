@@ -15,7 +15,9 @@ function addlisteners() {
 function addColorListener(){
     document.querySelectorAll('.toolbar input').forEach(el => {
         el.addEventListener('change', function (){
+            console.log("change")
             var command = this.dataset.command;
+            console.log(command);
             if (command == 'forecolor' || command == 'backcolor') {
                 document.execCommand(command, false, this.value);
             }

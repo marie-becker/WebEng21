@@ -1,49 +1,41 @@
 const fs = require("fs");
 
-const myArgs = process.argv.slice(2);
-let fileA = myArgs[0];
-let fileB = myArgs[1];
+const files = process.argv.slice(2);
 
-const fileName = fs.createWriteStream('Test.txt');
-let content = '';
+console.time("merge")
 
+const stream1 = fs.createReadStream(files[0], "utf8");
+const stream2 = fs.createReadStream(files[1], "utf8");
 
-const stream1 = fs.createReadStream(fileA, "utf8");
-const stream2 = fs.createReadStream(fileB, "utf8");
+const lines1 = [], lines2 = [];
 
-// Source: Vorlesung 'Node & npm & Deno'
-const
-    lines1 = [],
-    lines2 = [];
-stream1.on("data", process_chunk( lines1 ) );
-stream2.on("data", process_chunk( lines2 ) );
+stream1.on("data", process_chunk(lines1));
+stream2.on("data", process_chunk(lines2));
 stream1.on("end", output);
 stream2.on("end", output);
 
+let result = "";
 let count = 0;
-function output()
-{
+
+function output() {
     count += 1;
-    if ( count === 2 )
-    {
-        lines1.forEach((line,i) =>
-            content += line + lines2[i] + '\n');
-        fileName.write(content);
+    if (count === 2) {
+        lines1.forEach((line, i) => result += line + "\n" + lines2[i] + "\n")
     }
+    fs.writeFile('mergeStreamsRes.txt', result.substring(0, result.length - 1), function (err) {
+        if (err) throw err;
+    });
+    console.timeEnd("merge")
 }
 
-function process_chunk( lines )
-{
-    return function ( chunk )
-    {
+function process_chunk(lines) {
+    return function (chunk) {
         let i = 0;
-        chunk.split(/\r\n/).forEach(function (line)
-        {
+        chunk.split("\n").forEach(function (line) {
             if (!lines[i]) {
                 lines[i] = '';
             }
-            lines[i] += line;
-            ++i;
+            lines[i++] += line;
         });
     }
 }

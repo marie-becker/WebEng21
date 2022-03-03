@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>07 Node</title>
+    <link href="../index.css" rel="stylesheet">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/311699e670.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/monokai-sublime.min.css"
+          rel="stylesheet">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+    <script>hljs.configure({languages: ['javascript']})</script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon
+        * https://www.w3schools.com/howto/howto_js_topnav_responsive.asp */
+        function myFunction() {
+            var x = document.getElementById("mySidenav");
+            if (x.className === "sidenav") {
+                x.className += " responsive";
+            } else {
+                x.className = "sidenav";
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="sidenav" id="mySidenav">
+    <a href="../index.html" style="display: block"><i class="fa fa-home"></i></a>
+    <a href="../01_Einfuehrung/uebung01.html" class="active">01 Einführung</a>
+    <a href="../02_RWD/uebung02.html">02 RWD</a>
+    <a href="../03_JavaScript/uebung03.html">03 JavaScript</a>
+    <a href="../04_DOM/uebung04.html">04 DOM</a>
+    <a href="../05_Async/uebung05.html">05 Async</a>
+    <a href="../06_SVG/uebung06.html">06 SVG</a>
+    <a href="../07_node/uebung07.html">07 Node</a>
+    <a href="../08_ModularWeb/uebung08.html">08 ModularWeb</a>
+    <a href="../09_PWA/uebung09.html">09 PWA</a>
+    <a href="../10_Vue/uebung10.html">10 Vue</a>
+    <a href="../11_WebAssembly/uebung11.html">11 WebAssembly</a>
+    <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <i class="fa fa-bars"></i>
+    </a>
+</div>
+<div class="main">
+    <h1>Übung 07 - Node</h1>
+
+
+    <details>
+        <summary>7.1 File Generatoren
+        </summary>
+        <div class="akkordeon-inhalt">
+            Number File Generator
+            <pre>
+                        <code>
+    import * as process from "process";
+    import fs from 'fs';
+
+    const number = process.argv[process.argv.length -1]
+    let text = "";
+
+    for (let i = 1; i <= number; i++) {
+        text += i + " .\n";
+    }
+    text = text.substring(0, text.length-1);
+
+    fs.writeFile('testfile.txt', text, function (err) {
+        if (err) throw err;
+        console.log('Saved!');
+    });
+
+                        </code>
+                    </pre>
+            Alpha File Generator
+            <pre>
+                        <code>
+    import process from 'process'
+    import fs from 'fs'
+    const number = process.argv[process.argv.length -1]
+    let text = "";
+
+    for (let i = 1; i <= number; i++) {
+        text += numbersToLetters(i) + "\n"
+    }
+    text = text.substring(0, text.length-1);
+
+    fs.writeFile('alphafile.txt', text, function (err) {
+        if (err) throw err;
+        console.log('Saved!');
+    });
+
+    // function numbersToLetters from Flambino on Stackexchange
+    // https://codereview.stackexchange.com/a/16129
+    function numbersToLetters(number) {
+        let baseChar = ("A").charCodeAt(0),
+            letters = "";
+        do {
+            number -= 1;
+            letters = String.fromCharCode(baseChar + (number % 26)) + letters;
+            number = (number / 26) >> 0; // quick `floor`
+        } while(number > 0);
+        return letters;
+    }
+                        </code>
+                    </pre>
+        </div>
+    </details>
+
+    <details>
+        <summary>7.2 Performance Merge
+        </summary>
+        <div class="akkordeon-inhalt">
+            Merge Files
+            <pre>
+                        <code>
+    import fs from 'fs/promises'
+    import * as process from "process";
+
+    const file1 = process.argv[process.argv.length - 1];
+    const file2 = process.argv[process.argv.length - 2];
+
+    console.time("merge");
+    (async _=> {
+        const [text1, text2] = await Promise.all([fs.readFile(file1, 'utf8'), fs.readFile(file2, 'utf8')])
+        let arr1 = text1.split("\n");
+        let arr2 = text2.split("\n");
+        const text = interleave(arr1, arr2);
+        const output = text.join('\n')
+        fs.writeFile('mergeFileRes.txt', output, function (err) {
+            if (err) throw err;
+            console.log('Saved!');
+        });
+        console.timeEnd("merge");
+    })();
+
+    // interleave function taken from Mulan on stackoverflow
+    // https://stackoverflow.com/a/47061616/15212696
+    const interleave = ([x, ...xs], ys = []) =>
+        x === undefined
+            ? ys                             // base: no x
+            : [x, ...interleave(ys, xs)]     // inductive: some x
+                        </code>
+                    </pre>
+            Merge Streams
+            <pre>
+                        <code>
+    const fs = require("fs");
+
+    const files = process.argv.slice(2);
+
+    console.time("merge")
+
+    const stream1 = fs.createReadStream(files[0], "utf8");
+    const stream2 = fs.createReadStream(files[1], "utf8");
+
+    const lines1 = [], lines2 = [];
+
+    stream1.on("data", process_chunk(lines1));
+    stream2.on("data", process_chunk(lines2));
+    stream1.on("end", output);
+    stream2.on("end", output);
+
+    let result = "";
+    let count = 0;
+
+    function output() {
+        count += 1;
+        if (count === 2) {
+            lines1.forEach((line, i) => result += line + "\n" + lines2[i] + "\n")
+        }
+        fs.writeFile('mergeStreamsRes.txt', result.substring(0, result.length - 1), function (err) {
+            if (err) throw err;
+        });
+        console.timeEnd("merge")
+    }
+
+    function process_chunk(lines) {
+        return function (chunk) {
+            let i = 0;
+            chunk.split("\n").forEach(function (line) {
+                if (!lines[i]) {
+                    lines[i] = '';
+                }
+                lines[i++] += line;
+            });
+        }
+    }
+                        </code>
+                    </pre>
+            <div>
+                <h4>Performanzmessung:</h4>
+                <p>Merge Files: 1.716ms</p>
+                <p>Merge Streams: 7.352ms</p>
+            </div>
+        </div>
+    </details>
+
+    <details>
+        <summary>7.3 Express.js Server
+        </summary>
+        <div class="akkordeon-inhalt">
+            <pre>
+                        <code class="language-javascript">
+    const express = require('express');
+    const fs = require('fs');
+    const fileUpload = require('express-fileupload')
+    const app = express();
+    const port = 3000;
+
+    app.use(fileUpload());
+
+    app.get('/', (req, res) => {
+        res.writeHead(200, {"Content-Type": "text/html"});
+        res.end('&lt;!DOCTYPE html>\n' +
+            '&lt;html lang="en">\n' +
+            '&lt;head>\n' +
+            '    &lt;meta charset="UTF-8">\n' +
+            '    &lt;title>Merge Files&lt;/title>\n' +
+            '&lt;/head>\n' +
+            '&lt;body style="font-family: Calibri">\n' +
+            '&lt;h2>Wählen Sie zwei Dateien zum Mergen aus.&lt;/h2>\n' +
+            '&lt;form enctype="multipart/form-data" method="POST" action="/upload">\n' +
+            '    &lt;input name="first" type="file">\n' +
+            '    &lt;input name="second" type="file">\n' +
+            '    &lt;input type="submit">\n' +
+            '&lt;/form>\n' +
+            '&lt;/body>\n' +
+            '&lt;/html>')
+    })
+
+    app.post('/upload', function (req, res) {
+        let first = req.files.first.data.toString('utf8').split("\n");
+        let second = req.files.second.data.toString('utf8').split("\n");
+        const text = interleave(first, second).join('\n');
+       fs.writeFile('mergedResult.txt', text, function (err) {
+            if (err) throw err;
+        });
+        res.send(`&lt;h2 style="font-family: Calibri">Die Ergebnisdatei kann
+        &lt;a href="/download" target="_blank">hier&lt;/a> heruntergeladen werden und hat folgenden Inhalt:&lt;/h2>` + text);
+    })
+
+    app.get('/download', function(req, res){
+        const file = "mergedResult.txt";
+        res.download(file)
+    })
+
+
+    // interleave function taken from Mulan on stackoverflow
+    // https://stackoverflow.com/a/47061616/15212696
+    const interleave = ([x, ...xs], ys = []) =>
+        x === undefined
+            ? ys                             // base: no x
+            : [x, ...interleave(ys, xs)]     // inductive: some x
+
+    app.listen(port, () => {
+        console.log(`Example app listening at http://localhost:${port}`)
+    })
+                        </code>
+                    </pre>
+        </div>
+    </details>
+</div>
+</body>
+</html>

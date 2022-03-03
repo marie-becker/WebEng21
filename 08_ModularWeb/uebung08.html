@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>08 - Modular Web</title>
+    <link href="../index.css" rel="stylesheet">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/311699e670.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/monokai-sublime.min.css"
+          rel="stylesheet">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+
+    <script>hljs.configure({languages: ['javascript']})</script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon
+        * https://www.w3schools.com/howto/howto_js_topnav_responsive.asp */
+        function myFunction() {
+            var x = document.getElementById("mySidenav");
+            if (x.className === "sidenav") {
+                x.className += " responsive";
+            } else {
+                x.className = "sidenav";
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="sidenav" id="mySidenav">
+    <a href="../index.html" style="display: block"><i class="fa fa-home"></i></a>
+    <a href="../01_Einfuehrung/uebung01.html" class="active">01 Einführung</a>
+    <a href="../02_RWD/uebung02.html">02 RWD</a>
+    <a href="../03_JavaScript/uebung03.html">03 JavaScript</a>
+    <a href="../04_DOM/uebung04.html">04 DOM</a>
+    <a href="../05_Async/uebung05.html">05 Async</a>
+    <a href="../06_SVG/uebung06.html">06 SVG</a>
+    <a href="../07_node/uebung07.html">07 Node</a>
+    <a href="../08_ModularWeb/uebung08.html">08 ModularWeb</a>
+    <a href="../09_PWA/uebung09.html">09 PWA</a>
+    <a href="../10_Vue/uebung10.html">10 Vue</a>
+    <a href="../11_WebAssembly/uebung11.html">11 WebAssembly</a>
+    <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <i class="fa fa-bars"></i>
+    </a>
+</div>
+<div class="main">
+    <h1>Übung 08 - Modular Web</h1>
+    <script type="module">
+        import {render, html} from 'https://unpkg.com/lit-html?module';
+
+        class ShoppingList extends HTMLElement {
+            constructor() {
+                super();
+                let liste = [];
+                const addItem = () => {
+                    let item = document.getElementById('item').value
+                    if (item !== "") {
+                        liste.push(item);
+                        document.getElementById('item').value = "";
+                        render(this.template(), this);
+                    }
+                }
+                const clearall = () => {
+                    liste = [];
+                    render(this.template(), this);
+                }
+
+                const myKeyup = (ev) => {
+                    if (ev.key === "Enter") {
+                        addItem();
+                        document.getElementById('item').value = "";
+                    }
+                }
+                const deleteItem = (parent) => {
+                    liste.splice(parent, 1)
+                    render(this.template(), this);
+
+                }
+
+
+                this.template = () => html`<h1>Einkaufsliste</h1>
+                <label for="item">Enter a new item: </label><input id="item" type="text" @keyup="${e => myKeyup(e)}">
+                <button id="add" @click="${addItem}">Add item</button>
+                <button id="clear" @click="${clearall}">Clear all</button>
+                <ul id="liste">${liste.map(((i, index) => html`
+                    <li id="${index}">${i}&nbsp;<button @click="${() => deleteItem(index)}">Delete</button>
+                    </li>`))}
+                </ul>`;
+            }
+
+            connectedCallback() {
+                render(this.template(), this);
+            }
+        }
+
+        customElements.define('shopping-list', ShoppingList);
+    </script>
+    <script type="module">
+        import {html, render} from 'https://unpkg.com/lit-html?module';
+
+        class TabellenCalc extends HTMLElement {
+            constructor() {
+                super();
+                let formula;
+
+                const createTable = () => {
+                    var reihen = document.getElementById("reihen").value;
+                    let itemtemplates = [];
+                    for (let i = 1; i <= reihen; i++) {
+                        itemtemplates.push(html`
+                            <tr>
+                                <td>${toAbc(i)} =</td>
+                                <td contenteditable="true" id="${toAbc(i)}2" @blur="${() => calc(false)}"></td>`);
+                    }
+                    itemtemplates.push(html`
+                        <tr>
+                            <td>Sum =</td>
+                            <td contenteditable="true" id="sumfield" @blur="${() => calc(true)}"></td>
+                        </tr>`);
+                    this.tablehtml = () => html`
+                        <table id="table">${itemtemplates}</table>`
+                    render(this.tablehtml(), document.getElementById("tablewrapper"))
+
+                    calc();
+                }
+
+                const calc = (b) => {
+                    if (b) formula = document.getElementById("sumfield").innerHTML.toLowerCase();
+                    if (formula) {
+                        const f = formula.slice(1, 4);
+                        const z = parseInt(document.getElementById(formula.slice(5, 7)).innerHTML);
+                        const w = parseInt(document.getElementById(formula.slice(8, 10)).innerHTML);
+                        document.getElementById("sumfield").innerHTML = eval(f)(z, w);
+                    }
+                }
+
+                const toAbc = (i) => {
+                    return ((i % 26) + 9).toString(36);
+                }
+
+                const sum = (x, y) => {
+                    return x + y;
+                }
+                const mul = (x, y) => {
+                    return x * y;
+                }
+                const sub = (x, y) => {
+                    return x - y;
+                }
+                const div = (x, y) => {
+                    return x / y;
+                }
+
+
+                this.template = () => html`<h1>Tabellenkalkulation mit contentEditable</h1>
+                <p>Moegliche Funktionen: sum, sub, mul, div nach dem Schema =SUM(A2,B2)</p>
+                <h3>Wie gross soll die Tabelle sein?</h3>
+                <label for="reihen">Reihen: </label><input id="reihen" min="1" required type="number">
+                <button @click="${createTable}" type="submit">Erstelle Tabelle</button>
+                <br><br>
+                <div id="tablewrapper"></div>`;
+            }
+
+            connectedCallback() {
+                render(this.template(), this);
+            }
+        }
+
+        customElements.define('tabellen-comp', TabellenCalc);
+    </script>
+    <style>
+        table, td {
+            border: 1px solid black;
+        }
+
+        table {
+            width: 50%;
+            border-collapse: collapse;
+        }
+
+        td {
+            width: 50%;
+            height: 16px;
+            text-align: right;
+        }
+    </style>
+    <script type="module">
+
+        import {LitElement, svg, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
+
+        customElements.define('statistik-comp', class extends LitElement {
+            constructor() {
+                super();
+                this.data = {
+                    "spd": {
+                        name: "SPD",
+                        sitze: 206,
+                        color: "red"
+                    },
+                    "cdu/cdsu": {
+                        name: "CDU/CSU",
+                        sitze: 197,
+                        color: "black"
+                    },
+                    gruen: {
+                        name: "Die Gruenen",
+                        sitze: 118,
+                        color: "green",
+                    },
+                    fdp: {
+                        name: "FDP",
+                        sitze: 92,
+                        color: "yellow",
+                    },
+                    afd: {
+                        name: "AfD",
+                        sitze: 82,
+                        color: "#4d2600",
+                    },
+                    linke: {
+                        name: "Die Linke",
+                        sitze: 39,
+                        color: "#e60e98",
+                    },
+                    franktionslos: {
+                        name: "franktionslos",
+                        sitze: 2,
+                        color: "grey"
+                    }
+                }
+                this.y = 30
+            }
+
+            static get properties() {
+                return {
+                    data: {type: Object},
+                    y: {type: Number}
+                }
+            }
+
+            static get styles() {
+                return css`
+                  * {
+                    background-color: white;
+                  }
+
+                  .bar {
+                    animation-name: barAnim;
+                    animation-duration: 1.5s;
+                    animation-iteration-count: 1;
+                    animation-timing-function: ease;
+                    animation-play-state: running;
+                  }
+
+                  @keyframes barAnim {
+                    0% {
+                      width: 0;
+                    }
+                  }
+                `
+            }
+
+
+            render() {
+                return svg`<svg height="300" id="dia" width="600" xmlns="http://www.w3.org/2000/svg">
+    <line x1="99" y1="25" x2="99" y2="240" stroke-width="2" stroke="#85adad" /><text x="95" y="260">0</text>
+    <line x1="200" y1="25" x2="200" y2="240" stroke-width="2" stroke="#85adad" /><text x="192" y="260">50</text>
+    <line x1="300" y1="25" x2="300" y2="240" stroke-width="2" stroke="#85adad" /><text x="288" y="260">100</text>
+    <line x1="400" y1="25" x2="400" y2="240" stroke-width="2" stroke="#85adad" /><text x="388" y="260">150</text>
+    <line x1="500" y1="25" x2="500" y2="240" stroke-width="2" stroke="#85adad" /><text x="488" y="260">200</text>
+    <text font-family='Arial' font-size="12" x="350" y="280">Sitze im deutschen Parlament</text>
+    ${Object.values(this.data).map((d, index) => svg`<text font-family='Arial' font-size='14' x='10' y=${this.y + (30 * index) + 15}>${d.name}</text>
+                <rect class="bar" fill='${d.color}' height='20' width='${d.sitze * 2}' x='100' y='${this.y + (30 * index)}'/>
+                <text font-family='Arial' font-size='12' font-weight="bold" x='${110 + d.sitze * 2}' y='${this.y + (30 * index) + 15}'>${d.sitze}</text>`)}
+</svg>`;
+            }
+        })
+    </script>
+    <script type="module">
+
+        import {LitElement, svg, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
+
+        customElements.define('bezier-comp', class extends LitElement {
+            constructor() {
+                super();
+            }
+
+            static get styles() {
+                return css`
+                  .draggable {
+                    cursor: move;
+                  }
+
+                  .static {
+                    cursor: not-allowed;
+                  }`
+            }
+
+            render() {
+                return svg`<svg height=300 id="svg" style="margin-left: auto; margin-right: auto; display: block;" width="100%">
+    <circle class="draggable" cx="220" cy="60" fill="blue" id="blue" r="20"
+    @mousedown="${evt => {
+                    this.startDrag(evt)
+                }}" @mousemove="${evt => {
+                    this.drag(evt)
+                }}" @mouseup="${_ => {
+                    this.endDrag()
+                }}" @mouseleave="${_ => {
+                    this.endDrag()
+                }}"></circle>
+    <circle class="draggable" cx="102" cy="233" fill="red" id="red" r="20"
+        @mousedown="${evt => {
+                    this.startDrag(evt)
+                }}" @mousemove="${evt => {
+                    this.drag(evt)
+                }}" @mouseup="${_ => {
+                    this.endDrag()
+                }}" @mouseleave="${_ => {
+                    this.endDrag()
+                }}"></circle>
+    <circle class="draggable" cx="50" cy="110" fill="green" id="green" r="20"
+        @mousedown="${evt => {
+                    this.startDrag(evt)
+                }}" @mousemove="${evt => {
+                    this.drag(evt)
+                }}" @mouseup="${_ => {
+                    this.endDrag()
+                }}" @mouseleave="${_ => {
+                    this.endDrag()
+                }}"></circle>
+    <g id="lines">
+    </g>
+</svg>`;
+            }
+
+            updated() {
+                this.draw();
+            }
+
+            draw() {
+                const green = this.shadowRoot.getElementById('green');
+                const blue = this.shadowRoot.getElementById('blue');
+                const red = this.shadowRoot.getElementById('red');
+                let path = `M${red.getAttribute("cx")},${red.getAttribute("cy")} L${green.getAttribute("cx")},${green.getAttribute("cy")} L${blue.getAttribute("cx")},${blue.getAttribute("cy")} M${red.getAttribute("cx")},${red.getAttribute("cy")} Q${green.getAttribute("cx")},${green.getAttribute("cy")} ${blue.getAttribute("cx")},${blue.getAttribute("cy")}`
+                this.shadowRoot.getElementById("lines").innerHTML = `<path class="static" d="${path}" stroke="black" stroke-width="3" fill="none"/>`
+            }
+
+            selectedElement;
+            offset;
+
+            startDrag(evt) {
+                if (evt.target.classList.contains('draggable')) {
+                    this.selectedElement = evt.target;
+                    this.offset = this.getMousePosition(evt);
+                    this.offset.x -= parseFloat(this.selectedElement.getAttribute("cx"));
+                    this.offset.y -= parseFloat(this.selectedElement.getAttribute("cy"));
+                }
+            }
+
+            drag(evt) {
+                if (this.selectedElement) {
+                    evt.preventDefault();
+                    const coord = this.getMousePosition(evt);
+                    this.selectedElement.setAttribute("cx", coord.x - this.offset.x);
+                    this.selectedElement.setAttribute("cy", coord.y - this.offset.y);
+                }
+                this.draw();
+            }
+
+            endDrag(evt) {
+                this.selectedElement = null;
+                this.draw();
+            }
+
+            getMousePosition(evt) {
+                const CTM = this.shadowRoot.querySelector('svg').getScreenCTM();
+                return {
+                    x: (evt.clientX - CTM.e) / CTM.a,
+                    y: (evt.clientY - CTM.f) / CTM.d
+                };
+            }
+        })
+    </script>
+    <script type="module">
+        import {LitElement, html, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
+
+        customElements.define('menu-comp', class extends LitElement {
+            constructor() {
+                super();
+                this.listelements = [];
+                this.alignment = "";
+                this.buttonstyle = "";
+            }
+
+            static get properties() {
+                return {
+                    listelements: {type: JSON},
+                    alignment: {type: String},
+                    buttonstyle: {type: String}
+                }
+            }
+
+            static get styles() {
+                return css`
+                  button {
+                    background-color: #6a709f;
+                    color: black;
+                    border-top-color: white;
+                    border-left-color: white;
+                    border-bottom-color: #9a9a9a;
+                    border-right-color: #9a9a9a;
+                    border-radius: 20px;
+                    font-weight: bold;
+                    padding: 0.3em 2em;
+                    margin: 1em;
+                  }
+
+                  button:hover {
+                    background-color: antiquewhite;
+                  }`
+            }
+
+            render() {
+                return html`
+                    ${JSON.parse(this.listelements).map((e) => html`
+                        <button style="display:${this.alignment}; margin: 10px">${e}</button>`)}
+                `
+            }
+
+        })
+    </script>
+    <script type="module">
+
+        import {LitElement, html, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
+
+        customElements.define('footer-comp', class extends LitElement {
+            constructor() {
+                super();
+            }
+
+            static get styles() {
+                return css`footer {
+                  background: black;
+                }`
+            }
+
+            render() {
+                return html`
+                    <footer>
+                        <span style="font-size: 30px">Footer:</span>
+                        <a href="">Sitemap</a>
+                        <a href="">Home</a>
+                        <a href="">News</a>
+                        <a href="">Contact</a>
+                        <a href="">About</a></footer>
+                `;
+            }
+
+        })
+    </script>
+    <script type="module">
+        import {LitElement, html, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
+
+        customElements.define('header-comp', class extends LitElement {
+            constructor() {
+                super();
+            }
+
+            static get styles() {
+                return css`
+                  header {
+                    background-color: #c14f4f;
+                    text-align: left;
+                  }
+
+                  h1 {
+                    text-align: center;
+                    margin: 0;
+                  }
+
+                  button {
+                    background-color: #6a709f;
+                    color: black;
+                    border-top-color: white;
+                    border-left-color: white;
+                    border-bottom-color: #9a9a9a;
+                    border-right-color: #9a9a9a;
+                    border-radius: 20px;
+                    font-weight: bold;
+                    padding: 0.3em 2em;
+                    margin: 1em;
+                  }
+
+                  button:hover {
+                    background-color: antiquewhite;
+                  }`
+            }
+
+            render() {
+                return html`
+                    <header>
+                        <h1>WWW-Navigator</h1>
+                        <button id='html' @click="${() => topnav('html')}">HTML</button>
+                        <button id='css' @click="${() => topnav('css')}">CSS</button>
+                        <button id='javascript' @click="${() => topnav('javascript')}">JavaScript</button>
+                        <button>Other</button>
+                    </header>`
+            }
+        })
+    </script>
+    <script type="module">
+        import {LitElement, html, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
+
+        customElements.define('content-comp', class extends LitElement {
+            constructor() {
+                super();
+            }
+
+            static get styles() {
+                return css`
+                  .content {
+                    display: flex;
+                    flex-direction: column;
+                    overflow-y: auto;
+                    height: 100vh;
+                  }
+
+                  .left-sidebar {
+                    background-color: #c28281;
+                  }
+
+                  .left-sidebar button {
+                    display: block;
+                  }
+
+
+                  .right-sidebar {
+                    text-align: left;
+                    background-color: #c28281;
+                  }
+
+                  .container {
+                    display: flex;
+                    width: 100%;
+                    flex-direction: column;
+                    height: 100vh;
+                  }
+
+                  main {
+                    background-color: #6a9ebd;
+                    font-size: 1.5rem;
+                    color: black;
+                  }
+
+                  main a {
+                    font-size: 1.5rem;
+                    color: black;
+                  }
+
+                  button {
+                    background-color: #6a709f;
+                    color: black;
+                    border-top-color: white;
+                    border-left-color: white;
+                    border-bottom-color: #9a9a9a;
+                    border-right-color: #9a9a9a;
+                    border-radius: 20px;
+                    font-weight: bold;
+                    padding: 0.3em 2em;
+                    margin: 1em;
+                  }
+
+                  button:hover {
+                    background-color: antiquewhite;
+                  }
+
+
+                  a {
+                    color: white;
+                    font-size: small;
+                  }
+
+                  @media all and (min-width: 768px) {
+                    .content {
+                      flex-direction: row;
+                      flex-wrap: wrap;
+                    }
+
+                    main {
+                      flex: 5;
+                      order: 2;
+                    }
+
+                    .left-sidebar {
+                      order: 1;
+                      flex: 1;
+                      font-size: 2em;
+                    }
+
+                    .right-sidebar {
+                      flex: 1;
+                      order: 3;
+                      font-size: 2em;
+
+                    }
+                  }`
+            }
+
+            render() {
+                return html`
+                    <content class="content">
+                        <aside class="left-sidebar" style="display: block">
+                        </aside>
+                        <main id="main">
+                        </main>
+                        <aside class="right-sidebar">
+                            <h6>External resources:</h6>
+                            <div id="urls"></div>
+                        </aside>
+                    </content>`
+            }
+        })
+    </script>
+
+
+    <details>
+        <summary>8.1 Web-Komponenten erstellen</summary>
+        <div class="akkordeon-inhalt">
+            <details>
+                <summary>Einkaufsliste</summary>
+                <button id="shoppingcodebutton" onclick="buttonChange('shoppingcode','shoppingcomp')">Code</button>
+                <button disabled id="shoppingcompbutton" onclick="buttonChange('shoppingcomp', 'shoppingcode')">
+                    Komponente
+                </button>
+                <div class="akkordeon-inhalt">
+                    <shopping-list id="shoppingcomp" class="active"></shopping-list>
+
+                    <pre id="shoppingcode" style="display: none">
+                        <code>
+    import { render, html } from 'https://unpkg.com/lit-html?module';
+    class ShoppingList extends HTMLElement {
+        constructor(){
+            super();
+            let liste = [];
+            const addItem = () => {
+                let item = document.getElementById('item').value
+                if(item !== ""){
+                    liste.push(item);
+                    document.getElementById('item').value = "";
+                    render( this.template(), this );
+                }
+            }
+            const clearall = () =>{
+                liste = [];
+                render( this.template(), this );
+            }
+
+            const myKeyup = (ev) => {
+                if (ev.key === "Enter") {
+                    addItem();
+                    document.getElementById('item').value = "";
+                }
+            }
+            const deleteItem = (parent) => {
+                liste.splice(parent, 1)
+                render( this.template(), this );
+
+            }
+
+
+            this.template = () => html`&lt;h1>Einkaufsliste&lt;/h1>
+    &lt;label for="item">Enter a new item: &lt;/label>&lt;input id="item" type="text" @keyup="${e => myKeyup(e)}">
+    &lt;button id="add" @click="${addItem}">Add item&lt;/button>
+    &lt;button id="clear" @click="${clearall}">Clear all&lt;/button>
+    &lt;ul id="liste">${liste.map(((i, index) => html`&lt;li id="${index}">${i}&nbsp;&lt;button @click="${() => deleteItem(index)}">Delete&lt;/button>&lt;/li>`))}&lt;/ul>`;
+        }
+        connectedCallback(){
+            render( this.template(), this );
+        }
+    }
+    customElements.define('shopping-list', ShoppingList);
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Rednerliste</summary>
+                <button id="rednercodebutton" onclick="buttonChange('rednercode','rednercomp')">Code</button>
+                <button disabled id="rednercompbutton" onclick="buttonChange('rednercomp', 'rednercode')">Komponente
+                </button>
+                <div class="akkordeon-inhalt">
+                    <redner-liste id="rednercomp" class="active"></redner-liste>
+
+                    <pre id="rednercode" style="display: none">
+                        <code>
+
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Tabellenkalkulation</summary>
+                <button id="tabellecodebutton" onclick="buttonChange('tabellecode','tabellecomp')">Code</button>
+                <button disabled id="tabellecompbutton" onclick="buttonChange('tabellecomp', 'tabellecode')">
+                    Komponente
+                </button>
+                <div class="akkordeon-inhalt">
+                    <tabellen-comp id="tabellecomp" class="active"></tabellen-comp>
+
+                    <pre id="tabellecode" style="display: none">
+                        <code>
+    &lt;script type="module">
+        import {html, render} from 'https://unpkg.com/lit-html?module';
+
+        class TabellenCalc extends HTMLElement {
+            constructor() {
+                super();
+                let formula;
+
+                const createTable = () => {
+                    var reihen = document.getElementById("reihen").value;
+                    let itemtemplates = [];
+                    for (let i = 1; i <= reihen; i++) {
+                        itemtemplates.push(html`&lt;tr>&lt;td>${toAbc(i)} = &lt;/td>&lt;td contenteditable="true" id="${toAbc(i)}2" @blur="${() => calc(false)}">&lt;/td>`);
+                    }
+                    itemtemplates.push(html`&lt;tr>&lt;td>Sum = &lt;/td>&lt;td contenteditable="true" id="sumfield" @blur="${() => calc(true)}">&lt;/td>&lt;/tr>`);
+                    this.tablehtml = () => html`&lt;table id="table">${itemtemplates}&lt;/table>`
+                    render(this.tablehtml(), document.getElementById("tablewrapper"))
+
+                    calc();
+                }
+
+                const calc = (b) => {
+                    if (b) formula = document.getElementById("sumfield").innerHTML.toLowerCase();
+                    if (formula) {
+                        const f = formula.slice(1, 4);
+                        const z = parseInt(document.getElementById(formula.slice(5, 7)).innerHTML);
+                        const w = parseInt(document.getElementById(formula.slice(8, 10)).innerHTML);
+                        document.getElementById("sumfield").innerHTML = eval(f)(z, w);
+                    }
+                }
+
+                const toAbc = (i) => {
+                    return ((i % 26) + 9).toString(36);
+                }
+
+                const sum = (x, y) =>{
+                    return x + y;
+                }
+                const mul = (x, y) => {
+                    return x * y;
+                }
+                const sub = (x, y) => {
+                    return x - y;
+                }
+                const div = (x, y) => {
+                    return x / y;
+                }
+
+
+                this.template = () => html`&lt;h1>Tabellenkalkulation mit contentEditable&lt;/h1>
+                &lt;p>Moegliche Funktionen: sum, sub, mul, div nach dem Schema =SUM(A2,B2)&lt;/p>
+                &lt;h3>Wie gross soll die Tabelle sein?&lt;/h3>
+                &lt;label for="reihen">Reihen: &lt;/label>&lt;input id="reihen" min="1" required type="number">
+                &lt;button @click="${createTable}" type="submit">Erstelle Tabelle&lt;/button>
+                &lt;br>&lt;br>
+                &lt;div id="tablewrapper">&lt;/div>`;
+            }
+
+            connectedCallback() {
+                render(this.template(), this);
+            }
+        }
+
+        customElements.define('tabellen-comp', TabellenCalc);
+    &lt;/script>
+    &lt;style>
+        table, td {
+            border: 1px solid black;
+        }
+
+        table {
+            width: 25%;
+            border-collapse: collapse;
+        }
+
+        td {
+            width: 50%;
+            height: 16px;
+            text-align: right;
+        }
+    &lt;/style>
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Statistik-Balkendiagramm</summary>
+                <button id="diagramcodebutton" onclick="buttonChange('diagramcode','diagramcomp')">Code</button>
+                <button disabled id="diagramcompbutton" onclick="buttonChange('diagramcomp', 'diagramcode')">
+                    Komponente
+                </button>
+                <div class="akkordeon-inhalt">
+                    <statistik-comp id="diagramcomp" class="active"></statistik-comp>
+
+                    <pre id="diagramcode" style="display: none">
+                        <code>
+    &lt;script type="module">
+
+        import {LitElement, svg, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
+
+        customElements.define('statistik-comp', class extends LitElement {
+            constructor() {
+                super();
+                this.data = {
+                    "spd": {
+                        name: "SPD",
+                        sitze: 206,
+                        color: "red"
+                    },
+                    "cdu/cdsu": {
+                        name: "CDU/CSU",
+                        sitze: 197,
+                        color: "black"
+                    },
+                    gruen: {
+                        name: "Die Gruenen",
+                        sitze: 118,
+                        color: "green",
+                    },
+                    fdp: {
+                        name: "FDP",
+                        sitze: 92,
+                        color: "yellow",
+                    },
+                    afd: {
+                        name: "AfD",
+                        sitze: 82,
+                        color: "#4d2600",
+                    },
+                    linke: {
+                        name: "Die Linke",
+                        sitze: 39,
+                        color: "#e60e98",
+                    },
+                    franktionslos: {
+                        name: "franktionslos",
+                        sitze: 2,
+                        color: "grey"
+                    }
+                }
+                this.y = 30
+            }
+
+            static get properties() {
+                return {
+                    data: {type: Object},
+                    y: {type: Number}
+                }
+            }
+            static get styles(){
+                return css`
+            .bar{
+                animation-name: barAnim;
+                animation-duration: 1.5s;
+                animation-iteration-count: 1;
+                animation-timing-function: ease;
+                animation-play-state: running;
+            }
+            @keyframes barAnim {
+                0%{
+                    width: 0;
+                }
+            }
+                `
+            }
+
+
+            render() {
+                return svg`&lt;svg height="500" id="dia" width="600" xmlns="http://www.w3.org/2000/svg">
+        &lt;line x1="99" y1="25" x2="99" y2="240" stroke-width="2" stroke="#85adad" />&lt;text x="95" y="260">0&lt;/text>
+        &lt;line x1="200" y1="25" x2="200" y2="240" stroke-width="2" stroke="#85adad" />&lt;text x="192" y="260">50&lt;/text>
+        &lt;line x1="300" y1="25" x2="300" y2="240" stroke-width="2" stroke="#85adad" />&lt;text x="288" y="260">100&lt;/text>
+        &lt;line x1="400" y1="25" x2="400" y2="240" stroke-width="2" stroke="#85adad" />&lt;text x="388" y="260">150&lt;/text>
+        &lt;line x1="500" y1="25" x2="500" y2="240" stroke-width="2" stroke="#85adad" />&lt;text x="488" y="260">200&lt;/text>
+        &lt;text font-family='Arial' font-size="12" x="350" y="280">Sitze im deutschen Parlament&lt;/text>
+        ${Object.values(this.data).map((d, index) => svg`&lt;text font-family='Arial' font-size='14' x='10' y=${this.y+(30*index) + 15}>${d.name}&lt;/text>
+                    &lt;rect class="bar" fill='${d.color}' height='20' width='${d.sitze * 2}' x='100' y='${this.y+(30*index)}'/>
+                    &lt;text font-family='Arial' font-size='12' font-weight="bold" x='${110 + d.sitze * 2}' y='${this.y +(30*index)+ 15}'>${d.sitze}&lt;/text>`)}
+        &lt;/svg>`;
+            }
+        })
+    &lt;/script>
+
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Bezier-Animation</summary>
+                <button id="beziercodebutton" onclick="buttonChange('beziercode','beziercomp')">Code</button>
+                <button disabled id="beziercompbutton" onclick="buttonChange('beziercomp', 'beziercode')">Komponente
+                </button>
+                <div class="akkordeon-inhalt">
+                    <bezier-comp id="beziercomp" class="active"></bezier-comp>
+
+                    <pre id="beziercode" style="display: none">
+                        <code>
+    &lt;script type="module">
+
+        import {LitElement, svg, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
+
+        customElements.define('bezier-comp', class extends LitElement {
+            constructor() {
+                super();
+            }
+
+            static get styles() {
+                return css`
+                  .draggable {
+                    cursor: move;
+                  }
+
+                  .static {
+                    cursor: not-allowed;
+                  }`
+            }
+
+            render() {
+                return svg`&lt;svg height="100%" id="svg" style="margin-left: auto; margin-right: auto; display: block;" width="100%">
+        &lt;circle class="draggable" cx="220" cy="60" fill="blue" id="blue" r="20"
+            @mousedown="${evt => {this.startDrag(evt)}}" @mousemove="${evt => {this.drag(evt)}}" @mouseup="${_ => {this.endDrag()}}" @mouseleave="${_ => {this.endDrag()}}">&lt;/circle>
+        &lt;circle class="draggable" cx="102" cy="233" fill="red" id="red" r="20"
+            @mousedown="${evt => {this.startDrag(evt)}}" @mousemove="${evt => {this.drag(evt)}}" @mouseup="${_ => {this.endDrag()}}" @mouseleave="${_ => {this.endDrag()}}">&lt;/circle>
+        &lt;circle class="draggable" cx="50" cy="110" fill="green" id="green" r="20"
+            @mousedown="${evt => {this.startDrag(evt)}}" @mousemove="${evt => {this.drag(evt)}}" @mouseup="${_ => {this.endDrag()}}" @mouseleave="${_ => {this.endDrag()}}">&lt;/circle>
+        &lt;g id="lines">
+        &lt;/g>
+        &lt;/svg>`;
+            }
+
+            updated(){
+                this.draw();
+            }
+
+            draw() {
+                const green = this.shadowRoot.getElementById('green');
+                const blue = this.shadowRoot.getElementById('blue');
+                const red = this.shadowRoot.getElementById('red');
+                let path = `M${red.getAttribute("cx")},${red.getAttribute("cy")} L${green.getAttribute("cx")},${green.getAttribute("cy")}
+                            L${blue.getAttribute("cx")},${blue.getAttribute("cy")} M${red.getAttribute("cx")},${red.getAttribute("cy")}
+                            Q${green.getAttribute("cx")},${green.getAttribute("cy")} ${blue.getAttribute("cx")},${blue.getAttribute("cy")}`
+                this.shadowRoot.getElementById("lines").innerHTML = `&lt;path class="static" d="${path}" stroke="black" stroke-width="3" fill="none"/>`
+            }
+
+            selectedElement; offset;
+
+            startDrag(evt) {
+                console.log("drag")
+                if (evt.target.classList.contains('draggable')) {
+                    this.selectedElement = evt.target;
+                    this.offset = this.getMousePosition(evt);
+                    this.offset.x -= parseFloat(this.selectedElement.getAttribute("cx"));
+                    this.offset.y -= parseFloat(this.selectedElement.getAttribute("cy"));
+                }
+            }
+
+            drag(evt) {
+                console.log("drag")
+                if (this.selectedElement) {
+                    evt.preventDefault();
+                    const coord = this.getMousePosition(evt);
+                    this.selectedElement.setAttribute("cx", coord.x - this.offset.x);
+                    this.selectedElement.setAttribute("cy", coord.y - this.offset.y);
+                }
+                this.draw();
+            }
+
+            endDrag(evt) {
+                this.selectedElement = null;
+                this.draw();
+            }
+
+            getMousePosition(evt) {
+                const CTM = this.shadowRoot.querySelector('svg').getScreenCTM();
+                return {
+                    x: (evt.clientX - CTM.e) / CTM.a,
+                    y: (evt.clientY - CTM.f) / CTM.d
+                };
+            }
+        })
+    &lt;/script>
+                        </code>
+                    </pre>
+                </div>
+            </details>
+            <details>
+                <summary>Kalligraphie-Editor</summary>
+                <button id="kalligraphiecodebutton" onclick="buttonChange('kalligraphiecode','kalligraphiecomp')">Code
+                </button>
+                <button disabled id="kalligraphiecompbutton"
+                        onclick="buttonChange('kalligraphiecomp', 'kalligraphiecode')">Komponente
+                </button>
+                <div class="akkordeon-inhalt">
+                    <kalligraphie-comp id="kalligraphiecomp" class="active"></kalligraphie-comp>
+
+                    <pre id="kalligraphiecode" style="display: none">
+                        <code>
+
+                        </code>
+                    </pre>
+                </div>
+            </details>
+
+        </div>
+    </details>
+
+    <details>
+        <summary>8.2 LitElement Menü-Komponente</summary>
+        <div class="akkordeon-inhalt">
+            <button id="menucodebutton" onclick="buttonChange('menucode','menucomp')">Code</button>
+            <button disabled id="menucompbutton" onclick="buttonChange('menucomp', 'menucode')">Komponente</button>
+            <div id="menucomp">
+                Anwendung durch: &lt;menu-comp alignment="block" listelements='["block_1", "block_2", "block_3"]'>&lt;/menu-comp>
+                <menu-comp alignment="block" listelements='["block_1", "block_2", "block_3"]'></menu-comp>
+                <menu-comp alignment="inline" listelements='["inline_1", "inline_2", "inline_3"]'></menu-comp>
+            </div>
+
+            <pre id="menucode" style="display: none">
+                        <code>
+    &lt;script type="module">
+        import {LitElement, html, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
+
+        customElements.define('menu-comp', class extends LitElement {
+            constructor() {
+                super();
+                this.listelements = [];
+                this.alignment = "";
+                this.buttonstyle = "";
+            }
+
+            static get properties() {
+                return {
+                    listelements: {type: JSON},
+                    alignment: {type: String},
+                    buttonstyle: {type: String}
+                }
+            }
+
+            static get styles() {
+                return css`
+                  button {
+                    background-color: #6a709f;
+                    color: black;
+                    border-top-color: white;
+                    border-left-color: white;
+                    border-bottom-color: #9a9a9a;
+                    border-right-color: #9a9a9a;
+                    border-radius: 20px;
+                    font-weight: bold;
+                    padding: 0.3em 2em;
+                    margin: 1em;
+                  }
+
+                  button:hover {
+                    background-color: antiquewhite;
+                  }`
+            }
+
+            render() {
+                return html`
+                    ${JSON.parse(this.listelements).map((e) => html`
+                        &lt;button style="display:${this.alignment}; margin: 10px">${e}&lt;/button>`)}
+                `
+            }
+
+        })
+    &lt;/script>
+                        </code>
+                    </pre>
+        </div>
+    </details>
+
+    <details>
+        <summary>8.2 LitElement Menü-Komponente</summary>
+        <div class="akkordeon-inhalt">
+            <button id="navigatorcodebutton" onclick="buttonChange('navigatorcode','navigatorcomp')">Code</button>
+            <button disabled id="navigatorcompbutton" onclick="buttonChange('navigatorcomp', 'navigatorcode')">
+                Komponente
+            </button>
+            <div id="navigatorcomp">
+                <header-comp></header-comp>
+                <content-comp></content-comp>
+                <footer-comp></footer-comp>
+            </div>
+
+            <pre id="navigatorcode" style="display: none">
+                        <code>
+    &lt;script type="module">
+
+        import {LitElement, html, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
+
+        customElements.define('footer-comp', class extends LitElement {
+            constructor() {
+                super();
+            }
+
+            static get styles() {
+                return css`footer {
+                  background: black;
+                }`
+            }
+
+            render() {
+                return html`
+                    &lt;footer>
+                        &lt;span style="font-size: 30px">Footer:&lt;/span>
+                        &lt;a href="">Sitemap&lt;/a>
+                        &lt;a href="">Home&lt;/a>
+                        &lt;a href="">News&lt;/a>
+                        &lt;a href="">Contact&lt;/a>
+                        &lt;a href="">About&lt;/a>&lt;/footer>
+                `;
+            }
+
+        })
+    &lt;/script></code>
+    <code>
+    &lt;script type="module">
+        import {LitElement, html, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
+
+        customElements.define('header-comp', class extends LitElement {
+            constructor() {
+                super();
+            }
+
+            static get styles() {
+                return css`
+                  header {
+                    background-color: #c14f4f;
+                    text-align: left;
+                  }
+
+                  h1 {
+                    text-align: center;
+                    margin: 0;
+                  }
+
+                  button {
+                    background-color: #6a709f;
+                    color: black;
+                    border-top-color: white;
+                    border-left-color: white;
+                    border-bottom-color: #9a9a9a;
+                    border-right-color: #9a9a9a;
+                    border-radius: 20px;
+                    font-weight: bold;
+                    padding: 0.3em 2em;
+                    margin: 1em;
+                  }
+
+                  button:hover {
+                    background-color: antiquewhite;
+                  }`
+            }
+
+            render() {
+                return html`
+                    &lt;header>
+                        &lt;h1>WWW-Navigator&lt;/h1>
+                        &lt;button id='html' @click="${() => topnav('html')}">HTML&lt;/button>
+                        &lt;button id='css' @click="${() => topnav('css')}">CSS&lt;/button>
+                        &lt;button id='javascript' @click="${() => topnav('javascript')}">JavaScript&lt;/button>
+                        &lt;button>Other&lt;/button>
+                    &lt;/header>`
+            }
+        })
+    &lt;script></code>
+                <code>
+    &lt;script type="module">
+        import {LitElement, html, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
+
+        customElements.define('content-comp', class extends LitElement {
+            constructor() {
+                super();
+            }
+
+            static get styles() {
+                return css`
+                  .content {
+                    display: flex;
+                    flex-direction: column;
+                    overflow-y: auto;
+                    height: 100vh;
+                  }
+
+                  .left-sidebar {
+                    background-color: #c28281;
+                  }
+
+                  .left-sidebar button {
+                    display: block;
+                  }
+
+
+                  .right-sidebar {
+                    text-align: left;
+                    background-color: #c28281;
+                  }
+
+                  .container {
+                    display: flex;
+                    width: 100%;
+                    flex-direction: column;
+                    height: 100vh;
+                  }
+
+                  main {
+                    background-color: #6a9ebd;
+                    font-size: 1.5rem;
+                    color: black;
+                  }
+
+                  main a {
+                    font-size: 1.5rem;
+                    color: black;
+                  }
+
+                  button {
+                    background-color: #6a709f;
+                    color: black;
+                    border-top-color: white;
+                    border-left-color: white;
+                    border-bottom-color: #9a9a9a;
+                    border-right-color: #9a9a9a;
+                    border-radius: 20px;
+                    font-weight: bold;
+                    padding: 0.3em 2em;
+                    margin: 1em;
+                  }
+
+                  button:hover {
+                    background-color: antiquewhite;
+                  }
+
+
+                  a {
+                    color: white;
+                    font-size: small;
+                  }
+
+                  @media all and (min-width: 768px) {
+                    .content {
+                      flex-direction: row;
+                      flex-wrap: wrap;
+                    }
+
+                    main {
+                      flex: 5;
+                      order: 2;
+                    }
+
+                    .left-sidebar {
+                      order: 1;
+                      flex: 1;
+                      font-size: 2em;
+                    }
+
+                    .right-sidebar {
+                      flex: 1;
+                      order: 3;
+                      font-size: 2em;
+
+                    }
+                  }`
+            }
+
+            render() {
+                return html`
+                    &lt;content class="content">
+                        &lt;aside class="left-sidebar" style="display: block">&lt;/aside>
+                        &lt;main id="main">&lt;/main>
+                        &lt;aside class="right-sidebar">
+                            &lt;h6>External resources:&lt;/h6>
+                            &lt;div id="urls">&lt;/div>
+                        &lt;/aside>
+                    &lt;/content>`
+            }
+        })
+    &lt;/script>
+                </code>
+<code class="language-html">
+    &lt;header-comp>&lt;/header-comp>
+    &lt;content-comp>&lt;/content-comp>
+    &lt;footer-comp>&lt;/footer-comp>
+                        </code>
+                    </pre>
+        </div>
+    </details>
+
+
+</div>
+<script>
+    function buttonChange(own, other) {
+        document.getElementById(own).style.display = 'block';
+        document.getElementById(other).style.display = 'none'
+        document.getElementById(own + 'button').disabled = true;
+        document.getElementById(other + 'button').disabled = false;
+    }
+</script>
+
+</body>
+</html>

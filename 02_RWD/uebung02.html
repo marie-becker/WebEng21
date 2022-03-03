@@ -5,59 +5,800 @@
     <title>02 RWD</title>
     <link href="../index.css" rel="stylesheet">
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/311699e670.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/monokai-sublime.min.css"
+          rel="stylesheet">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+    <script>hljs.configure({languages: ['javascript']})</script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon
+        * https://www.w3schools.com/howto/howto_js_topnav_responsive.asp */
+        function myFunction() {
+            var x = document.getElementById("mySidenav");
+            if (x.className === "sidenav") {
+                x.className += " responsive";
+            } else {
+                x.className = "sidenav";
+            }
+        }
+    </script>
 </head>
 <body>
-<div class="sidenav">
-    <a href="../01_Einfuehrung/uebung01.html">Übung 01</a>
-    <a href="uebung02.html">Übung 02</a>
-    <a href="../03_JavaScript/uebung03.html">Übung 03</a>
-    <a href="../04_DOM/uebung04.html">Übung 04</a>
-
+<div class="sidenav" id="mySidenav">
+    <a href="../index.html" style="display: block"><i class="fa fa-home"></i></a>
+    <a href="../01_Einfuehrung/uebung01.html" class="active">01 Einführung</a>
+    <a href="../02_RWD/uebung02.html">02 RWD</a>
+    <a href="../03_JavaScript/uebung03.html">03 JavaScript</a>
+    <a href="../04_DOM/uebung04.html">04 DOM</a>
+    <a href="../05_Async/uebung05.html">05 Async</a>
+    <a href="../06_SVG/uebung06.html">06 SVG</a>
+    <a href="../07_node/uebung07.html">07 Node</a>
+    <a href="../08_ModularWeb/uebung08.html">08 ModularWeb</a>
+    <a href="../09_PWA/uebung09.html">09 PWA</a>
+    <a href="../10_Vue/uebung10.html">10 Vue</a>
+    <a href="../11_WebAssembly/uebung11.html">11 WebAssembly</a>
+    <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <i class="fa fa-bars"></i>
+    </a>
 </div>
 <div class="main">
     <h1>Übung 02 - Responsive Web Design</h1>
 
     <details>
-        <summary>2.1 - 2.4</summary>
-        <div class="akkordeon-inhalt">
-            <linkdetails>
-                <a href="desktop-first.html" target="_blank">
-                    <summary>2.1- Desktop First &nbsp;
-                        <i class="fas fa-external-link-alt"></i></summary>
-                </a>
-            </linkdetails>
-            <linkdetails>
-                <a href="mobile-first.html" target="_blank">
-                    <summary>2.2 - Mobile First &nbsp;<i
-                            class="fas fa-external-link-alt"></i></summary>
-                </a>
-            </linkdetails>
-            <details style="margin: 0;">
-                <summary>2.3 Holy Grail</summary>
-                <div class="akkordeon-inhalt">
-                    <linkdetails>
-                        <a href="holygrail-flex.html" target="_blank">
-                            <summary>2.3a - Flex &nbsp;
-                                <i class="fas fa-external-link-alt"></i></summary>
-                        </a>
-                    </linkdetails>
-                    <linkdetails>
-                        <a href="holygrail-grid.html" target="_blank">
-                            <summary>2.3b Grid &nbsp;<i
-                                    class="fas fa-external-link-alt"></i></summary>
-                        </a>
-                    </linkdetails>
-                </div>
-            </details>
-            <linkdetails>
-                <a href="landing-page-grid.html" target="_blank">
-                    <summary>2.4 Grid &nbsp;<i
-                            class="fas fa-external-link-alt"></i></summary>
-                </a>
-            </linkdetails>
+        <summary>2.1 - Desktop First
+            <a style="display: inline;" href="02_RWD/desktop-first.html" target="_blank">
+                &nbsp;
+                <i class="fas fa-external-link-alt"></i></a></summary>
+        <button id="dfcodebutton" onclick="buttonChange('dfcode','dfcomp')">Code</button>
+        <button disabled id="dfcompbutton" onclick="buttonChange('dfcomp', 'dfcode')">
+            Komponente
+        </button>
+
+        <div id="dfcomp">
+            <iframe frameborder="0" style="width: 100%; height: 100vh; margin-top: 1em; resize: both"
+                    src="desktop-first.html"></iframe>
+        </div>
+        <div id="dfcode" style="display: none">
+                            <pre>
+                                <code class="language-html">
+    &lt;!DOCTYPE html>
+    &lt;html lang="en">
+    &lt;head>
+        &lt;meta charset="UTF-8">
+        &lt;title>Flexbox Desktop-First&lt;/title>
+        &lt;style>
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                display: flex;
+                flex-wrap: wrap;
+                margin: 3vw 5vw 3vw 5vw;
+                height: 90vh;
+            }
+
+            aside.right {
+                flex-basis: 19%;
+                background-color: #ea3efe;
+                height: 68%;
+            }
+
+            aside.left {
+                background-color: #2cee27;
+                flex-basis: 19%;
+                height: 68%;
+            }
+
+            article {
+                flex-basis: 59.67%;
+                height: 68%;
+                background-color: #0533ff;
+                margin: 0 1% 0 1%;
+            }
+
+            nav {
+                background-color: #ff2500;
+                flex-basis: 100%;
+                height: 30%;
+                margin-bottom: 1.5vw;
+            }
+
+            /* mid-size devices like tablets &lt;= 800px */
+            @media screen and (max-width: 800px) {
+                body{
+                    margin: 5% 2% 5% 2%;
+                }
+                aside.left {
+                    flex-basis: 33%;
+                    height: 100%;
+                    margin-right: 1%;
+                }
+
+                article {
+                    flex-basis: 66%;
+                    height: 100%;
+                    margin: 0;
+                }
+
+                aside.right {
+                    flex-basis: 100%;
+                    height: 20%;
+                    margin-top: 2%;
+                }
+            }
+
+            /* small devices like smartphones &lt;= 500px */
+            @media screen and (max-width: 500px) {
+                nav{
+                    flex-basis: 100%;
+                    height: 20%;
+                    margin: 0;
+                }
+                article {
+                    flex-basis: 100%;
+                    height: 150%;
+                    margin: 0;
+
+                }
+
+                aside.left, aside.right {
+                    flex-basis: 100%;
+                    height: 20%;
+                    margin: 0;
+
+                }
+            }
+
+        &lt;/style>
+    &lt;/head>
+    &lt;body>
+    &lt;nav>&lt;/nav>
+    &lt;aside class="left">&lt;/aside>
+    &lt;article>&lt;/article>
+    &lt;aside class="right">&lt;/aside>
+    &lt;/body>
+    &lt;/html>
+                                </code>
+                            </pre>
+        </div>
+
+    </details>
+
+    <details>
+        <summary>2.2 - Mobile First
+            <a style="display: inline;" href="02_RWD/mobile-first.html" target="_blank">
+                &nbsp;
+                <i class="fas fa-external-link-alt"></i></a></summary>
+        <button id="mfcodebutton" onclick="buttonChange('mfcode','mfcomp')">Code</button>
+        <button disabled id="mfcompbutton" onclick="buttonChange('mfcomp', 'mfcode')">
+            Komponente
+        </button>
+
+        <div id="mfcomp">
+            <iframe style="width: 100%; height: 100vh; margin-top: 1em; resize: both"
+                    src="mobile-first.html"></iframe>
+        </div>
+        <div id="mfcode" style="display: none">
+                            <pre>
+                                <code class="language-html">
+    &lt;!DOCTYPE html>
+    &lt;html lang="en">
+    &lt;head>
+        &lt;meta charset="UTF-8">
+        &lt;title>Grid Mobile First&lt;/title>
+        &lt;style>
+            /* default for small devices like smartphones &lt; 768px width */
+            body {
+                display: grid;
+                grid-template-rows: 1fr 1fr 3fr 1fr;
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                        "nav" "asidel" "article" "asider";
+                height: 100vh;
+                margin: 0;
+            }
+
+            nav {
+                background-color: #ff2500;
+                grid-area: nav;
+            }
+
+            aside.left {
+                background-color: #2cee27;
+                grid-area: asidel;
+
+            }
+
+            aside.right {
+                background-color: #ea3efe;
+                grid-area: asider;
+
+            }
+
+            article {
+                background-color: #0533ff;
+                grid-area: article;
+
+            }
+
+            p{
+                padding-bottom: 2em;
+                font-size: 18px;
+                font-weight: bold;
+            }
+
+            /* mid-size devices like tablets >= 768px  */
+            @media (min-width: 768px ) {
+                body {
+                    grid-template-columns: 1fr 2fr 1fr;
+                    grid-template-rows: 1fr 3fr 1fr;
+                    grid-template-areas:
+                        "nav nav nav"
+                        "asidel article article"
+                        "asider asider asider";
+                }
+            }
+
+            /* big devices like monitors, notebooks >= 992 */
+            @media (min-width: 992px) {
+                body {
+                    grid-template-columns: 1fr 3fr 1fr;
+                    grid-template-rows: 1fr 3fr;
+                    grid-template-areas:
+                        "nav nav nav"
+                        "asidel article asider";
+                }
+            }
+        &lt;/style>
+    &lt;/head>
+    &lt;body>
+    &lt;nav>&lt;/nav>
+    &lt;aside class="left">&lt;/aside>
+    &lt;article>&lt;/article>
+    &lt;aside class="right">&lt;/aside>
+    &lt;/body>
+    &lt;/html>
+                                </code>
+                            </pre>
+        </div>
+
+    </details>
+
+    <details>
+        <summary>2.3a - Holy Grail Flexbox
+            <a style="display: inline;" href="02_RWD/holygrail-flex.html" target="_blank">&nbsp;
+                <i class="fas fa-external-link-alt"></i></a></summary>
+        <button id="hgfcodebutton" onclick="buttonChange('hgfcode','hgfcomp')">Code</button>
+        <button disabled id="hgfcompbutton" onclick="buttonChange('hgfcomp', 'hgfcode')">
+            Komponente
+        </button>
+
+        <div id="hgfcomp">
+            <iframe style="width: 100%; height: 100vh; margin-top: 1em; resize: both"
+                    src="holygrail-flex.html"></iframe>
+        </div>
+        <div id="hgfcode" style="display: none">
+                            <pre>
+                                <code class="language-html">
+    &lt;!DOCTYPE html>
+    &lt;html lang="en">
+
+    &lt;head>
+        &lt;meta charset="UTF-8">
+        &lt;title>Holy Grail Flexbox&lt;/title>
+
+        &lt;style>
+            * {
+                box-sizing: border-box;
+                padding: 0;
+                margin: 0;
+            }
+
+            body {
+                color: white;
+                text-align: center;
+            }
+
+            header {
+                background-color: #c14f4f;
+                text-align: left;
+                padding-bottom: 2vh;
+
+            }
+
+            main {
+                background-color: #6a9ebd;
+            }
+
+            footer {
+                background: black;
+            }
+
+            .left-sidebar {
+                background-color: #c28281;
+            }
+
+            .right-sidebar {
+                background-color: #c28281;
+            }
+
+            .container {
+                display: flex;
+                width: 100%;
+                flex-direction: column;
+                height: 100vh;
+            }
+
+            .content {
+                display: flex;
+                flex-direction: column;
+                overflow-y: auto;
+                height: 100vh;
+            }
+
+            button {
+                background-color: #6a709f;
+                color: black;
+                border-top-color: white;
+                border-left-color: white;
+                border-bottom-color: #9a9a9a;
+                border-right-color: #9a9a9a;
+                border-radius: 20px;
+                font-weight: bold;
+                padding: 0.3em 2em;
+                margin-left: 1em;
+            }
+
+            h1 {
+                text-align: center;
+                margin: 0;
+            }
+
+            a {
+                color: white;
+            }
+
+            @media all and (min-width: 768px) {
+                .content {
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                }
+
+                main {
+                    flex: 5;
+                    order: 2;
+                }
+
+                .left-sidebar {
+                    order: 1;
+                    flex: 1;
+                    font-size: 2em;
+                }
+
+                .right-sidebar {
+                    flex: 1;
+                    order: 3;
+                    font-size: 2em;
+
+                }
+            }
+        &lt;/style>
+    &lt;/head>
+
+    &lt;body>
+    &lt;div class="container">
+        &lt;header>
+            &lt;h1>Header&lt;/h1>
+            &lt;button>Home&lt;/button>
+            &lt;button>News&lt;/button>
+            &lt;button>Contact&lt;/button>
+            &lt;button>About&lt;/button>
+        &lt;/header>
+        &lt;div class="content">
+            &lt;aside class="left-sidebar">
+                &lt;p>left&lt;/p>
+                &lt;p>menu&lt;/p>
+                &lt;p>with&lt;/p>
+                &lt;p>many&lt;/p>
+                &lt;p>items&lt;/p>
+            &lt;/aside>
+            &lt;main>
+                Lorem ipsum Text (left out for readability)
+            &lt;/main>
+            &lt;aside class="right-sidebar">
+                right
+            &lt;/aside>
+        &lt;/div>
+        &lt;footer>
+            &lt;span style="font-size: 30px">Footer:&lt;/span>
+            &lt;a href="">Sitemap&lt;/a>
+            &lt;a href="">Home&lt;/a>
+            &lt;a href="">News&lt;/a>
+            &lt;a href="">Contact&lt;/a>
+            &lt;a href="">About&lt;/a>
+        &lt;/footer>
+    &lt;/div>
+    &lt;/body>
+
+    &lt;/html>
+                                </code>
+                            </pre>
+        </div>
+
+    </details>
+
+    <details>
+        <summary>2.3b - Holy Grail Grid &nbsp;
+            <a style="display: inline;" href="02_RWD/holygrail-grid.html" target="_blank">
+                <i class="fas fa-external-link-alt"></i></a></summary>
+        <button id="hggcodebutton" onclick="buttonChange('hggcode','hggcomp')">Code</button>
+        <button disabled id="hggcompbutton" onclick="buttonChange('hggcomp', 'hgfcode')">
+            Komponente
+        </button>
+
+        <div id="hggcomp">
+            <iframe style="width: 100%; height: 100vh; margin-top: 1em; resize: both"
+                    src="holygrail-grid.html"></iframe>
+        </div>
+        <div id="hggcode" style="display: none">
+                            <pre>
+                                <code class="language-html">
+    &lt;!DOCTYPE html>
+    &lt;html lang="en">
+
+    &lt;head>
+        &lt;meta charset="UTF-8">
+        &lt;title>Holy Grail Grid&lt;/title>
+
+        &lt;style>
+            * {
+                box-sizing: border-box;
+                padding: 0;
+                margin: 0;
+            }
+
+            body {
+                color: white;
+                text-align: center;
+            }
+
+            header {
+                background-color: #c14f4f;
+                text-align: left;
+            }
+
+            main {
+                background-color: #6a9ebd;
+            }
+
+            footer {
+                background: black;
+            }
+
+            .left-sidebar {
+                background-color: #c28281;
+            }
+
+            .right-sidebar {
+                background-color: #c28281;
+            }
+
+            .container {
+                display: grid;
+                grid-column: auto;
+                width: 100%;
+                height: 100vh;
+                grid-template-rows: 1fr  9fr 0.5fr;
+                grid-template-columns: 1fr;
+            }
+
+            .content {
+                display: grid;
+                overflow-y: auto;
+                grid-template-rows: 1fr  3fr 1fr;
+                grid-template-columns: 1fr;
+                height: 100%;
+            }
+
+            button {
+                background-color: #6a709f;
+                color: black;
+                border-top-color: white;
+                border-left-color: white;
+                border-bottom-color: #9a9a9a;
+                border-right-color: #9a9a9a;
+                border-radius: 20px;
+                font-weight: bold;
+                padding: 0.3em 2em;
+                margin-left: 1em;
+            }
+
+            h1 {
+                text-align: center;
+                margin: 0;
+            }
+
+            a {
+                color: white;
+            }
+
+            @media all and (min-width: 768px) {
+                .content {
+                    grid-template-columns: 1fr  3fr 1fr;
+                    grid-template-rows: 1fr;
+                }
+
+                .left-sidebar {
+                    order: 1;
+                    font-size: 2em;
+                }
+
+                main {
+                    order: 2;
+                }
+
+                .right-sidebar {
+                    order: 3;
+                    font-size: 2em;
+                }
+            }
+        &lt;/style>
+    &lt;/head>
+
+    &lt;body>
+    &lt;div class="container">
+        &lt;header>
+            &lt;h1>Header&lt;/h1>
+            &lt;button>Home&lt;/button>
+            &lt;button>News&lt;/button>
+            &lt;button>Contact&lt;/button>
+            &lt;button>About&lt;/button>
+        &lt;/header>
+        &lt;div class="content">
+            &lt;aside class="left-sidebar">
+                &lt;p>left&lt;/p>
+                &lt;p>menu&lt;/p>
+                &lt;p>with&lt;/p>
+                &lt;p>many&lt;/p>
+                &lt;p>items&lt;/p>
+            &lt;/aside>
+            &lt;main>
+                Lorem ipsum text (left out for readability)
+            &lt;/main>
+            &lt;aside class="right-sidebar">
+                right
+            &lt;/aside>
+        &lt;/div>
+        &lt;footer>
+            &lt;span>Footer:&lt;/span>
+            &lt;a href="">Sitemap&lt;/a>
+            &lt;a href="">Home&lt;/a>
+            &lt;a href="">News&lt;/a>
+            &lt;a href="">Contact&lt;/a>
+            &lt;a href="">About&lt;/a>
+        &lt;/footer>
+    &lt;/div>
+    &lt;/body>
+    &lt;/html>
+                                </code>
+                            </pre>
+        </div>
+    </details>
+
+    <details>
+        <summary>2.4 - Landing Page Grid &nbsp;
+            <a style="display: inline;" href="02_RWD/landing-page-grid.html" target="_blank">
+                <i class="fas fa-external-link-alt"></i></a></summary>
+        <button id="lpgcodebutton" onclick="buttonChange('lpgcode','lpgcomp')">Code</button>
+        <button disabled id="lpgcompbutton" onclick="buttonChange('lpgcomp', 'lpgcode')">
+            Komponente
+        </button>
+
+        <div id="lpgcomp">
+            <iframe style="width: 100%; height: 100vh; margin-top: 1em; resize: both"
+                    src="landing-page-grid.html"></iframe>
+        </div>
+        <div id="lpgcode" style="display: none">
+                            <pre>
+                                <code class="language-html">
+    &lt;!DOCTYPE html>
+    &lt;html lang="en">
+    &lt;head>
+        &lt;meta charset="UTF-8">
+        &lt;title>Landing Page Grid&lt;/title>
+        &lt;style>
+            @import url('https://fonts.googleapis.com/css2?family=Economica&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                overflow: hidden;
+                font-family: "Open Sans", sans-serif;
+                margin: 0;
+                height: 100vh;
+                width: 100vw;
+                display: grid;
+                grid-template-rows: 0.5fr 7fr 2.5fr;
+                grid-template-areas:
+                    "nav"
+                    "main"
+                    "footi";
+            }
+
+            button {
+                background: #f88e37;
+                color: white;
+                border-radius: 8px;
+                border: none;
+                font-family: "Economica", sans-serif;
+                font-size: 3vh;
+                font-weight: bold;
+                width: 50%;
+            }
+
+            .main {
+                grid-area: main;
+                display: grid;
+                height: 70vh;
+                grid-template-columns: 50% 50%;
+                grid-template-rows: 5vh 65vh;
+                grid-template-areas: "heading heading" "pic text";
+                text-align: center;
+                background: #ebeae6;
+
+            }
+
+            nav {
+                grid-area: nav;
+                background: #363636;
+                text-align: center;
+                color: #dcdbdb;
+                font-weight: bold;
+                position: relative;
+                top: 50%;
+                transform: translateY(-50%);
+
+            }
+
+            nav span {
+                display: inline-block;
+                padding: 0 1em;
+            }
+
+            footer {
+                grid-area: footi;
+                background: #011826;
+                text-align: center;
+                color: white;
+                padding-top: 3em;
+                font-size: 2vh;
+            }
+
+            .pic {
+                grid-area: pic;
+                vertical-align: middle;
+            }
+
+            .pic > img {
+                max-height: 90%;
+                max-width: 90%;
+                border: 1px solid black;
+                border-radius: 10px;
+                position: relative;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            .text {
+                padding-top: 3em;
+                grid-area: text;
+            }
+
+            h1 {
+                text-align: center;
+                font-family: Roboto, sans-serif;
+                font-weight: bold;
+                grid-area: heading;
+                margin: 0;
+                font-size: 4vh;
+
+            }
+
+            .text p {
+                font-weight: bold;
+                padding-bottom: 2em;
+                font-size: 2vh;
+            }
+
+            /* small devices like smartphones &lt;= 500px */
+            @media screen and (max-width: 500px) {
+                h1 {
+                    font-size: 1.5em;
+                }
+
+                nav span {
+                    display: block;
+                    position: static;
+                    top: auto;
+                    transform: none;
+                }
+
+                .main {
+                    grid-template-columns: 100%;
+                    grid-template-rows: 10% 50% 40%;
+                    grid-template-areas: "heading" "pic" "text";
+
+                }
+
+                .text p {
+                    padding: 0;
+                    font-size: 0.8em;
+                }
+
+                .text {
+                    padding: 0;
+                }
+
+                button {
+                    font-size: 1em;
+                }
+
+                footer {
+                    padding: 0;
+                }
+            }
+
+
+        &lt;/style>
+    &lt;/head>
+    &lt;body>
+    &lt;nav>
+        &lt;span>The book series&lt;/span>
+        &lt;span>Testimonials&lt;/span>
+        &lt;span>The Author&lt;/span>
+        &lt;span>Free resources&lt;/span>
+    &lt;/nav>
+
+
+    &lt;div class="main">
+        &lt;h1>You don't know JavaScript&lt;/h1>
+        &lt;div class="pic">
+            &lt;img alt="Picture of a book named You don't know JS, Complete Series by Kyle Simpson"
+                 src="https://kaul.inf.h-brs.de/wem/assets/img/landing-img.png">
+        &lt;/div>
+
+        &lt;div class="text">
+            &lt;p>Don't just drift through Javascript.&lt;/p>
+            &lt;p>Understand how Javascript works&lt;/p>
+            &lt;p>Start your journey through the bumpy side of Javascript.&lt;/p>
+            &lt;button>ORDER YOUR COPY NOW&lt;/button>
+        &lt;/div>
+    &lt;/div>
+
+
+    &lt;footer>
+        &lt;p>The first ebook in the book series is absolutely
+            free.&lt;/p>
+        &lt;button>FIND OUT MORE ABOUT THIS OFFER&lt;/button>
+    &lt;/footer>
+    &lt;/body>
+    &lt;/html>
+                                </code>
+                            </pre>
         </div>
     </details>
 </div>
-
+<script>
+    function buttonChange(own, other) {
+        document.getElementById(own).style.display = 'block';
+        document.getElementById(other).style.display = 'none'
+        document.getElementById(own + 'button').disabled = true;
+        document.getElementById(other + 'button').disabled = false;
+    }
+</script>
 </body>
 </html>

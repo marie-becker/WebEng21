@@ -4,27 +4,30 @@
     <meta charset="UTF-8">
     <title>Promises</title>
     <script>
-        fetch('https://www2.inf.h-brs.de/~mbeck32s/A.txt')
-        .then(response => response.text())
-        .then(a => {
-            fetch('https://www2.inf.h-brs.de/~mbeck32s/B.txt')
-            .then(resb => resb.text())
-            .then(b => {
-                let arra = a.split('\r');
-                let arrb = b.split('\r');
-                const interleave = ([ x, ...xs ], ys = []) =>
-                    x === undefined
-                        ? ys                             // base: no x
-                        : [ x, ...interleave (ys, xs) ]  // inductive: some x
-                const text = interleave(arra, arrb);
-                document.getElementById("text").innerHTML = text.join('<br />');
-            })
-                .catch(error => console.log(error))
+        Promise.all([
+            fetch('https://www2.inf.h-brs.de/~mbeck32s/A.txt').then(res => res.text()),
+            fetch('https://www2.inf.h-brs.de/~mbeck32s/B.txt').then(res => res.text())
+        ]).then(data => {
+            let arra = data[0].split('\r');
+            let arrb = data[1].split('\r');
+
+            arrb.forEach(function (ael, index) {
+                this[index] = '<span style="color:blue;">' + ael + '</span>';
+            }, arrb)
+
+            // interleave function taken from Mulan on stackoverflow
+            // https://stackoverflow.com/a/47061616/15212696
+            const interleave = ([x, ...xs], ys = []) =>
+                x === undefined
+                    ? ys                             // base: no x
+                    : [x, ...interleave(ys, xs)]     // inductive: some x
+            const text = interleave(arra, arrb);
+            document.getElementById("text").innerHTML = text.join('<br />');
         })
-        .catch(error => console.log(error))
     </script>
 </head>
-<body>
-<p style="text-align: center" id="text"></p>
+<body style="text-align: center; font-family: 'Calibri',serif">
+<h1>5.1 Promises - Konkateniert zwei Texte, die auf meinem Server liegen, zeilenweise.</h1>
+<p id="text"></p>
 </body>
 </html>

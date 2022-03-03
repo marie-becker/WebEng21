@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>04 DOM</title>
+    <link href="../index.css" rel="stylesheet">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/311699e670.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/monokai-sublime.min.css"
+          rel="stylesheet">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+    <script>hljs.configure({languages: ['javascript']})</script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon
+        * https://www.w3schools.com/howto/howto_js_topnav_responsive.asp */
+        function myFunction() {
+            var x = document.getElementById("mySidenav");
+            if (x.className === "sidenav") {
+                x.className += " responsive";
+            } else {
+                x.className = "sidenav";
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="sidenav" id="mySidenav">
+    <a href="../index.html" style="display: block"><i class="fa fa-home"></i></a>
+    <a href="../01_Einfuehrung/uebung01.html" class="active">01 Einführung</a>
+    <a href="../02_RWD/uebung02.html">02 RWD</a>
+    <a href="../03_JavaScript/uebung03.html">03 JavaScript</a>
+    <a href="../04_DOM/uebung04.html">04 DOM</a>
+    <a href="../05_Async/uebung05.html">05 Async</a>
+    <a href="../06_SVG/uebung06.html">06 SVG</a>
+    <a href="../07_node/uebung07.html">07 Node</a>
+    <a href="../08_ModularWeb/uebung08.html">08 ModularWeb</a>
+    <a href="../09_PWA/uebung09.html">09 PWA</a>
+    <a href="../10_Vue/uebung10.html">10 Vue</a>
+    <a href="../11_WebAssembly/uebung11.html">11 WebAssembly</a>
+    <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <i class="fa fa-bars"></i>
+    </a>
+</div>
+<div class="main">
+    <h1>Übung 05 - Asynchron</h1>
+
+    <details>
+        <summary>5.1 - Promises
+            <a style="display: inline;" href="promises.html" target="_blank">
+                &nbsp;
+                <i class="fas fa-external-link-alt"></i></a></summary>
+        <button id="promisescodebutton" onclick="buttonChange('promisescode','promisescomp')">Code</button>
+        <button disabled id="promisescompbutton" onclick="buttonChange('promisescomp', 'promisescode')">
+            Komponente
+        </button>
+
+        <div id="promisescomp">
+            <iframe frameborder="0"
+                    style="background-color:white; width: 100%; height: 100vh; margin-top: 1em; resize: both"
+                    src="promises.html"></iframe>
+        </div>
+        <div id="promisescode" style="display: none">
+                            <pre>
+                                <code class="language-html">
+    &lt;!DOCTYPE html>
+    &lt;html lang="en">
+    &lt;head>
+        &lt;meta charset="UTF-8">
+        &lt;title>Promises&lt;/title>
+        &lt;script>
+            Promise.all([
+                fetch('https://www2.inf.h-brs.de/~mbeck32s/A.txt').then(res => res.text()),
+                fetch('https://www2.inf.h-brs.de/~mbeck32s/B.txt').then(res => res.text())
+            ]).then(data => {
+                let arra = data[0].split('\r');
+                let arrb = data[1].split('\r');
+
+                arrb.forEach(function (ael, index) {
+                    this[index] = '&lt;span style="color:blue;">' + ael + '&lt;/span>';
+                }, arrb)
+
+                // interleave function taken from Mulan on stackoverflow
+                // https://stackoverflow.com/a/47061616/15212696
+                const interleave = ([x, ...xs], ys = []) =>
+                    x === undefined
+                        ? ys                             // base: no x
+                        : [x, ...interleave(ys, xs)]     // inductive: some x
+                const text = interleave(arra, arrb);
+                document.getElementById("text").innerHTML = text.join('&lt;br />');
+            })
+        &lt;/script>
+    &lt;/head>
+    &lt;body style="text-align: center; font-family: 'Calibri',serif">
+    &lt;h1>5.1 Promises - Konkateniert zwei Texte, die auf meinem Server liegen, zeilenweise.&lt;/h1>
+    &lt;p id="text">&lt;/p>
+    &lt;/body>
+    &lt;/html>
+                                </code>
+                            </pre>
+        </div>
+
+    </details>
+
+    <details>
+        <summary>5.2 - Async Await
+            <a style="display: inline;" href="async-await.html" target="_blank">
+                &nbsp;
+                <i class="fas fa-external-link-alt"></i></a></summary>
+        <button id="asynccodebutton" onclick="buttonChange('asynccode','asynccomp')">Code</button>
+        <button disabled id="asynccompbutton" onclick="buttonChange('asynccomp', 'asynccode')">
+            Komponente
+        </button>
+
+        <div id="asynccomp">
+            <iframe frameborder="0"
+                    style="background-color:white; width: 100%; height: 100vh; margin-top: 1em; resize: both"
+                    src="promises.html"></iframe>
+        </div>
+        <div id="asynccode" style="display: none">
+                            <pre>
+                                <code class="language-html">
+    &lt;!DOCTYPE html>
+    &lt;html lang="en">
+    &lt;head>
+        &lt;meta charset="UTF-8">
+        &lt;title>Async/Await&lt;/title>
+        &lt;script>
+            async function mixTexts() {
+                const [a, b] = await Promise.all([
+                    fetch('https://www2.inf.h-brs.de/~mbeck32s/A.txt'),
+                    fetch('https://www2.inf.h-brs.de/~mbeck32s/B.txt')
+                ]);
+                let arra = (await a.text()).split('\r');
+                let arrb = (await b.text()).split('\r');
+
+                arrb.forEach(function (ael, index) {
+                    this[index] = '&lt;span style="color:blue;">' + ael + '&lt;/span>';
+                }, arrb)
+
+                // interleave function taken from Mulan on stackoverflow
+                // https://stackoverflow.com/a/47061616/15212696
+                const interleave = ([x, ...xs], ys = []) =>
+                    x === undefined
+                        ? ys                             // base: no x
+                        : [x, ...interleave(ys, xs)]  // inductive: some x
+                const text = interleave(arra, arrb);
+                document.getElementById("text").innerHTML = text.join('&lt;br />');
+            }
+            mixTexts();
+        &lt;/script>
+    &lt;/head>
+    &lt;body style="text-align: center; font-family: 'Calibri',serif">
+    &lt;h1>5.2 async/await - Konkateniert zwei Texte, die auf meinem Server liegen, zeilenweise.&lt;/h1>
+    &lt;p id="text">&lt;/p>
+    &lt;/body>
+    &lt;/html>
+                                </code>
+                            </pre>
+        </div>
+
+    </details>
+
+    <details>
+        <summary>5.3 - Web Worker
+            <a style="display: inline;" href="03_WebWorker/worker.html" target="_blank">
+                &nbsp;
+                <i class="fas fa-external-link-alt"></i></a></summary>
+        <button id="wwcodebutton" onclick="buttonChange('wwcode','wwcomp')">Code</button>
+        <button disabled id="wwcompbutton" onclick="buttonChange('wwcomp', 'wwcode')">
+            Komponente
+        </button>
+
+        <div id="wwcomp">
+            <iframe frameborder="0"
+                    style="background-color:white; width: 100%; height: 100vh; margin-top: 1em; resize: both"
+                    src="03_WebWorker/worker.html"></iframe>
+        </div>
+        <div id="wwcode" style="display: none">
+                            <pre>
+ primzahlen.html
+                                <code class="language-html">
+    &lt;!DOCTYPE html>
+    &lt;html lang="en">
+    &lt;head>
+        &lt;meta charset="UTF-8">
+        &lt;title>Primzahlen&lt;/title>
+        &lt;style>
+            div {
+                width: 100%;
+                height: 4em;
+            }
+
+            #container {
+                background-color: lightgrey;
+            }
+
+            #animate {
+                background-color: yellow;
+            }
+        &lt;/style>
+
+    &lt;/head>
+    &lt;body style="font-family: Calibri,serif">
+    &lt;h1>5.3 Worker - Web Worker, der Primzahlen berechnet.&lt;/h1>
+    &lt;p>Die Berechnung startet erst nach 3 Sekunden, um Ruckel(freiheit) besser zu erkennen. Die Schleife läuft nur bis
+    Index 9999, da eine Endlosschleife bei mir dafür sorgt, dass die Seite keine Rückmeldung mehr gibt.&lt;/p>
+    &lt;div id="container">
+        &lt;div id="animate">&lt;/div>
+    &lt;/div>
+    &lt;div id="prime" style="overflow-wrap: break-word">&lt;/div>
+    &lt;/body>
+    &lt;script>
+
+        function fib(max) {
+            let cache = [];
+            /*
+            Endlosschleife:
+            let i = 0;
+            for (;;){
+             */
+            for (let i = 0; i &lt; max ; i++) {
+                if (i === 0 || i === 1) {
+                    cache.push(BigInt(i));
+                    document.getElementById("prime").innerText = "Index: " + i + " Fibonacci: " + i;
+                    continue;
+                }
+                const next = cache[cache.length - 2] + cache[cache.length - 1];
+                cache.push(next);
+                console.log("Index: " + i + " Fibonacci: " + next);
+                document.getElementById("prime").innerText = "Index: " + i + " Fibonacci: " + next;
+            }
+        }
+
+        function anim() {
+            const animate = document.getElementById("animate");
+            let width = 1;
+            let animation = requestAnimationFrame(step);
+
+            function step() {
+                width += 1;
+                if (width === 100) width = 1; // repeat
+                animate.style.width = width + '%';
+                animation = requestAnimationFrame(step);
+            }
+        }
+        anim();
+        setTimeout(function (){
+            // fib()
+            fib(10000);
+        }, 3000);
+
+    &lt;/script>
+    &lt;/html>
+                                </code>
+ primeWorker.js
+                                <code class="language-javascript">
+    onmessage = function () {
+        let i = 0;
+        let cache = [];
+        for (; ; i++) {
+            if (i === 0 || i === 1) {
+                cache.push(BigInt(i));
+                self.postMessage("Index: " + i + " Fibonacci: " + i)
+                continue;
+            }
+            const next = cache[cache.length - 2] + cache[cache.length - 1];
+            cache.push(next);
+            postMessage("Index: " + i + '&lt;br>' +  " Fibonacci: " + next)
+        }
+    }
+                                </code>
+ worker.html (as seen live here)
+                                <code class="language-html">
+    &lt;!DOCTYPE html>
+    &lt;html lang="en">
+    &lt;head>
+        &lt;meta charset="UTF-8">
+        &lt;title>Worker&lt;/title>
+        &lt;style>
+            div {
+                width: 100%;
+                height: 4em;
+            }
+
+            #container {
+                background-color: lightgrey;
+            }
+
+            #animate {
+                background-color: yellow;
+            }
+        &lt;/style>
+
+    &lt;/head>
+    &lt;body>
+    &lt;div id="container">
+        &lt;div id="animate">&lt;/div>
+    &lt;/div>
+    &lt;div id="prime" style="overflow-wrap: break-word">&lt;/div>
+    &lt;/body>
+    &lt;script>
+        function anim() {
+            const animate = document.getElementById("animate");
+            let width = 1;
+            let animation = requestAnimationFrame(step);
+
+            function step() {
+                width += 1;
+                if (width === 100) width = 1; // repeat
+                animate.style.width = width + '%';
+                animation = requestAnimationFrame(step);
+            }
+        }
+
+        anim();
+        const worker = new Worker('primeWorker.js')
+        worker.postMessage('letsgo');
+        worker.onmessage = function (event){
+            document.getElementById("prime").innerHTML = event.data;
+        }
+    &lt;/script>
+    &lt;/html>
+                                </code>
+                            </pre>
+        </div>
+
+    </details>
+
+
+
+
+    <linkdetails>
+        <a href="04_Navigator/navigator.html" target="_blank">
+            <summary>5.4 - Navigator
+                <i class="fas fa-external-link-alt"></i></summary>
+        </a>
+    </linkdetails>
+
+    <script>
+        function buttonChange(own, other) {
+            document.getElementById(own).style.display = 'block';
+            document.getElementById(other).style.display = 'none'
+            document.getElementById(own + 'button').disabled = true;
+            document.getElementById(other + 'button').disabled = false;
+        }
+    </script>
+</div>
+</body>
+</html>

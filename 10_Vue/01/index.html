@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Singe File Component</title>
+</head>
+<script src="https://unpkg.com/vue"></script>
+<div id="app">
+    <single-file-component></single-file-component>
+</div>
+<div id="app2">
+    <single-file-component></single-file-component>
+</div>
+<script type="module">
+    import SingleFileComponent from './singlefilecomp.mjs';
+
+    new Vue ({
+        el: '#app',
+        components:{
+            SingleFileComponent,
+        }
+    });
+    new Vue ({
+        el: '#app2',
+        components:{
+            SingleFileComponent,
+        }
+    });
+</script>
+</html>

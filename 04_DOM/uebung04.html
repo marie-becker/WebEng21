@@ -5,47 +5,576 @@
     <title>04 DOM</title>
     <link href="../index.css" rel="stylesheet">
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/311699e670.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/monokai-sublime.min.css"
+          rel="stylesheet">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+    <script>hljs.configure({languages: ['javascript']})</script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon
+        * https://www.w3schools.com/howto/howto_js_topnav_responsive.asp */
+        function myFunction() {
+            var x = document.getElementById("mySidenav");
+            if (x.className === "sidenav") {
+                x.className += " responsive";
+            } else {
+                x.className = "sidenav";
+            }
+        }
+    </script>
 </head>
 <body>
-<div class="sidenav">
-    <a href="../01_Einfuehrung/uebung01.html">Übung 01</a>
-    <a href="../02_RWD/uebung02.html">Übung 02</a>
-    <a href="../03_JavaScript/uebung03.html">Übung 03</a>
-    <a href="uebung04.html">Übung 04</a>
+<div class="sidenav" id="mySidenav">
+    <a href="../index.html" style="display: block"><i class="fa fa-home"></i></a>
+    <a href="../01_Einfuehrung/uebung01.html" class="active">01 Einführung</a>
+    <a href="../02_RWD/uebung02.html">02 RWD</a>
+    <a href="../03_JavaScript/uebung03.html">03 JavaScript</a>
+    <a href="../04_DOM/uebung04.html">04 DOM</a>
+    <a href="../05_Async/uebung05.html">05 Async</a>
+    <a href="../06_SVG/uebung06.html">06 SVG</a>
+    <a href="../07_node/uebung07.html">07 Node</a>
+    <a href="../08_ModularWeb/uebung08.html">08 ModularWeb</a>
+    <a href="../09_PWA/uebung09.html">09 PWA</a>
+    <a href="../10_Vue/uebung10.html">10 Vue</a>
+    <a href="../11_WebAssembly/uebung11.html">11 WebAssembly</a>
+    <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <i class="fa fa-bars"></i>
+    </a>
 </div>
 <div class="main">
     <h1>Übung 04 - DOM</h1>
 
     <details>
-        <summary>4.1 - 4.4</summary>
-        <div class="akkordeon-inhalt">
-            <linkdetails>
-                <a href="01_Einkaufsliste/einkaufsliste.html" target="_blank">
-                    <summary>4.1 - Einkaufsliste
-                        <i class="fas fa-external-link-alt"></i></summary>
-                </a>
-            </linkdetails>
-            <linkdetails>
-                <a href="02_Rednerliste/rednerliste.html" target="_blank">
-                    <summary>4.2 - Rednerliste&nbsp;
-                        <i class="fas fa-external-link-alt"></i></summary>
-                </a>
-            </linkdetails>
-            <linkdetails>
-                <a href="03_Tabellenkalkulation/tabellenkalkulation.html" target="_blank">
-                    <summary>4.3 - Tabellenkalkulation&nbsp;
-                        <i class="fas fa-external-link-alt"></i></summary>
-                </a>
-            </linkdetails>
-            <linkdetails>
-                <a href="04_Editor/editor.html" target="_blank">
-                    <summary>4.4 - HTML-Editor&nbsp;
-                        <i class="fas fa-external-link-alt"></i></summary>
-                </a>
-            </linkdetails>
+        <summary>4.1 - Einkaufsliste
+            <a style="display: inline;" href="01_Einkaufsliste/einkaufsliste.html" target="_blank">
+                &nbsp;
+                <i class="fas fa-external-link-alt"></i></a></summary>
+        <button id="einkaufcodebutton" onclick="buttonChange('einkaufcode','einkaufcomp')">Code</button>
+        <button disabled id="einkaufcompbutton" onclick="buttonChange('einkaufcomp', 'einkaufcode')">Komponente
+        </button>
+
+        <div id="einkaufcomp">
+            <iframe frameborder="0" style="background-color:white; width: 100%; height: 100vh; margin-top: 1em"
+                    src="01_Einkaufsliste/einkaufsliste.html"></iframe>
+        </div>
+        <div id="einkaufcode" style="display: none">
+                            <pre>
+ einkaufsliste.html
+                                <code class="language-html">
+    &lt;!DOCTYPE html>
+    &lt;html lang="en">
+    &lt;head>
+        &lt;meta charset="UTF-8">
+        &lt;title>Einkaufsliste&lt;/title>
+        &lt;script src="einkaufsliste.js">&lt;/script>
+    &lt;/head>
+    &lt;body>
+    &lt;h1>Einkaufsliste&lt;/h1>
+    &lt;label for="item">Enter a new item: &lt;/label>&lt;input id="item" onkeyup="myKeyup(event)" type="text">
+    &lt;button onclick="additem()">Add item&lt;/button>
+    &lt;button onclick="clearall()">Clear all&lt;/button>
+    &lt;div id="liste">&lt;/div>
+    &lt;/body>
+    &lt;/html>
+                                </code>
+ einkaufsliste.js
+                                <code class="language-javascript">
+    let liste = [];
+
+    function myKeyup(ev){
+        console.log(ev)
+        if (ev.key === "Enter") {
+            additem();
+            document.getElementById('item').value = "";
+        }
+    }
+
+    function additem() {
+        liste.push(document.getElementById('item').value);
+        document.getElementById('item').value = "";
+        renderlist();
+    }
+
+    function renderlist() {
+        let str = '&lt;ul id="renderedlist">';
+        let counter = 0;
+        liste.forEach(function (l) {
+            str += `&lt;li id="${counter}">` + l + ` &lt;button onclick="deleteitem(${counter})">Delete&lt;/button>` + '&lt;/li>';
+            counter++;
+        });
+        str += '&lt;/ul>';
+        document.getElementById("liste").innerHTML = str;
+    }
+
+    function deleteitem(index) {
+        liste.splice(index, 1)
+        document.getElementById("renderedlist").remove();
+        renderlist();
+    }
+
+    function clearall(){
+        liste = [];
+        renderlist();
+    }
+                                </code>
+                            </pre>
         </div>
     </details>
-</div>
 
+    <details>
+        <summary>4.2 - Rednerliste
+            <a style="display: inline;" href="02_Rednerliste/rednerliste.html" target="_blank">
+                &nbsp;
+                <i class="fas fa-external-link-alt"></i></a></summary>
+        <button id="rednercodebutton" onclick="buttonChange('rednercode','rednercomp')">Code</button>
+        <button disabled id="rednercompbutton" onclick="buttonChange('rednercomp', 'rednercode')">
+            Komponente
+        </button>
+
+        <div id="rednercomp">
+            <iframe frameborder="0" style="background-color:white; width: 100%; height: 100vh; margin-top: 1em"
+                    src="02_Rednerliste/rednerliste.html"></iframe>
+        </div>
+        <div id="rednercode" style="display: none">
+                            <pre>
+ rednerliste.html
+                                <code class="language-html">
+    &lt;html lang="en">
+    &lt;head>
+        &lt;meta charset="UTF-8">
+        &lt;title>Rednerliste&lt;/title>
+        &lt;script src="rednerliste.js">&lt;/script>
+    &lt;/head>
+    &lt;body>
+    &lt;h1>Rednerliste&lt;/h1>
+    &lt;label for="item">Neuer Redner &lt;/label>&lt;input id="item" onkeyup="myKeyup(event)" type="text">
+    &lt;button onclick="additem()">Add item&lt;/button>
+    &lt;button onclick="clearall()">Clear all&lt;/button>
+    &lt;div id="liste">&lt;/div>
+    &lt;/body>
+    &lt;/html>
+                                </code>
+ rednerliste.js
+                                <code class="language-javascript">
+    let liste = [];
+    let starttime;
+    let elapsedtime = 0;
+    let timerinterval;
+    let running;
+
+    function myKeyup(ev) {
+        if (ev.key === "Enter") {
+            additem();
+            document.getElementById('item').value = "";
+        }
+    }
+
+    function additem() {
+        var redner = {name: document.getElementById('item').value, time: 0}
+        liste.push(redner);
+        document.getElementById('item').value = "";
+        renderlist();
+        start(liste.length - 1);
+    }
+
+    function renderlist() {
+        if (liste.length !== 0) {
+            if (running !== undefined) {
+                stop(running);
+            }
+            let str = '&lt;ul id="renderedlist">';
+            let counter = 0;
+            liste.forEach(function (l) {
+                str += `&lt;li>${l.name} ` + `&lt;span id="${counter}">${timeToString(l.time)}&lt;/span>` +
+                    ` &lt;button onclick="start(${counter})">Start!&lt;/button>` +
+                    ` &lt;button onclick="stop(${counter})" style="display: none">Stop!&lt;/button>` +
+                    '&lt;/li>';
+                counter++;
+            });
+            str += '&lt;/ul>';
+            document.getElementById("liste").innerHTML = str;
+        }
+    }
+
+    function clearall() {
+        if (running !== undefined) {
+            stop(running);
+            running = undefined;
+        }
+        liste = [];
+        document.getElementById("renderedlist").remove();
+    }
+
+    function start(id) {
+        if (running !== undefined) {
+            stop(running);
+        }
+        running = id;
+        starttime = Date.now() - liste[id].time;
+        timerinterval = setInterval(function printtime() {
+            elapsedtime = Date.now() - starttime;
+            document.getElementById(id).innerHTML = timeToString(elapsedtime)
+        }, 10);
+        const btn = document.getElementById(id).nextElementSibling;
+        btn.style.display = "none";
+        btn.nextElementSibling.style.display = "inline";
+    }
+
+    function timeToString(time) {
+        let diffInHrs = time / 3600000;
+        let hh = Math.floor(diffInHrs);
+
+        let diffInMin = (diffInHrs - hh) * 60;
+        let mm = Math.floor(diffInMin);
+
+        let diffInSec = (diffInMin - mm) * 60;
+        let ss = Math.floor(diffInSec);
+
+        let diffInMs = (diffInSec - ss) * 100;
+        let ms = Math.floor(diffInMs);
+
+        let formattedMM = mm.toString().padStart(2, "0");
+        let formattedSS = ss.toString().padStart(2, "0");
+        let formattedMS = ms.toString().padStart(2, "0");
+
+        return `${formattedMM}:${formattedSS}:${formattedMS}`;
+    }
+
+    function stop(id) {
+        clearInterval(timerinterval);
+        liste[id].time = elapsedtime;
+        const btn = document.getElementById(id).nextElementSibling;
+        btn.style.display = "inline";
+        btn.nextElementSibling.style.display = "none";
+    }
+                                </code>
+                            </pre>
+        </div>
+
+    </details>
+
+    <details>
+        <summary>4.3 - Tabellenkalkulation
+            <a style="display: inline;" href="03_Tabellenkalkulation/tabellenkalkulation.html" target="_blank">
+                &nbsp;
+                <i class="fas fa-external-link-alt"></i></a></summary>
+        <button id="tabellecodebutton" onclick="buttonChange('tabellecode','tabellecomp')">Code</button>
+        <button disabled id="tabellecompbutton" onclick="buttonChange('tabellecomp', 'tabellecode')">
+            Komponente
+        </button>
+
+        <div id="tabellecomp">
+            <iframe frameborder="0" style="background-color:white; width: 100%; height: 100vh; margin-top: 1em"
+                    src="03_Tabellenkalkulation/tabellenkalkulation.html"></iframe>
+        </div>
+        <div id="tabellecode" style="display: none">
+                            <pre>
+ tabellenkalkulation.html
+                                <code class="language-html">
+    &lt;!DOCTYPE html>
+    &lt;html lang="en">
+    &lt;head>
+        &lt;meta charset="UTF-8">
+        &lt;title>Tabellenkalkulation&lt;/title>
+        &lt;script src="tabellenkalkulation.js">&lt;/script>
+        &lt;style>
+            table, td {
+                border: 1px solid black;
+            }
+
+            table {
+                width: 25%;
+                border-collapse: collapse;
+            }
+
+            td {
+                width: 50%;
+                height: 16px;
+                text-align: right;
+            }
+        &lt;/style>
+    &lt;/head>
+    &lt;body>
+    &lt;h1>Tabellenkalkulation mit contentEditable&lt;/h1>
+    &lt;p>Mögliche Funktionen: sum, sub, mul, div nach dem Schema =SUM(A2,B2)&lt;/p>
+    &lt;h3>Wie groß soll die Tabelle sein?&lt;/h3>
+    &lt;label for="reihen">Reihen: &lt;/label>&lt;input id="reihen" min="1" required type="number">
+    &lt;button onclick="createTable()" type="submit">Erstelle Tabelle&lt;/button>
+    &lt;br>&lt;br>
+    &lt;div id="tablewrapper">&lt;/div>
+    &lt;/body>
+    &lt;/html>
+                                </code>
+ tabellenkalkulation.js
+                                <code class="language-javascript">
+    let formula;
+
+    function createTable() {
+        var reihen = document.getElementById("reihen").value;
+        let table = `&lt;table id="table">`;
+        for(let i = 1; i <= reihen; i++){
+            table +=`&lt;tr>&lt;td>${toAbc(i)} = &lt;/td>&lt;td contenteditable="true" id="${toAbc(i)}2" onblur="calc(false)">&lt;/td>`;
+        }
+        table += `&lt;tr>&lt;td>Sum = &lt;/td>&lt;td contenteditable="true" id="sumfield" onblur="calc(true)">&lt;/td>&lt;/tr>`;
+        table += '&lt;/table>';
+        document.getElementById("tablewrapper").innerHTML = table;
+        calc();
+    }
+
+    function calc(b) {
+        console.log(formula)
+        if(b) formula = document.getElementById("sumfield").innerHTML.toLowerCase();
+        console.log(formula.slice(5,7))
+
+        var f = formula.slice(1,4)
+        var z = parseInt(document.getElementById(formula.slice(5,7)).innerHTML);
+        var w = parseInt(document.getElementById(formula.slice(8,10)).innerHTML);
+        var res = window[f](z,w)
+        console.log(res)
+        document.getElementById("sumfield").innerHTML = res;
+    }
+
+    function toAbc(i){
+        return ((i%26)+9).toString(36);
+    }
+
+    function sum(x,y){
+        return x+y;
+    }
+    function mul(x,y){
+        return x*y;
+    }
+    function sub(x,y){
+        return x-y;
+    }
+    function div(x,y){
+        return x/y;
+    }
+                                </code>
+                            </pre>
+        </div>
+
+    </details>
+
+    <details>
+        <summary>4.4 - Editor
+            <a style="display: inline;" href="04_Editor/editor.html" target="_blank">
+                &nbsp;
+                <i class="fas fa-external-link-alt"></i></a></summary>
+        <button id="editorcodebutton" onclick="buttonChange('editorcode','editorcomp')">Code</button>
+        <button disabled id="editorcompbutton" onclick="buttonChange('editorcomp', 'editorcode')">
+            Komponente
+        </button>
+
+        <div id="editorcomp">
+            <iframe frameborder="0" style="background-color:white; width: 100%; height: 100vh; margin-top: 1em"
+                    src="04_Editor/editor.html"></iframe>
+        </div>
+        <div id="editorcode" style="display: none">
+                            <pre>
+ editor.html
+                                <code class="language-html">
+    &lt;!-- https://code.tutsplus.com/tutorials/create-a-wysiwyg-editor-with-the-contenteditable-attribute--cms-25657 -->
+    &lt;!DOCTYPE html>
+    &lt;html lang="en">
+    &lt;head>
+        &lt;meta charset="UTF-8">
+        &lt;title>Editor&lt;/title>
+        &lt;script src="https://kit.fontawesome.com/311699e670.js" crossorigin="anonymous">&lt;/script>
+        &lt;script src="editor.js">&lt;/script>
+        &lt;style>
+            body {
+                margin: 0 auto;
+                width: 600px;
+                font-family: 'Dosis', serif;
+            }
+
+            a {
+                cursor: pointer;
+            }
+
+            #editor {
+                box-shadow: 0 0 2px #CCC;
+                min-height: 150px;
+                overflow: auto;
+                padding: 1em;
+                margin-top: 20px;
+                resize: vertical;
+                outline: none;
+            }
+
+            .toolbar {
+                text-align: center;
+            }
+
+            .toolbar a,
+            .fore-wrapper,
+            .back-wrapper {
+                border: 1px solid #AAA;
+                background: #FFF;
+                border-radius: 1px;
+                color: black;
+                padding: 5px;
+                width: 1.5em;
+                margin: 10px -2px -2px;
+                display: inline-block;
+                text-decoration: none;
+                box-shadow: 0 1px 0 #CCC;
+            }
+
+            .toolbar a:hover,
+            .fore-wrapper:hover,
+            .back-wrapper:hover {
+                background: #f2f2f2;
+                border-color: #8c8c8c;
+            }
+
+            a[data-command='redo'],
+            a[data-command='strikeThrough'],
+            a[data-command='justifyFull'],
+            a[data-command='insertOrderedList'],
+            a[data-command='outdent'],
+            a[data-command='p'],
+            a[data-command='superscript'] {
+                margin-right: 5px;
+                border-radius: 0 3px 3px 0;
+            }
+
+            a[data-command='undo'],
+            .fore-wrapper,
+            a[data-command='justifyLeft'],
+            a[data-command='insertUnorderedList'],
+            a[data-command='indent'],
+            a[data-command='h1'],
+            a[data-command='subscript'] {
+                border-radius: 3px 0 0 3px;
+            }
+
+            .fore-palette,
+            .back-palette {
+                display: none;
+            }
+
+            .fore-wrapper,
+            .back-wrapper {
+                display: inline-block;
+                cursor: pointer;
+            }
+
+            .fore-wrapper:hover .fore-palette,
+            .back-wrapper:hover .back-palette {
+                display: block;
+                float: left;
+                position: absolute;
+                padding: 3px;
+                background: #FFF;
+                border: 1px solid #DDD;
+                box-shadow: 0 0 5px #CCC;
+            }
+
+            input[type="color"] {
+                -webkit-appearance: none;
+                border: none;
+                width: 32px;
+                height: 32px;
+            }
+            input[type="color"]::-webkit-color-swatch-wrapper {
+                padding: 0;
+            }
+            input[type="color"]::-webkit-color-swatch {
+                border: none;
+            }
+        &lt;/style>
+    &lt;/head>
+
+    &lt;body onload="addlisteners(); addColorListener();">
+    &lt;div class="toolbar">
+        &lt;a href="#" data-command='undo'>&lt;i class='fa fa-undo'>&lt;/i>&lt;/a>
+        &lt;a href="#" data-command='redo'>&lt;i class='fa fa-repeat'>&lt;/i>&lt;/a>
+        &lt;div class="fore-wrapper">&lt;i class='fa fa-font' style='color:#C96;'>&lt;/i>
+            &lt;div class="fore-palette">
+                &lt;input data-command="forecolor" type="color" value="#000000">
+            &lt;/div>
+        &lt;/div>
+        &lt;div class="back-wrapper">&lt;i class='fa fa-font' style='background:#C96;'>&lt;/i>
+            &lt;div class="back-palette">
+                &lt;input data-command="backcolor" type="color" value="#000000">
+            &lt;/div>
+        &lt;/div>
+        &lt;a href="#" data-command='bold'>&lt;i class='fa fa-bold'>&lt;/i>&lt;/a>
+        &lt;a href="#" data-command='italic'>&lt;i class='fa fa-italic'>&lt;/i>&lt;/a>
+        &lt;a href="#" data-command='underline'>&lt;i class='fa fa-underline'>&lt;/i>&lt;/a>
+        &lt;a href="#" data-command='strikeThrough'>&lt;i class='fa fa-strikethrough'>&lt;/i>&lt;/a>
+        &lt;a href="#" data-command='justifyLeft'>&lt;i class='fa fa-align-left'>&lt;/i>&lt;/a>
+        &lt;a href="#" data-command='justifyCenter'>&lt;i class='fa fa-align-center'>&lt;/i>&lt;/a>
+        &lt;a href="#" data-command='justifyRight'>&lt;i class='fa fa-align-right'>&lt;/i>&lt;/a>
+        &lt;a href="#" data-command='justifyFull'>&lt;i class='fa fa-align-justify'>&lt;/i>&lt;/a>
+        &lt;a href="#" data-command='indent'>&lt;i class='fa fa-indent'>&lt;/i>&lt;/a>
+        &lt;a href="#" data-command='outdent'>&lt;i class='fa fa-outdent'>&lt;/i>&lt;/a>
+        &lt;a href="#" data-command='insertUnorderedList'>&lt;i class='fa fa-list-ul'>&lt;/i>&lt;/a>
+        &lt;a href="#" data-command='insertOrderedList'>&lt;i class='fa fa-list-ol'>&lt;/i>&lt;/a>
+        &lt;a href="#" data-command='h1'>H1&lt;/a>
+        &lt;a href="#" data-command='h2'>H2&lt;/a>
+        &lt;a href="#" data-command='createlink'>&lt;i class='fa fa-link'>&lt;/i>&lt;/a>
+        &lt;a href="#" data-command='unlink'>&lt;i class='fa fa-unlink'>&lt;/i>&lt;/a>
+        &lt;a href="#" data-command='insertimage'>&lt;i class='fa fa-image'>&lt;/i>&lt;/a>
+        &lt;a href="#" data-command='p'>P&lt;/a>
+        &lt;a href="#" data-command='subscript'>&lt;i class='fa fa-subscript'>&lt;/i>&lt;/a>
+        &lt;a href="#" data-command='superscript'>&lt;i class='fa fa-superscript'>&lt;/i>&lt;/a>
+    &lt;/div>
+    &lt;div id='editor' contenteditable>
+        &lt;h1>A WYSIWYG Editor.&lt;/h1>
+        &lt;p>Try making some changes here. Add your own text or maybe an image.&lt;/p>
+    &lt;/div>
+    &lt;/body>
+    &lt;/html>
+                                </code>
+ editor.js
+                                <code class="language-javascript">
+    function addlisteners() {
+        document.querySelectorAll('.toolbar a').forEach(el => {
+            el.addEventListener('click', function () {
+                var command = this.dataset.command;
+                if (command === 'h1' || command === 'h2' || command === 'p'){
+                    document.execCommand('formatBlock', false, command);
+                }
+                if (command == 'createlink' || command == 'insertimage') {
+                    url = prompt('Enter the link here: ','http:\/\/');
+                    document.execCommand(command, false, url);
+                } else document.execCommand(command, false, null);
+            })
+        })
+    }
+    function addColorListener(){
+        document.querySelectorAll('.toolbar input').forEach(el => {
+            el.addEventListener('change', function (){
+                console.log("change")
+                var command = this.dataset.command;
+                console.log(command);
+                if (command == 'forecolor' || command == 'backcolor') {
+                    document.execCommand(command, false, this.value);
+                }
+            })
+        })
+    }
+                                </code>
+                            </pre>
+        </div>
+
+    </details>
+
+
+
+
+
+</div>
+<script>
+    function buttonChange(own, other) {
+        document.getElementById(own).style.display = 'block';
+        document.getElementById(other).style.display = 'none'
+        document.getElementById(own + 'button').disabled = true;
+        document.getElementById(other + 'button').disabled = false;
+    }
+</script>
 </body>
 </html>

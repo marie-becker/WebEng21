@@ -2,8 +2,10 @@
   "name": "WebEng1",
   "version": "1.0.0",
   "dependencies": {
+    "@vue/cli": "^4.5.15",
     "express": "^4.17.1",
     "lit": "^2.0.2",
-    "lit-element": "^3.0.2"
+    "lit-element": "^3.0.2",
+    "webassembly": "^0.11.0"
   }
 }

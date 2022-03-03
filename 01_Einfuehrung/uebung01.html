@@ -5,14 +5,41 @@
     <title>01 Einführung</title>
     <link href="../index.css" rel="stylesheet">
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/311699e670.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/monokai-sublime.min.css"
+          rel="stylesheet">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+    <script>hljs.configure({languages: ['javascript']})</script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon
+        * https://www.w3schools.com/howto/howto_js_topnav_responsive.asp */
+        function myFunction() {
+            var x = document.getElementById("mySidenav");
+            if (x.className === "sidenav") {
+                x.className += " responsive";
+            } else {
+                x.className = "sidenav";
+            }
+        }
+    </script>
 </head>
 <body>
-<div class="sidenav">
-    <a href="uebung01.html">Übung 01</a>
-    <a href="../02_RWD/uebung02.html">Übung 02</a>
-    <a href="../03_JavaScript/uebung03.html">Übung 03</a>
-    <a href="../04_DOM/uebung04.html">Übung 04</a>
-
+<div class="sidenav" id="mySidenav">
+    <a href="../index.html" style="display: block"><i class="fa fa-home"></i></a>
+    <a href="../01_Einfuehrung/uebung01.html" class="active">01 Einführung</a>
+    <a href="../02_RWD/uebung02.html">02 RWD</a>
+    <a href="../03_JavaScript/uebung03.html">03 JavaScript</a>
+    <a href="../04_DOM/uebung04.html">04 DOM</a>
+    <a href="../05_Async/uebung05.html">05 Async</a>
+    <a href="../06_SVG/uebung06.html">06 SVG</a>
+    <a href="../07_node/uebung07.html">07 Node</a>
+    <a href="../08_ModularWeb/uebung08.html">08 ModularWeb</a>
+    <a href="../09_PWA/uebung09.html">09 PWA</a>
+    <a href="../10_Vue/uebung10.html">10 Vue</a>
+    <a href="../11_WebAssembly/uebung11.html">11 WebAssembly</a>
+    <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <i class="fa fa-bars"></i>
+    </a>
 </div>
 <div class="main">
     <h1>Übung 01 - Einführung</h1>
@@ -24,13 +51,16 @@
                 <summary>Mit welchen fachlichen Argumenten wurde das WWW-Proposal von TBL abgelehnt?</summary>
                 <div class="akkordeon-inhalt">
                     <p>Zum einen wurde die gezielte Evolvierbarkeit mit Vagheit verwechselt.
-                        Zum anderen besteht im WWW die Möglichkeit für "broken links" die ins Leere führen,
-                        was als Rückschritt der Hypertext Community empfunden wurde.</p>
+                        Zum anderen besteht im WWW die Möglichkeit für "broken links", die ins Leere führen.
+                        Dies wurde von der Hypertext Community als Rückschritt empfunden, zumal dem Proposal an
+                        mathematischer Rigorosität mangelte und die Community ein Objekt- über einem Text-Protokoll
+                        bevorzugte.</p>
                 </div>
             </details>
             <details>
                 <summary>Was sind die fachlichen Argumente, warum das WWW dennoch ein Erfolg wurde?</summary>
                 <div class="akkordeon-inhalt">
+                    <p></p>
                     <ul>
                         <li>Unterschiedliche Technologien des WWW können sich unabhängig voneinander weiterentwickeln
                             ohne zentrale Kontrolle
@@ -44,7 +74,7 @@
             <details>
                 <summary>Was wäre der Preis für die garantierte Verhinderung von “broken links”?</summary>
                 <div class="akkordeon-inhalt">
-                    <p>Zentrale Kontrolle und Geschlossenheit</p>
+                    <p>Zentrale Kontrolle und Geschlossenheit.</p>
                 </div>
             </details>
         </div>
@@ -147,27 +177,400 @@
     <details>
         <summary>1.3 - 1.5 Wireframes with HTML and CSS</summary>
         <div class="akkordeon-inhalt">
-            <linkdetails>
-                <a href="tribute.html" target="_blank">
-                    <summary>1.3 - Tribute Page &nbsp;
-                        <i class="fas fa-external-link-alt"></i></summary>
-                </a>
-            </linkdetails>
-            <linkdetails>
-                <a href="surveyform.html" target="_blank">
-                    <summary>1.4 - Survey Form &nbsp;<i
-                            class="fas fa-external-link-alt"></i></summary>
-                </a>
-            </linkdetails>
-            <linkdetails>
-                <a href="productLandingPage.html" target="_blank">
-                    <summary>1.5 - Product Landing Page &nbsp;<i
-                            class="fas fa-external-link-alt"></i></summary>
-                </a>
-            </linkdetails>
+            <details>
+                <summary>1.3 - Tribute Page
+                    <a style="display: inline;" href="tribute.html" target="_blank">
+                        &nbsp;
+                        <i class="fas fa-external-link-alt"></i></a></summary>
+                <button id="tributecodebutton" onclick="buttonChange('tributecode','tributecomp')">Code</button>
+                <button disabled id="tributecompbutton" onclick="buttonChange('tributecomp', 'tributecode')">
+                    Komponente
+                </button>
+
+                <div id="tributecomp">
+                    <iframe frameborder="0" style="width: 100%; height: 100vh; margin-top: 1em"
+                            src="tribute.html"></iframe>
+                </div>
+                <div id="tributecode" style="display: none">
+                            <pre>
+                                <code class="language-html">
+    &lt;!DOCTYPE html>
+    &lt;html lang="en">
+    &lt;head>
+        &lt;meta charset="UTF-8">
+        &lt;title>Dr. Norman Borlaug&lt;/title>
+        &lt;style>
+            body {
+                text-align: center;
+            }
+
+            img {
+                max-width: 100%;
+            }
+
+            #heading {
+                background: #eeeeee;
+                padding-top: 1%;
+                padding-bottom: 1%;
+                color: #333332;
+                font-family: 'Arial Black', serif;
+                font-weight: bold;
+            }
+        &lt;/style>
+    &lt;/head>
+    &lt;body>
+    &lt;div id="heading">
+        &lt;h1>Dr. Norman Borlaug&lt;/h1>
+        &lt;p style="font-family: Arial, serif;">The man who saved a billion lives&lt;/p>
+    &lt;/div>
+    &lt;img alt="Dr. Norman Balaug standing in a wheat field with other men."
+         src="https://kaul.inf.h-brs.de/wem/assets/img/tribute-img.png">
+    &lt;/body>
+    &lt;/html>
+                                </code>
+                            </pre>
+                </div>
+
+            </details>
+
+            <details>
+                <summary>1.2 - Survey Form
+                    <a style="display: inline;" href="surveyform.html" target="_blank">
+                        &nbsp;
+                        <i class="fas fa-external-link-alt"></i></a></summary>
+                <button id="surveycodebutton" onclick="buttonChange('surveycode','surveycomp')">Code</button>
+                <button disabled id="surveycompbutton" onclick="buttonChange('surveycomp', 'surveycode')">Komponente
+                </button>
+
+                <div id="surveycomp">
+                    <iframe style="width: 100%; height: 100vh; margin-top: 1em" src="surveyform.html"></iframe>
+                </div>
+                <div id="surveycode" style="display: none">
+                            <pre>
+                                <code class="language-html">
+    &lt;!DOCTYPE html>
+    &lt;html lang="en">
+    &lt;head>
+        &lt;meta charset="UTF-8">
+        &lt;title>Survey Form&lt;/title>
+        &lt;style>
+            body {
+                background: #b2d6d1;
+                text-align: center;
+                font-family: "Ubuntu", sans-serif;
+            }
+
+            .row {
+                position: static;
+                display: block;
+            }
+
+            .left {
+                display: inline-block;
+                text-align: right;
+                width: 45%;
+                padding-right: 1em;
+                padding-bottom: 2em;
+
+            }
+
+            .right {
+                display: inline-block;
+                text-align: left;
+                width: 45%;
+                padding-left: 1em;
+                padding-bottom: 2em;
+            }
+
+            .right div div label {
+                vertical-align: middle;
+
+            }
+
+            .right div div input {
+                vertical-align: middle;
+            }
+
+            input {
+                height: 20px;
+            }
+
+            input[type=radio] {
+                border-radius: 0;
+            }
+
+            select {
+                height: 25px;
+            }
+
+            .form {
+                padding-top: 1em;
+                margin-left: 2em;
+                margin-right: 2em;
+                background: white;
+            }
+
+        &lt;/style>
+    &lt;/head>
+    &lt;body>
+    &lt;h1>Survey Form&lt;/h1>
+    &lt;div class="form">
+    &lt;p>Let us know how we can improve freeCodeCamp&lt;/p>&lt;br>
+        &lt;form>
+            &lt;div class="row">
+                &lt;div class="left">
+                    &lt;label for="name">* Name:&lt;/label>
+                &lt;/div>
+                &lt;div class="right">
+                    &lt;input id="name" placeholder="Enter your name" type="text">
+                &lt;/div>
+
+            &lt;/div>
+            &lt;div class="row">
+                &lt;div class="left">
+                    &lt;label for="email">* Email:&lt;/label>
+                &lt;/div>
+                &lt;div class="right">
+                    &lt;input id="email" placeholder="Enter your Email" type="text">
+                &lt;/div>
+            &lt;/div>
+
+            &lt;div class="row">
+                &lt;div class="left">
+                    &lt;label for="age">* Age:&lt;/label>
+                &lt;/div>
+                &lt;div class="right">
+                    &lt;input id="age" placeholder="Age" type="number">
+                &lt;/div>
+            &lt;/div>
+
+            &lt;div class="row">
+                &lt;div class="left" style="vertical-align: top">
+                    &lt;label for="role">Which option best describes your current role?&lt;/label>
+                &lt;/div>
+                &lt;div class="right">
+                    &lt;select id="role">
+                        &lt;option value="student">Student&lt;/option>
+                        &lt;option value="teacher">Teacher&lt;/option>
+                        &lt;option value="other">Other&lt;option>
+                    &lt;/select>
+                &lt;/div>
+            &lt;/div>
+
+            &lt;div class="row">
+                &lt;div id="radio">
+                    &lt;div class="left" style="vertical-align: top">
+                        &lt;label for="radio">* How likely is that you would recommend &lt;br> freeCodeCamp to a friend?&lt;/label>
+                    &lt;/div>
+                    &lt;div class="right">
+                        &lt;div style="display: block">
+                            &lt;div>
+                                &lt;input id="def" name="recommend" type="radio">
+                                &lt;label for="def">Definitely&lt;/label>&lt;br>
+                            &lt;/div>
+                            &lt;div>
+                                &lt;input id="maybe" name="recommend" type="radio">
+                                &lt;label for="maybe">Maybe&lt;/label>&lt;br>
+                            &lt;/div>
+                            &lt;div>
+                                &lt;input id="unsure" name="recommend" type="radio">
+                                &lt;label for="unsure">Not Sure&lt;/label>
+                            &lt;/div>
+                        &lt;/div>
+                    &lt;/div>
+                &lt;/div>
+            &lt;/div>
+
+            &lt;div class="row">
+                &lt;div class="left">
+                    &lt;label for="fcc">What do you like most in FCC:
+                    &lt;label>
+                &lt;/div>
+                &lt;div class="right">
+                    &lt;select id="fcc">
+                        &lt;option disabled hidden selected value="">Select an option&lt;/option>
+                        &lt;option value="challenges">Code Challenges&lt;/option>
+                        &lt;option value="yt">YouTube-Tutorials&lt;/option>
+                        &lt;option value="community">Community&lt;/option>
+                    &lt;/select>
+                &lt;/div>
+            &lt;/div>
+
+            &lt;div class="row">
+                &lt;div class="left" style="vertical-align: top">
+                    &lt;label for="radio2">Things that should be improved in the future
+                        &lt;br>(Check all that apply):&lt;/label>
+                &lt;/div>
+                &lt;div class="right">
+                    &lt;div id="radio2" style="">
+                        &lt;div>
+                            &lt;input id="frontend" type="checkbox">
+                            &lt;label for="frontend">Front-end Projects&lt;/label>&lt;br>
+                        &lt;/div>
+                        &lt;div>
+                            &lt;input id="backend" type="checkbox">
+                            &lt;label for="backend">Back-end Projects&lt;/label>&lt;br>
+                        &lt;/div>
+                        &lt;div>
+                            &lt;input id="data" type="checkbox">
+                            &lt;label for="data">Data Visualization&lt;/label>
+                        &lt;/div>
+                    &lt;/div>
+                &lt;/div>
+            &lt;/div>
+        &lt;/form>
+    &lt;/div>
+    &lt;/body>
+    &lt;/html>
+                                </code>
+                            </pre>
+                </div>
+            </details>
+
+            <details>
+                <summary>1.3 Product Landing Page
+                    <a style="display: inline;" href="productform.html" target="_blank">
+                        &nbsp;
+                        <i class="fas fa-external-link-alt"></i></a></summary>
+                <button id="productcodebutton" onclick="buttonChange('productcode','productcomp')">Code</button>
+                <button disabled id="productcompbutton" onclick="buttonChange('productcomp', 'productcode')">Komponente
+                </button>
+
+                <div id="productcomp">
+                    <iframe style="width: 100%; height: 100vh; margin-top: 1em" src="productLandingPage.html"></iframe>
+                </div>
+                <div id="productcode" style="display: none">
+                            <pre>
+                                <code class="language-html">
+    &lt;!DOCTYPE html>
+    &lt;html lang="en">
+    &lt;head>
+        &lt;meta charset="UTF-8">
+        &lt;title>Product Landing Page&lt;/title>
+        &lt;style>
+            @import url('https://fonts.googleapis.com/css2?family=Economica&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+
+            html {
+                height: 100%;
+                overflow: hidden;
+                margin: 0;
+            }
+
+            body {
+                margin: 0;
+                font-family: "Open Sans", sans-serif;
+                height: 100%;
+                overflow: hidden;
+                background: #ebeae6;
+            }
+
+            .header {
+                background: #363636;
+                text-align: center;
+                color: #dcdbdb;
+                height: 3em;
+                vertical-align: central;
+                line-height: 3em;
+                position: sticky;
+                font-weight: bold;
+            }
+
+            .header span {
+                padding: 1em;
+            }
+
+            h1 {
+                text-align: center;
+                font-family: Roboto, sans-serif;
+                font-weight: bold;
+            }
+
+            .main {
+                height: calc(100% - 350px);
+                display: flex;
+            }
+
+            .footer {
+                background: #011826;
+                text-align: center;
+                color: white;
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+
+            }
+
+            button {
+                background: #f88e37;
+                color: white;
+                border-radius: 8px;
+                border: none;
+                height: 2em;
+                font-family: "Economica", sans-serif;
+                font-size: 20px;
+                font-weight: bold;
+            }
+
+            img {
+                border: 1px solid black;
+                border-radius: 10px;
+                height: 100%;
+            }
+
+            p{
+                padding-bottom: 2em;
+                font-size: 18px;
+                font-weight: bold;
+            }
+
+        &lt;/style>
+    &lt;/head>
+    &lt;body>
+    &lt;div class="header">
+        &lt;span>The book series&lt;/span>
+        &lt;span>Testimonials&lt;/span>
+        &lt;span>The Author&lt;/span>
+        &lt;span>Free resources&lt;/span>
+    &lt;/div>
+    &lt;h1>You don't know JavaScript&lt;/h1>
+
+    &lt;div class="main">
+        &lt;div style="display: inline-block; width: 49%;  text-align: center;">
+            &lt;img alt="Picture of a book named You don't know JS, Complete Series by Kyle Simpson" src="https://kaul.inf.h-brs.de/wem/assets/img/landing-img.png">
+        &lt;/div>
+
+        &lt;div style="display: inline-block; width: 49%;  text-align: center; align-content: center">
+            &lt;p style="padding-top: 3em">Don't just drift through Javascript.&lt;/p>
+            &lt;p>Understand how Javascript works&lt;/p>
+            &lt;p>Start your journey through the bumpy side of Javascript.&lt;/p>
+            &lt;button style="width: 40%;">ORDER YOUR COPY NOW&lt;/button>
+        &lt;/div>
+    &lt;/div>
+
+    &lt;div class="footer">
+        &lt;p style="margin-bottom: 0; margin-top: 4em; padding-bottom: 1em;">The first ebook in the book series is absolutely
+            free.&lt;/p>
+        &lt;button style="margin-bottom: 2em; width: 50%">FIND OUT MORE ABOUT THIS OFFER&lt;/button>
+    &lt;/div>
+    &lt;/body>
+    &lt;/html>
+                                </code>
+                            </pre>
+                </div>
+            </details>
+
         </div>
     </details>
 </div>
-
+<script>
+    function buttonChange(own, other) {
+        document.getElementById(own).style.display = 'block';
+        document.getElementById(other).style.display = 'none'
+        document.getElementById(own + 'button').disabled = true;
+        document.getElementById(other + 'button').disabled = false;
+    }
+</script>
 </body>
 </html>

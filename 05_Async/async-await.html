@@ -11,6 +11,13 @@
             ]);
             let arra = (await a.text()).split('\r');
             let arrb = (await b.text()).split('\r');
+
+            arrb.forEach(function (ael, index) {
+                this[index] = '<span style="color:blue;">' + ael + '</span>';
+            }, arrb)
+
+            // interleave function taken from Mulan on stackoverflow
+            // https://stackoverflow.com/a/47061616/15212696
             const interleave = ([x, ...xs], ys = []) =>
                 x === undefined
                     ? ys                             // base: no x
@@ -21,7 +28,8 @@
         mixTexts();
     </script>
 </head>
-<body>
-<p id="text" style="text-align: center"></p>
+<body style="text-align: center; font-family: 'Calibri',serif">
+<h1>5.2 async/await - Konkateniert zwei Texte, die auf meinem Server liegen, zeilenweise.</h1>
+<p id="text"></p>
 </body>
 </html>

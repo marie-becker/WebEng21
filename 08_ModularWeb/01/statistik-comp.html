@@ -51,20 +51,22 @@
                 y: {type: Number}
             }
         }
-        static get styles(){
+
+        static get styles() {
             return css`
-        .bar{
-            animation-name: barAnim;
-            animation-duration: 1.5s;
-            animation-iteration-count: 1;
-            animation-timing-function: ease;
-            animation-play-state: running;
-        }
-        @keyframes barAnim {
-            0%{
-                width: 0;
-            }
-        }
+              .bar {
+                animation-name: barAnim;
+                animation-duration: 1.5s;
+                animation-iteration-count: 1;
+                animation-timing-function: ease;
+                animation-play-state: running;
+              }
+
+              @keyframes barAnim {
+                0% {
+                  width: 0;
+                }
+              }
             `
         }
 
@@ -77,14 +79,10 @@
     <line x1="400" y1="25" x2="400" y2="240" stroke-width="2" stroke="#85adad" /><text x="388" y="260">150</text>
     <line x1="500" y1="25" x2="500" y2="240" stroke-width="2" stroke="#85adad" /><text x="488" y="260">200</text>
     <text font-family='Arial' font-size="12" x="350" y="280">Sitze im deutschen Parlament</text>
-    ${Object.values(this.data).map((d, index) => svg`<text font-family='Arial' font-size='14' x='10' y=${this.y+(30*index) + 15}>${d.name}</text>
-                <rect class="bar" fill='${d.color}' height='20' width='${d.sitze * 2}' x='100' y='${this.y+(30*index)}'/>
-                <text font-family='Arial' font-size='12' font-weight="bold" x='${110 + d.sitze * 2}' y='${this.y +(30*index)+ 15}'>${d.sitze}</text>`)}
-</svg>`;
+    ${Object.values(this.data).map((d, index) => svg`<text font-family='Arial' font-size='14' x='10' y=${this.y + (30 * index) + 15}>${d.name}</text>
+                <rect class="bar" fill='${d.color}' height='20' width='${d.sitze * 2}' x='100' y='${this.y + (30 * index)}'/>
+                <text font-family='Arial' font-size='12' font-weight="bold" x='${110 + d.sitze * 2}' y='${this.y + (30 * index) + 15}'>${d.sitze}</text>`)}
+    </svg>`;
         }
     })
-
-    const demo = document.createElement('statistik-comp');
-    document.body.appendChild(demo);
-
 </script>
