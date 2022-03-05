@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', init, false);
 
-// followed this tutorial https://blog.logrocket.com/how-to-build-a-progressive-web-app-pwa-with-node-js/
-
+// followed this tutorial by Diogo Spínola
+// https://blog.logrocket.com/how-to-build-a-progressive-web-app-pwa-with-node-js/
 
 function init() {
   if ('serviceWorker' in navigator && navigator.onLine) {

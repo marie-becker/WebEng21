@@ -5,6 +5,11 @@
     <title>09 - PWA</title>
     <link href="../index.css" rel="stylesheet">
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/311699e670.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/monokai-sublime.min.css"
+          rel="stylesheet">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+    <script>hljs.configure({languages: ['javascript']})</script>
+    <script>hljs.highlightAll();</script>
     <script>
         /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon
         * https://www.w3schools.com/howto/howto_js_topnav_responsive.asp */
@@ -38,34 +43,390 @@
 </div>
 <div class="main">
     <h1>Übung 09 - Progressive Web Apps</h1>
-
     <details>
-        <summary>9.1 LitElement Navigator als PWA</summary>
+        <summary>Vorgehensweise, Tools, Libraries</summary>
         <div class="akkordeon-inhalt">
-            <details>
-                <summary>Vorgehensweise, Tools, Libraries</summary>
-                <p>Ich habe ein Tutorial befolgt, welches ohne Libraries arbeitet. Als einziges Tool wurde openssl unter
-                    Ubuntu zur Zertifizierung genutzt (und Lighthouse zur Analyse).</p>
-            </details>
-            <details>
-                <summary>Probleme und Lösungskonzepte</summary>
-                <p>Der Betrieb von HTTPS war komplizierter als erwartet. Das Nutzen eines mckert certificates hat nicht
-                    funktioniert und bei der Lösungssuche bin ich auf ein anderes PWA Tutorial gestoßen, das ich dann
-                    versucht habe zu befolgen. Dabei wurden openssl certificates benutzt. Jedoch wusste ich nicht, dass
-                    man Zertifikate auf dem PC als trustworthy installieren muss, sodass auch hier lange nach
-                    Fehlern/Lösungen gesucht wurde.<br>
-                    Lighthouse eingebaut in Chrome hat bei Seiten mit ServiceWorkern bei mir nicht mehr funktioniert, es
-                    hat geladen ohne zu einem Ergebnis zu kommen. Stattdessen habe ich dann die Node CLI benutzt um
-                    Lighthouse analysieren zu lassen. Die HTML-Datei der Messergebnisse ist im folgenden Akkordeondetail
-                    als resizeable iFrame eingebunden.</p>
-            </details>
-            <details>
-                <summary>Lighthouse-Messergebnisse</summary>
-                <iframe style="height: 100%; width: 100%; resize: vertical" src="lighthouse.html"></iframe>
-            </details>
+        <p>Ich habe ein Tutorial befolgt, welches ohne Libraries arbeitet. Als einziges Tool wurde openssl unter
+            Ubuntu zur Zertifizierung genutzt (und Lighthouse zur Analyse).</p>
         </div>
     </details>
-</div>
+    <details>
+        <summary>Probleme und Lösungskonzepte</summary>
+        <div class="akkordeon-inhalt">
+        <p>Der Betrieb von HTTPS war komplizierter als erwartet. Das Nutzen eines mckert certificates hat nicht
+            funktioniert und bei der Lösungssuche bin ich auf ein anderes PWA Tutorial gestoßen, das ich dann
+            versucht habe zu befolgen. Dabei wurden openssl certificates benutzt. Jedoch wusste ich nicht, dass
+            man Zertifikate auf dem PC als trustworthy installieren muss, sodass auch hier lange nach
+            Fehlern/Lösungen gesucht wurde.<br>
+            Lighthouse eingebaut in Chrome hat bei Seiten mit ServiceWorkern bei mir nicht mehr funktioniert, es
+            hat geladen ohne zu einem Ergebnis zu kommen. Stattdessen habe ich dann die Node CLI benutzt um
+            Lighthouse analysieren zu lassen. Die HTML-Datei der Messergebnisse ist im folgenden Akkordeondetail
+            als resizeable iFrame eingebunden.</p>
+        </div>
+    </details>
+    <details>
+        <summary>Lighthouse-Messergebnisse</summary>
+        <iframe style="height: 100%; width: 100%; resize: vertical" src="lighthouse.html"></iframe>
+    </details>
 
+    <details>
+        <summary>Navigator
+            <a style="display: inline;" href="./public/index.html" target="_blank">
+                &nbsp;
+                <i class="fas fa-external-link-alt"></i></a></summary>
+        <button id="pwacodebutton" onclick="buttonChange('pwacode','pwacomp')">Code</button>
+        <button disabled id="pwacompbutton" onclick="buttonChange('pwacomp', 'pwacode')">
+            Komponente
+        </button>
+
+        <div id="pwacomp">
+            <iframe frameborder="0" style="width: 100%; height: 100vh; margin-top: 1em; resize: both"
+                    src="./public/index.html"></iframe>
+        </div>
+        <div id="pwacode" style="display: none">
+                            <pre>
+ pwa.js
+                                <code class="language-javascript">
+    document.addEventListener('DOMContentLoaded', init, false);
+
+    // followed this tutorial by Diogo Spínola
+    // https://blog.logrocket.com/how-to-build-a-progressive-web-app-pwa-with-node-js/
+
+    function init() {
+      if ('serviceWorker' in navigator && navigator.onLine) {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then((reg) => {
+            console.log('Service worker registered -->', reg);
+          }, (err) => {
+            console.error('Service worker not registered -->', err);
+          });
+      }
+    }
+                                </code>
+ pwa.webmanifest
+                                <code>
+    {
+      "name": "09_PWA",
+      "short_name": "PWA",
+      "description": "Progressive Web App for Master's Web Engineering",
+      "icons": [
+        {
+          "src": "/../images/512.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        },
+            {
+              "src": "/../images/maskable_icon.png",
+              "sizes": "196x196",
+              "type": "image/png",
+              "purpose": "any maskable"
+            }
+      ],
+      "start_url": "/",
+      "display": "fullscreen",
+      "theme_color": "#6a9ebd",
+      "background_color": "#764ABC"
+    }
+                                </code>
+ service-worker.js
+                                <code class="language-javascript">
+    // followed this tutorial by Diogo Spínola
+    // https://blog.logrocket.com/how-to-build-a-progressive-web-app-pwa-with-node-js/
+
+    const CACHE_NAME = 'sw-cache-example';
+    const toCache = [
+      '/',
+      '/index.html',
+      '/js/pwa.webmanifest',
+      '/js/pwa.js',
+      '/js/status.js',
+      '/images/512.png',
+      '/images/192.png',
+    ];
+
+    self.addEventListener('install', function(event) {
+      event.waitUntil(
+        caches.open(CACHE_NAME)
+          .then(function(cache) {
+            return cache.addAll(toCache)
+          })
+          .then(self.skipWaiting())
+      )
+    })
+
+    self.addEventListener('fetch', function(event) {
+      event.respondWith(
+        fetch(event.request)
+          .catch(() => {
+            return caches.open(CACHE_NAME)
+              .then((cache) => {
+                return cache.match(event.request)
+              })
+          })
+      )
+    })
+
+    self.addEventListener('activate', function(event) {
+      event.waitUntil(
+        caches.keys()
+          .then((keyList) => {
+            return Promise.all(keyList.map((key) => {
+              if (key !== CACHE_NAME) {
+                console.log('[ServiceWorker] Removing old cache', key)
+                return caches.delete(key)
+              }
+            }))
+          })
+          .then(() => self.clients.claim())
+      )
+    })
+                                </code>
+ index.html
+                                <code class="language-html">
+    &lt;!DOCTYPE html>
+    &lt;html lang="en">
+    &lt;head>
+      &lt;meta charset="UTF-8">
+      &lt;title>WWW Navigator&lt;/title>
+      &lt;link rel="manifest" href="/js/pwa.webmanifest">
+      &lt;link rel="apple-touch-icon" href="/images/192.png">
+      &lt;meta name="theme-color" content="#6a709f"/>
+      &lt;meta name="viewport" content="width=device-width, initial-scale=1">
+
+      &lt;script>
+        let content;
+        let selectedTop;
+        let t;
+        let selectedLeft;
+
+        async function getContent() {
+            fetch('https://www2.inf.h-brs.de/~mbeck32s/navigator_contents.json')
+                .then(res => res.json())
+                .then((js) => {
+                    content = js;
+                    selectedTop = js['html'];
+                    selectedLeft = Object.keys(selectedTop)[0];
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const top = urlParams.get('top');
+                    const left = urlParams.get('left');
+                    if(top !== null) topnav(top);
+                    if(left !== null) sidenav(left);
+                })
+
+        }
+
+        getContent();
+
+        function sidenav(title) {
+            const btns = document.getElementsByClassName('left-sidebar')[0].getElementsByTagName('button');
+            for (let i of btns) {
+                i.style.backgroundColor = '#6a709f'
+            }
+            document.getElementById(`${title}`).style.backgroundColor = 'antiquewhite'
+            selectedLeft = content[t][title];
+            document.getElementById("main").innerHTML = selectedLeft.content;
+            document.getElementById("urls").innerHTML = "";
+            for (let el of selectedLeft.references) {
+                document.getElementById("urls").innerHTML += `&lt;a style="overflow-wrap: anywhere" href="${el}">${el}&lt;/a>`;
+            }
+            setLinks();
+
+        }
+
+        function topnav(title) {
+            const btns = document.getElementsByTagName('header')[0].getElementsByTagName('button');
+            for (let i of btns) {
+                i.style.backgroundColor = '#6a709f'
+            }
+            document.getElementById(`${title}`).style.backgroundColor = 'antiquewhite'
+            t = title;
+            selectedTop = content[title.toLowerCase()]
+            document.getElementsByClassName('left-sidebar')[0].innerHTML = "";
+            for (let el in selectedTop) {
+                if (el !== 'basics') document.getElementsByClassName('left-sidebar')[0].innerHTML += `&lt;button id="${el}" onclick="sidenav('${el}')">${el}&lt;/button>`
+            }
+            document.getElementById("main").innerHTML = content[t].basics.content;
+            document.getElementById("urls").innerHTML = "";
+
+            for (let el of content[t].basics.references) {
+                document.getElementById("urls").innerHTML += `&lt;a style="overflow-wrap: anywhere" href="${el}">${el}&lt;/a>`;
+            }
+            setLinks();
+        }
+
+        function setLinks() {
+            let links = document.getElementById("main").getElementsByTagName("a");
+            for (let a of links) {
+                if (a.innerText.toLowerCase() === 'html' || a.innerText.toLowerCase() === 'css' || a.innerText.toLowerCase() ==='javascript') {
+                    a.href = window.location.href.split('?')[0] + '?top=' + a.innerText.toLowerCase();
+                    continue;
+                }
+                a.href = window.location.href.split('?')[0] + '?top=' + t + '&left=' + a.innerText.toLowerCase();
+            }
+        }
+      &lt;/script>
+      &lt;style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            color: white;
+            text-align: center;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #c14f4f;
+            text-align: left;
+
+        }
+
+        main {
+            background-color: #6a9ebd;
+            font-size: 1.5rem;
+            color: black;
+        }
+        main a{
+            font-size: 1.5rem;
+            color: black;
+        }
+
+        footer {
+            background: black;
+        }
+
+        .left-sidebar {
+            background-color: #c28281;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .right-sidebar {
+            text-align: left;
+            background-color: #c28281;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            height: 100vh;
+        }
+
+        button {
+            background-color: #6a709f;
+            color: black;
+            border-top-color: white;
+            border-left-color: white;
+            border-bottom-color: #9a9a9a;
+            border-right-color: #9a9a9a;
+            border-radius: 20px;
+            font-weight: bold;
+            padding: 0.3em 2em;
+            margin: 1em;
+        }
+
+        button:hover {
+            background-color: antiquewhite;
+        }
+
+        .left-sidebar button {
+            display: block;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 0;
+        }
+
+        a {
+            color: white;
+            font-size: small;
+        }
+
+        @media all and (min-width: 768px) {
+            .content {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            main {
+                flex: 5;
+                order: 2;
+            }
+
+            .left-sidebar {
+                order: 1;
+                flex: 1;
+                display: block;
+                font-size: 2em;
+            }
+
+            .right-sidebar {
+                flex: 1;
+                order: 3;
+                font-size: 2em;
+
+            }
+        }
+      &lt;/style>
+    &lt;/head>
+
+    &lt;body>
+    &lt;div class="container">
+      &lt;header>
+        &lt;h1>WWW-Navigator&lt;/h1>
+        &lt;button id='html' onclick="topnav('html')">HTML&lt;/button>
+        &lt;button id='css' onclick="topnav('css')">CSS&lt;/button>
+        &lt;button id='javascript' onclick="topnav('javascript')">JavaScript&lt;/button>
+        &lt;button>Other&lt;/button>
+      &lt;/header>
+      &lt;div class="content">
+        &lt;aside class="left-sidebar">
+        &lt;/aside>
+        &lt;main id="main">
+        &lt;/main>
+        &lt;aside class="right-sidebar">
+          &lt;h6>External resources:&lt;/h6>
+          &lt;div id="urls">&lt;/div>
+        &lt;/aside>
+      &lt;/div>
+      &lt;footer>
+        &lt;span style="font-size: 30px">Footer:&lt;/span>
+        &lt;a href="">Sitemap&lt;/a>
+        &lt;a href="">Home&lt;/a>
+        &lt;a href="">News&lt;/a>
+        &lt;a href="">Contact&lt;/a>
+        &lt;a href="">About&lt;/a>
+      &lt;/footer>
+    &lt;/div>
+    &lt;script src="/js/pwa.js">&lt;/script>
+    &lt;/body>
+    &lt;/html>
+                                </code>
+                            </pre>
+        </div>
+
+    </details>
+
+</div>
+<script>
+    function buttonChange(own, other) {
+        document.getElementById(own).style.display = 'block';
+        document.getElementById(other).style.display = 'none'
+        document.getElementById(own + 'button').disabled = true;
+        document.getElementById(other + 'button').disabled = false;
+    }
+</script>
 </body>
 </html>

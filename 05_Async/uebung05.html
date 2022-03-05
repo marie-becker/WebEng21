@@ -326,15 +326,254 @@
 
     </details>
 
+    <details>
+        <summary>5.4 WWW Navigator
+            <a style="display: inline;" href="04_Navigator/navigator.html" target="_blank">
+                &nbsp;
+                <i class="fas fa-external-link-alt"></i></a></summary>
+        <button id="navcodebutton" onclick="buttonChange('navcode','navcomp')">Code</button>
+        <button disabled id="navcompbutton" onclick="buttonChange('navcomp', 'navcode')">
+            Komponente
+        </button>
+
+        <div id="navcomp">
+            <iframe frameborder="0"
+                    style="background-color:white; width: 100%; height: 100vh; margin-top: 1em; resize: both"
+                    src="04_Navigator/navigator.html"></iframe>
+        </div>
+        <div id="navcode" style="display: none">
+                            <pre>
+                                <code class="language-html">
+    &lt;!DOCTYPE html>
+    &lt;html lang="en">
+    &lt;head>
+        &lt;meta charset="UTF-8">
+        &lt;title>WWW Navigator&lt;/title>
+        &lt;script>
+            let content;
+            let selectedTop;
+            let t;
+            let selectedLeft;
+
+            async function getContent() {
+                fetch('https://www2.inf.h-brs.de/~mbeck32s/navigator_contents.json')
+                    .then(res => res.json())
+                    .then((js) => {
+                        content = js;
+                        selectedTop = js['html'];
+                        selectedLeft = Object.keys(selectedTop)[0];
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const top = urlParams.get('top');
+                        const left = urlParams.get('left');
+                        if(top !== null) topnav(top);
+                        if(left !== null) sidenav(left);
+                    })
+
+            }
+
+            getContent();
+
+            function sidenav(title) {
+                const btns = document.getElementsByClassName('left-sidebar')[0].getElementsByTagName('button');
+                for (let i of btns) {
+                    console.log(i)
+                    i.style.backgroundColor = '#6a709f'
+                }
+                document.getElementById(`${title}`).style.backgroundColor = 'antiquewhite'
+                selectedLeft = content[t][title];
+                document.getElementById("main").innerHTML = selectedLeft.content;
+                document.getElementById("urls").innerHTML = "";
+                for (let el of selectedLeft.references) {
+                    document.getElementById("urls").innerHTML += `&lt;a style="overflow-wrap: anywhere" href="${el}">${el}&lt;/a>`;
+                }
+                setLinks();
+
+            }
 
 
+            function topnav(title) {
+                const btns = document.getElementsByTagName('header')[0].getElementsByTagName('button');
+                for (let i of btns) {
+                    i.style.backgroundColor = '#6a709f'
+                }
+                console.log(title)
+                document.getElementById(`${title}`).style.backgroundColor = 'antiquewhite'
+                t = title;
+                selectedTop = content[title.toLowerCase()]
+                document.getElementsByClassName('left-sidebar')[0].innerHTML = "";
+                for (let el in selectedTop) {
+                    if (el !== 'basics') document.getElementsByClassName('left-sidebar')[0].innerHTML += `&lt;button id="${el}" onclick="sidenav('${el}')">${el}&lt;/button>`
+                }
+                document.getElementById("main").innerHTML = content[t].basics.content;
+                document.getElementById("urls").innerHTML = "";
 
-    <linkdetails>
-        <a href="04_Navigator/navigator.html" target="_blank">
-            <summary>5.4 - Navigator
-                <i class="fas fa-external-link-alt"></i></summary>
-        </a>
-    </linkdetails>
+                for (let el of content[t].basics.references) {
+                    document.getElementById("urls").innerHTML += `&lt;a style="overflow-wrap: anywhere" href="${el}">${el}&lt;/a>`;
+                }
+                setLinks();
+            }
+
+            function setLinks() {
+                let links = document.getElementById("main").getElementsByTagName("a");
+                for (let a of links) {
+                    if (a.innerText.toLowerCase() === 'html' || a.innerText.toLowerCase() === 'css' || a.innerText.toLowerCase() ==='javascript') {
+                        console.log(a.innerText)
+                        a.href = window.location.href.split('?')[0] + '?top=' + a.innerText.toLowerCase();
+                        continue;
+                    }
+                    a.href = window.location.href.split('?')[0] + '?top=' + t + '&left=' + a.innerText.toLowerCase();
+                }
+            }
+        &lt;/script>
+        &lt;style>
+            * {
+                box-sizing: border-box;
+                padding: 0;
+                margin: 0;
+            }
+
+            body {
+                color: white;
+                text-align: center;
+            }
+
+            header {
+                background-color: #c14f4f;
+                text-align: left;
+
+            }
+
+            main {
+                background-color: #6a9ebd;
+                font-size: 1.5rem;
+                color: black;
+            }
+            main a{
+                font-size: 1.5rem;
+                color: black;
+            }
+
+            footer {
+                background: black;
+            }
+
+            .left-sidebar {
+                background-color: #c28281;
+            }
+
+            .right-sidebar {
+                text-align: left;
+                background-color: #c28281;
+            }
+
+            .container {
+                display: flex;
+                width: 100%;
+                flex-direction: column;
+                height: 100vh;
+            }
+
+            .content {
+                display: flex;
+                flex-direction: column;
+                overflow-y: auto;
+                height: 100vh;
+            }
+
+            button {
+                background-color: #6a709f;
+                color: black;
+                border-top-color: white;
+                border-left-color: white;
+                border-bottom-color: #9a9a9a;
+                border-right-color: #9a9a9a;
+                border-radius: 20px;
+                font-weight: bold;
+                padding: 0.3em 2em;
+                margin: 1em;
+            }
+
+            button:hover {
+                background-color: antiquewhite;
+            }
+
+            .left-sidebar button {
+                display: block;
+            }
+
+            h1 {
+                text-align: center;
+                margin: 0;
+            }
+
+            a {
+                color: white;
+                font-size: small;
+            }
+
+            @media all and (min-width: 768px) {
+                .content {
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                }
+
+                main {
+                    flex: 5;
+                    order: 2;
+                }
+
+                .left-sidebar {
+                    order: 1;
+                    flex: 1;
+                    font-size: 2em;
+                }
+
+                .right-sidebar {
+                    flex: 1;
+                    order: 3;
+                    font-size: 2em;
+
+                }
+            }
+        &lt;/style>
+    &lt;/head>
+
+    &lt;body>
+    &lt;div class="container">
+        &lt;header>
+            &lt;h1>WWW-Navigator&lt;/h1>
+            &lt;button id='html' onclick="topnav('html')">HTML&lt;/button>
+            &lt;button id='css' onclick="topnav('css')">CSS&lt;/button>
+            &lt;button id='javascript' onclick="topnav('javascript')">JavaScript&lt;/button>
+            &lt;button>Other&lt;/button>
+        &lt;/header>
+        &lt;div class="content">
+            &lt;aside class="left-sidebar" style="display: block">
+            &lt;/aside>
+            &lt;main id="main">
+            &lt;/main>
+            &lt;aside class="right-sidebar">
+                &lt;h6>External resources:&lt;/h6>
+                &lt;div id="urls">&lt;/div>
+            &lt;/aside>
+        &lt;/div>
+        &lt;footer>
+            &lt;span style="font-size: 30px">Footer:&lt;/span>
+            &lt;a href="">Sitemap&lt;/a>
+            &lt;a href="">Home&lt;/a>
+            &lt;a href="">News&lt;/a>
+            &lt;a href="">Contact&lt;/a>
+            &lt;a href="">About&lt;/a>
+        &lt;/footer>
+    &lt;/div>
+    &lt;/body>
+    &lt;/html>
+                                </code>
+                            </pre>
+        </div>
+
+    </details>
+
 
     <script>
         function buttonChange(own, other) {

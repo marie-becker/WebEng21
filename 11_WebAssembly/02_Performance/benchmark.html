@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora&display=swap" rel="stylesheet">
+</head>
+<body style="font-family: Sora,serif">
+<h1>Benchmark - Both methods are executed 10 times for measurement.</h1>
+<h3 style="color: red">Execution takes some time.</h3>
+<button id="button">Start</button>
+<div style="display: flex">
+    <div style="width: 25%">
+        <h2>WebAssembly</h2>
+        <ol id="walist">
+        </ol>
+        <div id="wares"></div>
+    </div>
+    <div style="width: 25%">
+        <h2>JavaScript</h2>
+        <ol id="jslist"></ol>
+        <div id="jsres"></div>
+    </div>
+</div>
+<p id="p"></p>
+<script type="module">
+    import {wasmInstance} from './prime.mjs';
+    import {countPrimes} from './primej.mjs'
+
+    const prime = wasmInstance.exports.main;
+
+    let watimes = [];
+    let jstimes = [];
+
+    let button = document.getElementById("button");
+    button.addEventListener('click', async () => {
+        await funky("wa");
+        await funky("js");
+        document.getElementById("p").innerHTML += `Executing with JavaScript is around <b>${Math.round(avg(watimes) / avg(jstimes))}%</b> faster than with WebAssembly.`
+    })
+
+    function funky(name) {
+        return new Promise((resolve => {
+            let times = [];
+            let i = 0;
+            const step = () => {
+                let start = Date.now();
+                name === "js" ? countPrimes(100000) : prime();
+                let end = Date.now() - start;
+                times.push(end)
+                document.getElementById(name + "list").innerHTML += (`<li>${end} ms</li>`);
+                i++;
+                if (i < 10) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    document.getElementById(name + "res").innerHTML += `min: ${Math.min(...times)}, \n max: ${Math.max(...times)},\n avg: ${avg(times)}`
+                    name==="wa" ? watimes = times : jstimes = times;
+                    resolve(times);
+                }
+            }
+            window.requestAnimationFrame(step);
+        }))
+    }
+
+    // Based on answer from ChaosPandion on stackoverflow https://stackoverflow.com/a/3762623/15212696
+    function avg(array) {
+        return array.reduce((pv, cv) => pv + cv, 0) / array.length;
+    }
+
+</script>
+
+</body>
+</html>

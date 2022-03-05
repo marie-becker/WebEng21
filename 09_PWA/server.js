@@ -3,7 +3,8 @@ const path = require('path')
 const fs = require('fs')
 const https = require('https')
 
-// followed this tutorial https://blog.logrocket.com/how-to-build-a-progressive-web-app-pwa-with-node-js/
+// followed this tutorial by Diogo Spínola
+// https://blog.logrocket.com/how-to-build-a-progressive-web-app-pwa-with-node-js/
 
 const httpPort = 80
 const httpsPort = 443

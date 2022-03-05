@@ -3,24 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>GCD</title>
-    <script>
-        async function fetchAndInstantiate(){
-            const response = await fetch("gcd.wasm")
-            const buffer = await response.arrayBuffer();
-            const wasm = await WebAssembly.instantiate(buffer);
-            const gcd = wasm.instance.exports.gcd;
-            let el = document.createElement('div')
-            for(let i=0; i<=100; i++){
-                for(let j=0; j<=100; j++){
-                   el.innerHTML += `<p>GCD of ${i} and ${j} is ${gcd(i,j)}</p>`;
-                }
-            }
-            document.body.appendChild(el);
-        }
-        fetchAndInstantiate();
-    </script>
 </head>
 <body>
-<h1>Funktioniert bisher nur, wenn a > b</h1>
+<h1>Open the console to see results.</h1>
+<button onclick="fetchAndInstantiate()">Start</button>
 </body>
+<script>
+    async function fetchAndInstantiate(){
+        const response = await fetch("gcd.wasm")
+        const buffer = await response.arrayBuffer();
+        const wasm = await WebAssembly.instantiate(buffer);
+        const gcd = wasm.instance.exports.gcd;
+        for(let i=1; i<=100; i++){
+            for(let j=1; j<=100; j++){
+                console.log("GCD of " + i + " and "+ j + ": " + gcd(i,j))
+            }
+        }
+    }
+</script>
 </html>

@@ -1,4 +1,4 @@
-const webassembly = require("webassembly")
+const {webassembly} = require("webassembly")
 
 webassembly
 .load("gcd.wasm")

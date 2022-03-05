@@ -1,31 +1,35 @@
 (module
 (export "gcd" (func $gcd))
-(func $gcd (param $a i32) (param $b i32) (result i32)
+(func $gcd (param $a i32) (param $b i32) (result i32) (local $temp i32)
 local.get $a
 i32.eqz
 if
     local.get $b
     return
 end
-loop $looplabel
+local.get $b
+i32.eqz
+if
     local.get $a
-    i32.const 0
-    i32.gt_s
-    if
-        local.get $a
-        local.get $b
-        i32.gt_s ;; a > b?
-        if
-            local.get $a
-            local.get $b
-            i32.sub
-            local.set $a ;; a=a-b
-        end ;; else (b > a)
-        local.get $b
-        local.get $a
-        i32.sub
-        local.set $b ;; b=b-a
-    end
+    return
 end
+loop $do
+get_local $a
+get_local $b
+i32.rem_s
+set_local $temp
+
+get_local $b
+set_local $a
+
+get_local $temp
+set_local $b
+
+i32.const 0
+get_local $b
+i32.ne
+br_if $do
+end
+
     local.get $a
 ))

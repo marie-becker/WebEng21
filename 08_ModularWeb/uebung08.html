@@ -1081,7 +1081,7 @@
     </details>
 
     <details>
-        <summary>8.2 LitElement Menü-Komponente</summary>
+        <summary>8.3 LitElement WWW-Navigtaor</summary>
         <div class="akkordeon-inhalt">
             <button id="navigatorcodebutton" onclick="buttonChange('navigatorcode','navigatorcomp')">Code</button>
             <button disabled id="navigatorcompbutton" onclick="buttonChange('navigatorcomp', 'navigatorcode')">
@@ -1094,6 +1094,7 @@
             </div>
 
             <pre id="navigatorcode" style="display: none">
+ Footer-Component
                         <code>
     &lt;script type="module">
 
@@ -1124,6 +1125,7 @@
 
         })
     &lt;/script></code>
+ Header-Component
     <code>
     &lt;script type="module">
         import {LitElement, html, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
@@ -1175,6 +1177,7 @@
             }
         })
     &lt;script></code>
+ Content-Component
                 <code>
     &lt;script type="module">
         import {LitElement, html, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
@@ -1288,7 +1291,8 @@
         })
     &lt;/script>
                 </code>
-<code class="language-html">
+ navigator.html
+    <code class="language-html">
     &lt;header-comp>&lt;/header-comp>
     &lt;content-comp>&lt;/content-comp>
     &lt;footer-comp>&lt;/footer-comp>

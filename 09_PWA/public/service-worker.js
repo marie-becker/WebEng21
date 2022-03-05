@@ -1,5 +1,5 @@
-
-// followed this tutorial https://blog.logrocket.com/how-to-build-a-progressive-web-app-pwa-with-node-js/
+// followed this tutorial by Diogo Spínola
+// https://blog.logrocket.com/how-to-build-a-progressive-web-app-pwa-with-node-js/
 
 const CACHE_NAME = 'sw-cache-example';
 const toCache = [
