@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, user-scalable=yes, minimal-ui">
     <title>10 Vue</title>
     <link href="../index.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora&display=swap" rel="stylesheet">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/monokai-sublime.min.css"
+          rel="stylesheet">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+    <script>hljs.configure({languages: ['javascript']})</script>
+    <script>hljs.highlightAll();</script>
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/311699e670.js"></script>
     <script>
         /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon
@@ -42,12 +50,221 @@
     <h1>Übung 10 - Vue</h1>
 
     <details>
-        <summary>10.</summary>
-        <div class="akkordeon-inhalt">
-            <iframe src="01/index.html"></iframe>
+        <summary>10.1 Single File Component
+            <a style="display: inline;" href="01/index.html" target="_blank">
+                &nbsp;
+                <i class="fas fa-external-link-alt"></i></a></summary>
+        <button id="sfccodebutton" onclick="buttonChange('sfccode','sfccomp')">Code</button>
+        <button disabled id="sfccompbutton" onclick="buttonChange('sfccomp', 'sfccode')">Komponente
+        </button>
+
+        <div  class="akkordeon-inhalt" id="sfccomp">
+            <iframe style="width: 100%; height: 100vh; margin-top: 1em" src="01/index.html"></iframe>
+        </div>
+        <div class="akkordeon-inhalt" id="sfccode" style="display: none">
+ Single File Component<pre><code class="language-javascript">
+  export default {
+        template: `
+          &lt;div>&lt;input type="text" @keyup="compute" v-model="message">
+          &lt;div>Letters: {{letters }}&lt;/div>
+          &lt;div>Spaces: {{spaces}}&lt;/div>
+          &lt;div>Words: {{words}}&lt;/div>
+          &lt;/div>`,
+        data(){
+            return{
+                letters: 0, spaces: 0, words:0
+            }
+        },
+        methods: {
+            compute() {
+                this.spaces = this.message.split(' ').length - 1;
+                this.letters = this.message.length - this.spaces;
+                this.words = this.message.split(' ').length;
+            }
+        }
+    }
+                                </code>
+                            </pre>Testseite<pre><code class="language-html">
+    &lt;!DOCTYPE html>
+    &lt;html lang="en">
+    &lt;head>
+        &lt;title>Singe File Component&lt;/title>
+        &lt;script src="https://unpkg.com/vue@2.6.14/dist/vue.js">&lt;/script>
+    &lt;/head>
+    &lt;div style="display: flex; margin: 10px; width: 50%">
+        &lt;div id="app" style="flex: 25%">
+            &lt;single-file-component>&lt;/single-file-component>
+        &lt;/div>
+        &lt;br>
+        &lt;div id="app2" style="flex: 25%">
+            &lt;single-file-component>&lt;/single-file-component>
+        &lt;/div>
+    &lt;/div>
+
+    &lt;script type="module">
+        import SingleFileComponent from './singlefilecomp.js';
+
+        new Vue ({
+            el: '#app',
+            components:{
+                SingleFileComponent,
+            }
+        });
+        new Vue ({
+            el: '#app2',
+            components:{
+                SingleFileComponent,
+            }
+        });
+    &lt;/script>
+    &lt;/html>
+        </code></pre>
         </div>
     </details>
-</div>
 
+    <details>
+        <summary>10.2 Menü-Komponente
+            <a style="display: inline;" href="https://marie-becker.github.io/WEM10_Vue/" target="_blank">
+                &nbsp;
+                <i class="fas fa-external-link-alt"></i></a></summary>
+        <button id="mkcodebutton" onclick="buttonChange('mkcode','mkcomp')">Code</button>
+        <button disabled id="mkcompbutton" onclick="buttonChange('mkcomp', 'mkcode')">Komponente
+        </button>
+
+        <div  class="akkordeon-inhalt" id="mkcomp">
+            <iframe style="width: 100%; height: 100vh; margin-top: 1em" src="https://marie-becker.github.io/WEM10_Vue/"></iframe>
+        </div>
+        <div class="akkordeon-inhalt" id="mkcode" style="display: none">
+            Menu.vue
+            <pre><code>
+    &lt;template>
+      &lt;div>
+        &lt;ul>
+          &lt;li :class="{ inline: inline}">
+            &lt;a>&lt;h1>{{item1}}&lt;/h1>&lt;/a>
+          &lt;/li>
+          &lt;li :class="{inline: inline}">
+            &lt;a>&lt;h1>{{item2}}&lt;/h1>&lt;/a>
+          &lt;/li>
+          &lt;li :class="{inline: inline}">
+            &lt;a>&lt;h1>{{item3}}&lt;/h1>&lt;/a>
+          &lt;/li>
+          &lt;li :class="{inline: inline}">
+            &lt;a>&lt;h1>{{item4}}&lt;/h1>&lt;/a>
+          &lt;/li>
+        &lt;/ul>
+      &lt;/div>
+    &lt;/template>
+
+    &lt;script>
+    export default {
+        name: 'Menu',
+        props: {
+            item1: String,
+            item2: String,
+            item3: String,
+            item4: String,
+            inline: Boolean
+        },
+    }
+    &lt;/script>
+
+                    &lt;!-- Add "scoped" attribute to limit CSS to this component only -->
+    &lt;style scoped>
+    .inline {
+        display: inline-block;
+    }
+    li {
+        background-color: #2b96e0;
+        border-radius: 10px;
+        border: 3px solid #063d8f;
+        width: 10%;
+        line-height: 5px;
+        text-align: center;
+        margin: 1em;
+        list-style: none
+    }
+
+    a {
+        color: #000000;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: inherit;
+    }
+    &lt;/style>
+            </code></pre>
+            App.vue
+                <pre><code>
+    &lt;template>
+      &lt;div id="app">
+        &lt;!-- display: inline -->
+        &lt;Menu inline item1="HTML" item2="CSS" item3="JavaScript" item4="DOM"/>
+          &lt;!-- display: block -->
+        &lt;Menu item1="HTML" item2="CSS" item3="JavaScript" item4="DOM"/>
+      &lt;/div>
+    &lt;/template>
+
+    &lt;script>
+    import Menu from './components/Menu.vue'
+
+    export default {
+        name: 'App',
+        components: {
+            Menu
+        }
+    }
+    &lt;/script>
+
+    &lt;style>
+    #app {
+        font-family: Avenir, Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-align: center;
+        color: #2c3e50;
+        margin-top: 60px;
+    }
+    &lt;/style>
+                </code></pre>
+            main.js
+            <pre><code>
+    import { createApp } from 'vue'
+    import App from './App.vue'
+
+    createApp(App).mount('#app')
+
+            </code></pre>
+            index.html
+            <pre><code class="language-html">
+    &lt;!DOCTYPE html>
+    &lt;html lang="">
+      &lt;head>
+        &lt;meta charset="utf-8">
+        &lt;meta http-equiv="X-UA-Compatible" content="IE=edge">
+        &lt;meta name="viewport" content="width=device-width,initial-scale=1.0">
+        &lt;link rel="icon" href="&lt;%= BASE_URL %>favicon.ico">
+        &lt;title>&lt;%= htmlWebpackPlugin.options.title %>&lt;/title>
+      &lt;/head>
+      &lt;body>
+        &lt;noscript>
+          &lt;strong>We're sorry but &lt;%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.&lt;/strong>
+        &lt;/noscript>
+        &lt;div id="app">&lt;/div>
+        &lt;!-- built files will be auto injected -->
+      &lt;/body>
+    &lt;/html>
+            </code></pre>
+        </div>
+    </details>
+
+</div>
+<script>
+    function buttonChange(own, other) {
+        document.getElementById(own).style.display = 'block';
+        document.getElementById(other).style.display = 'none'
+        document.getElementById(own + 'button').disabled = true;
+        document.getElementById(other + 'button').disabled = false;
+    }
+</script>
 </body>
 </html>

