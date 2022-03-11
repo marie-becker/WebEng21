@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, user-scalable=yes, minimal-ui">
     <title>04 DOM</title>
-    <link href="../index.css" rel="stylesheet">
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/311699e670.js"></script>
+    <link href="../index.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora&display=swap" rel="stylesheet">
     <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/monokai-sublime.min.css"
           rel="stylesheet">
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
@@ -45,7 +48,6 @@
 </div>
 <div class="main">
     <h1>Übung 04 - DOM</h1>
-
     <details>
         <summary>4.1 - Einkaufsliste
             <a style="display: inline;" href="01_Einkaufsliste/einkaufsliste.html" target="_blank">
@@ -55,14 +57,13 @@
         <button disabled id="einkaufcompbutton" onclick="buttonChange('einkaufcomp', 'einkaufcode')">Komponente
         </button>
 
-        <div id="einkaufcomp">
+        <div class="akkordeon-inhalt" id="einkaufcomp">
             <iframe frameborder="0" style="background-color:white; width: 100%; height: 100vh; margin-top: 1em"
                     src="01_Einkaufsliste/einkaufsliste.html"></iframe>
         </div>
-        <div id="einkaufcode" style="display: none">
-                            <pre>
- einkaufsliste.html
-                                <code class="language-html">
+        <div class="akkordeon-inhalt" id="einkaufcode" style="display: none">
+            einkaufsliste.html
+            <pre><code class="language-html">
     &lt;!DOCTYPE html>
     &lt;html lang="en">
     &lt;head>
@@ -78,9 +79,9 @@
     &lt;div id="liste">&lt;/div>
     &lt;/body>
     &lt;/html>
-                                </code>
- einkaufsliste.js
-                                <code class="language-javascript">
+            </code></pre>
+            einkaufsliste.js
+            <pre><code class="language-javascript">
     let liste = [];
 
     function myKeyup(ev){
@@ -118,8 +119,7 @@
         liste = [];
         renderlist();
     }
-                                </code>
-                            </pre>
+                                </code></pre>
         </div>
     </details>
 
@@ -133,14 +133,13 @@
             Komponente
         </button>
 
-        <div id="rednercomp">
+        <div class="akkordeon-inhalt" id="rednercomp">
             <iframe frameborder="0" style="background-color:white; width: 100%; height: 100vh; margin-top: 1em"
                     src="02_Rednerliste/rednerliste.html"></iframe>
         </div>
-        <div id="rednercode" style="display: none">
-                            <pre>
- rednerliste.html
-                                <code class="language-html">
+        <div class="akkordeon-inhalt" id="rednercode" style="display: none">
+            rednerliste.html
+            <pre><code class="language-html">
     &lt;html lang="en">
     &lt;head>
         &lt;meta charset="UTF-8">
@@ -155,9 +154,9 @@
     &lt;div id="liste">&lt;/div>
     &lt;/body>
     &lt;/html>
-                                </code>
- rednerliste.js
-                                <code class="language-javascript">
+            </code></pre>
+            rednerliste.js
+            <pre><code class="language-javascript">
     let liste = [];
     let starttime;
     let elapsedtime = 0;
@@ -265,14 +264,13 @@
             Komponente
         </button>
 
-        <div id="tabellecomp">
+        <div class="akkordeon-inhalt" id="tabellecomp">
             <iframe frameborder="0" style="background-color:white; width: 100%; height: 100vh; margin-top: 1em"
                     src="03_Tabellenkalkulation/tabellenkalkulation.html"></iframe>
         </div>
-        <div id="tabellecode" style="display: none">
-                            <pre>
- tabellenkalkulation.html
-                                <code class="language-html">
+        <div class="akkordeon-inhalt" id="tabellecode" style="display: none">
+            tabellenkalkulation.html
+            <pre><code class="language-html">
     &lt;!DOCTYPE html>
     &lt;html lang="en">
     &lt;head>
@@ -306,9 +304,9 @@
     &lt;div id="tablewrapper">&lt;/div>
     &lt;/body>
     &lt;/html>
-                                </code>
- tabellenkalkulation.js
-                                <code class="language-javascript">
+            </code></pre>
+            tabellenkalkulation.js
+            <pre><code class="language-javascript">
     let formula;
 
     function createTable() {
@@ -368,11 +366,11 @@
             Komponente
         </button>
 
-        <div id="editorcomp">
+        <div class="akkordeon-inhalt" id="editorcomp">
             <iframe frameborder="0" style="background-color:white; width: 100%; height: 100vh; margin-top: 1em"
                     src="04_Editor/editor.html"></iframe>
         </div>
-        <div id="editorcode" style="display: none">
+        <div class="akkordeon-inhalt" id="editorcode" style="display: none">
                             <pre>
  editor.html
                                 <code class="language-html">
@@ -564,9 +562,6 @@
         </div>
 
     </details>
-
-
-
 
 
 </div>

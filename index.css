@@ -12,7 +12,8 @@ button{
     border-radius: 7px;
     box-shadow: none;
     border: 0;
-    margin: 5px;
+    color:white;
+    margin: 10px 0 5px 10px;
 }
 
 /* Sidebar taken from W3Schools https://www.w3schools.com/howto/howto_css_fixed_sidebar.asp ; Changed slightly */

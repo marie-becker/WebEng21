@@ -2,16 +2,20 @@
 <html lang="en">
 <head>
     <title>Singe File Component</title>
+    <script src="https://unpkg.com/vue@2.6.14/dist/vue.js"></script>
 </head>
-<script src="https://unpkg.com/vue"></script>
-<div id="app">
-    <single-file-component></single-file-component>
+<div style="display: flex; margin: 10px; width: 50%">
+    <div id="app" style="flex: 25%">
+        <single-file-component></single-file-component>
+    </div>
+    <br>
+    <div id="app2" style="flex: 25%">
+        <single-file-component></single-file-component>
+    </div>
 </div>
-<div id="app2">
-    <single-file-component></single-file-component>
-</div>
+
 <script type="module">
-    import SingleFileComponent from './singlefilecomp.mjs';
+    import SingleFileComponent from './singlefilecomp.js';
 
     new Vue ({
         el: '#app',
