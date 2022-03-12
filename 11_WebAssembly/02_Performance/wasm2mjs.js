@@ -1,3 +1,5 @@
+/* */
+
 const fs = require('fs').promises;
 const fileSuffix = '.mjs';
 const wasmFilename = process.argv[2];

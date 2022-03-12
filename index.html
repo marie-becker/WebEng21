@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sora&display=swap" rel="stylesheet">
     <title>Web Engineering Masterkurs</title>
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
     <script>
         /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon
         * https://www.w3schools.com/howto/howto_js_topnav_responsive.asp */
@@ -36,7 +37,7 @@
     <a href="09_PWA/uebung09.html">09 PWA</a>
     <a href="10_Vue/uebung10.html">10 Vue</a>
     <a href="11_WebAssembly/uebung11.html">11 WebAssembly</a>
-    <a href="../12_Security/uebung12.html">12 Security</a>
+    <a href="12_Security/uebung12.html">12 Security</a>
     <a href="javascript:void(0);" class="icon" onclick="myFunction()">
         <i class="fa fa-bars"></i>
     </a>
@@ -44,14 +45,33 @@
 <div class="main">
     <h1>Web Engineering Masterkurs</h1>
     <ul>
-        <li><a href="https://github.com/marie-becker/WebEng21" target="_blank" style="color: #31abec;"><u>Git Repository</u></a></li>
+        <li><a href="https://github.com/marie-becker/WebEng21" target="_blank" style="color: #31abec;"><u>Git
+            Repository</u></a></li>
         <li>Videopräsentation max 10 min auf LEA, optional youtube</li>
         <li>Präsentationsfolien als PDF (max 15)</li>
-        <li>Tabelle über Eigenleistungen als PDF</li>
+
         <li>Formular ausfüllen</li>
-        <li>StoryBook?</li>
+        <li><a href="https://master--622b64b91bcf82003a1edd96.chromatic.com/" target="_blank"
+               style="color: #31abec;"><u>Storybook</u></a></li>
+        <li>Tabelle über Eigen- und Fremdleistungen und LOC als PDF:<br>
+        </li>
     </ul>
+    <br><br>
+    <div id="adobe-dc-view" style="width: 800px;"></div>
+    <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+    <script type="text/javascript">
+        document.addEventListener("adobe_dc_view_sdk.ready", function () {
+            var adobeDCView = new AdobeDC.View({clientId: "11abc9a59a2346d4a47243b2880390ef", divId: "adobe-dc-view"});
+            adobeDCView.previewFile({
+                content: {location: {url: "Eigenleistungen.pdf"}},
+                metaData: {fileName: "Bodea Brochure.pdf"}
+            }, {embedMode: "IN_LINE"});
+        });
+    </script>
+
 </div>
+
+
 </body>
 </html>
 

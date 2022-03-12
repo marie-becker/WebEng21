@@ -173,7 +173,7 @@ function gensymf(sym) {
 
 function fibonaccif(x, y) {
     return function () {
-        var next = x;
+        const next = x;
         x = y;
         y += next;
         return next;
