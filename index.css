@@ -47,8 +47,21 @@ button{
 
 /* Style page content */
 .main {
-    margin-left: 200px; /* Same as the width of the sidebar */
-    padding: 0px 10px;
+    margin-left: 250px; /* Same as the width of the sidebar */
+    padding: 0 10px;
+}
+
+.welcometext{
+    width: 70%;
+}
+
+.pdfdl{
+    display: none;
+}
+
+#adobe-dc-view{
+    width: 850px;
+    height: 1200px
 }
 
 
@@ -168,6 +181,19 @@ Show the link that contains should open and close the topnav (.icon) */
         right: 0;
         top: 0;
     }
+
+    .pdfdl{
+        display: block;
+    }
+
+    #adobe-dc-view{
+        width: auto;
+        height: 500px;
+    }
+
+    .welcometext{
+        width: auto;
+    }
 }
 
 /* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon.
@@ -184,4 +210,5 @@ This class makes the sidenav look good on small screens (display the links verti
         display: block;
         text-align: left;
     }
+
 }

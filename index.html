@@ -43,35 +43,29 @@
     </a>
 </div>
 <div class="main">
-    <h1>Web Engineering Masterkurs</h1>
-    <ul>
-        <li><a href="https://github.com/marie-becker/WebEng21" target="_blank" style="color: #31abec;"><u>Git
-            Repository</u></a></li>
-        <li>Videopräsentation max 10 min auf LEA, optional youtube</li>
-        <li>Präsentationsfolien als PDF (max 15)</li>
-
-        <li>Formular ausfüllen</li>
-        <li><a href="https://master--622b64b91bcf82003a1edd96.chromatic.com/" target="_blank"
-               style="color: #31abec;"><u>Storybook</u></a></li>
-        <li>Tabelle über Eigen- und Fremdleistungen und LOC als PDF:<br>
-        </li>
-    </ul>
+    <h1>Web Engineering Masterkurs - Marie Becker</h1>
+    <h3>Herzlich willkommen auf dem Solutionmanager zu den Übungsaufgaben des Masterkurses Web Engineering!</h3>
+    <p class="welcometext">Alle Aufgaben wurden von mir selbst bearbeitet, benutzte Tools oder verwendete Fremdleistungen sind in der
+        Tabelle unten aufgelistet und kann <a href="Leistungen.pdf" style="display: inline; color: #31abec" download=""><u>hier</u></a>
+        heruntergeladen werden. Der Sourcecode der Aufgabenlösungen kann jeweils durch einen Klick auf den <button style="margin: 0">Code</button> Button
+        eingesehen werden, alternativ ist der gesamte Solutionmanager auf
+        <a target="_blank" href="https://github.com/marie-becker/WebEng21" style="display: inline; color: #31abec"><u>GitHub</u></a> zu finden.<br>
+        Ein <a href="https://622b64b91bcf82003a1edd96-igwdvrhvns.chromatic.com/?path=/story/menu--primary" target="_blank" style="color: #31abec; display: inline"><u>Storybook</u></a>
+        wurde aufgesetzt, jedoch befindet sich darin nur die Menü-Komponente aus Aufgabe 10.2. </p>
     <br><br>
-    <div id="adobe-dc-view" style="width: 800px;"></div>
+    <div id="adobe-dc-view" style=""></div>
     <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
     <script type="text/javascript">
         document.addEventListener("adobe_dc_view_sdk.ready", function () {
-            var adobeDCView = new AdobeDC.View({clientId: "206356e508714d4caac72388ee50dcbd", divId: "adobe-dc-view"});
+            var adobeDCView = new AdobeDC.View({clientId: "b8302b4733f24d19bbfedf68eaeac34d", divId: "adobe-dc-view"});
             adobeDCView.previewFile({
-                content: {location: {url: "Eigenleistungen.pdf"}},
+                content: {location: {url: "Leistungen.pdf"}},
                 metaData: {fileName: "Leistungen.pdf"}
-            }, {embedMode: "IN_LINE"});
+            }, {embedMode: "SIZED_CONTAINER"}, {showAnnotationTools: true}, {dockPageControl: true}) ;
         });
     </script>
 
 </div>
-
-
 </body>
 </html>
 
