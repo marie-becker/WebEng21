@@ -204,7 +204,7 @@
         <summary>7.3 Express.js Server
         </summary>
         <button id="expresscodebutton" onclick="buttonChange('expresscode','expresscomp')">Code</button>
-        <button disabled id="expresscompbutton" onclick="buttonChange('expresscomp', 'expresscode')">
+        <button style="opacity: 0.5" disabled id="expresscompbutton" onclick="buttonChange('expresscomp', 'expresscode')">
             Komponente
         </button>
         <div id="expresscomp" class="akkordeon-inhalt">
@@ -278,7 +278,9 @@
         document.getElementById(own).style.display = 'block';
         document.getElementById(other).style.display = 'none'
         document.getElementById(own + 'button').disabled = true;
+        document.getElementById(own + 'button').style.opacity = "0.5";
         document.getElementById(other + 'button').disabled = false;
+        document.getElementById(other + 'button').style.opacity = "1";
     }
 </script>
 </body>

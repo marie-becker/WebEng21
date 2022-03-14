@@ -56,7 +56,7 @@
                 &nbsp;
                 <i class="fas fa-external-link-alt"></i></a></summary>
         <button id="sfccodebutton" onclick="buttonChange('sfccode','sfccomp')">Code</button>
-        <button disabled id="sfccompbutton" onclick="buttonChange('sfccomp', 'sfccode')">Komponente
+        <button style="opacity: 0.5" disabled id="sfccompbutton" onclick="buttonChange('sfccomp', 'sfccode')">Komponente
         </button>
 
         <div  class="akkordeon-inhalt" id="sfccomp">
@@ -129,7 +129,7 @@
                 &nbsp;
                 <i class="fas fa-external-link-alt"></i></a></summary>
         <button id="mkcodebutton" onclick="buttonChange('mkcode','mkcomp')">Code</button>
-        <button disabled id="mkcompbutton" onclick="buttonChange('mkcomp', 'mkcode')">Komponente
+        <button style="opacity: 0.5" disabled id="mkcompbutton" onclick="buttonChange('mkcomp', 'mkcode')">Komponente
         </button>
 
         <div  class="akkordeon-inhalt" id="mkcomp">
@@ -264,7 +264,9 @@
         document.getElementById(own).style.display = 'block';
         document.getElementById(other).style.display = 'none'
         document.getElementById(own + 'button').disabled = true;
+        document.getElementById(own + 'button').style.opacity = "0.5";
         document.getElementById(other + 'button').disabled = false;
+        document.getElementById(other + 'button').style.opacity = "1";
     }
 </script>
 </body>

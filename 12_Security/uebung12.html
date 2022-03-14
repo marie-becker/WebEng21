@@ -210,7 +210,9 @@ Authentication TAN:'; UPDATE employees SET salary=9999 WHERE first_name='John' A
         document.getElementById(own).style.display = 'block';
         document.getElementById(other).style.display = 'none'
         document.getElementById(own + 'button').disabled = true;
+        document.getElementById(own + 'button').style.opacity = "0.5";
         document.getElementById(other + 'button').disabled = false;
+        document.getElementById(other + 'button').style.opacity = "1";
     }
 </script>
 </body>

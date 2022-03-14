@@ -56,7 +56,7 @@
                 &nbsp;
                 <i class="fas fa-external-link-alt"></i></a></summary>
         <button id="bdcodebutton" onclick="buttonChange('bdcode','bdcomp')">Code</button>
-        <button disabled id="bdcompbutton" onclick="buttonChange('bdcomp', 'bdcode')">
+        <button style="opacity: 0.5" disabled id="bdcompbutton" onclick="buttonChange('bdcomp', 'bdcode')">
             Komponente
         </button>
 
@@ -175,7 +175,7 @@
                 &nbsp;
                 <i class="fas fa-external-link-alt"></i></a></summary>
         <button id="beziercodebutton" onclick="buttonChange('beziercode','beziercomp')">Code</button>
-        <button disabled id="beziercompbutton" onclick="buttonChange('beziercomp', 'beziercode')">
+        <button style="opacity: 0.5" disabled id="beziercompbutton" onclick="buttonChange('beziercomp', 'beziercode')">
             Komponente
         </button>
 
@@ -401,7 +401,9 @@
         document.getElementById(own).style.display = 'block';
         document.getElementById(other).style.display = 'none'
         document.getElementById(own + 'button').disabled = true;
+        document.getElementById(own + 'button').style.opacity = "0.5";
         document.getElementById(other + 'button').disabled = false;
+        document.getElementById(other + 'button').style.opacity = "1";
     }
 </script>
 </body>

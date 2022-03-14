@@ -81,7 +81,7 @@
                 &nbsp;
                 <i class="fas fa-external-link-alt"></i></a></summary>
         <button id="pwacodebutton" onclick="buttonChange('pwacode','pwacomp')">Code</button>
-        <button disabled id="pwacompbutton" onclick="buttonChange('pwacomp', 'pwacode')">
+        <button style="opacity: 0.5" disabled id="pwacompbutton" onclick="buttonChange('pwacomp', 'pwacode')">
             Komponente
         </button>
 
@@ -431,7 +431,9 @@
         document.getElementById(own).style.display = 'block';
         document.getElementById(other).style.display = 'none'
         document.getElementById(own + 'button').disabled = true;
+        document.getElementById(own + 'button').style.opacity = "0.5";
         document.getElementById(other + 'button').disabled = false;
+        document.getElementById(other + 'button').style.opacity = "1";
     }
 </script>
 </body>

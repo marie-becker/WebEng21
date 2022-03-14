@@ -188,7 +188,7 @@
                         &nbsp;
                         <i class="fas fa-external-link-alt"></i></a></summary>
                 <button id="tributecodebutton" onclick="buttonChange('tributecode','tributecomp')">Code</button>
-                <button disabled id="tributecompbutton" onclick="buttonChange('tributecomp', 'tributecode')">
+                <button style="opacity: 0.5" disabled id="tributecompbutton" onclick="buttonChange('tributecomp', 'tributecode')">
                     Komponente
                 </button>
 
@@ -244,7 +244,7 @@
                         &nbsp;
                         <i class="fas fa-external-link-alt"></i></a></summary>
                 <button id="surveycodebutton" onclick="buttonChange('surveycode','surveycomp')">Code</button>
-                <button disabled id="surveycompbutton" onclick="buttonChange('surveycomp', 'surveycode')">Komponente
+                <button style="opacity: 0.5;" disabled id="surveycompbutton" onclick="buttonChange('surveycomp', 'surveycode')">Komponente
                 </button>
 
                 <div id="surveycomp">
@@ -438,7 +438,7 @@
                         &nbsp;
                         <i class="fas fa-external-link-alt"></i></a></summary>
                 <button id="productcodebutton" onclick="buttonChange('productcode','productcomp')">Code</button>
-                <button disabled id="productcompbutton" onclick="buttonChange('productcomp', 'productcode')">Komponente
+                <button style="opacity: 0.5" disabled id="productcompbutton" onclick="buttonChange('productcomp', 'productcode')">Komponente
                 </button>
 
                 <div id="productcomp">
@@ -574,7 +574,9 @@
         document.getElementById(own).style.display = 'block';
         document.getElementById(other).style.display = 'none'
         document.getElementById(own + 'button').disabled = true;
+        document.getElementById(own + 'button').style.opacity = "0.5";
         document.getElementById(other + 'button').disabled = false;
+        document.getElementById(other + 'button').style.opacity = "1";
     }
 </script>
 </body>

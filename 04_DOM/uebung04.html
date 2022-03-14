@@ -55,7 +55,7 @@
                 &nbsp;
                 <i class="fas fa-external-link-alt"></i></a></summary>
         <button id="einkaufcodebutton" onclick="buttonChange('einkaufcode','einkaufcomp')">Code</button>
-        <button disabled id="einkaufcompbutton" onclick="buttonChange('einkaufcomp', 'einkaufcode')">Komponente
+        <button style="opacity: 0.5" disabled id="einkaufcompbutton" onclick="buttonChange('einkaufcomp', 'einkaufcode')">Komponente
         </button>
 
         <div class="akkordeon-inhalt" id="einkaufcomp">
@@ -130,7 +130,7 @@
                 &nbsp;
                 <i class="fas fa-external-link-alt"></i></a></summary>
         <button id="rednercodebutton" onclick="buttonChange('rednercode','rednercomp')">Code</button>
-        <button disabled id="rednercompbutton" onclick="buttonChange('rednercomp', 'rednercode')">
+        <button style="opacity: 0.5" disabled id="rednercompbutton" onclick="buttonChange('rednercomp', 'rednercode')">
             Komponente
         </button>
 
@@ -261,7 +261,7 @@
                 &nbsp;
                 <i class="fas fa-external-link-alt"></i></a></summary>
         <button id="tabellecodebutton" onclick="buttonChange('tabellecode','tabellecomp')">Code</button>
-        <button disabled id="tabellecompbutton" onclick="buttonChange('tabellecomp', 'tabellecode')">
+        <button style="opacity: 0.5" disabled id="tabellecompbutton" onclick="buttonChange('tabellecomp', 'tabellecode')">
             Komponente
         </button>
 
@@ -363,7 +363,7 @@
                 &nbsp;
                 <i class="fas fa-external-link-alt"></i></a></summary>
         <button id="editorcodebutton" onclick="buttonChange('editorcode','editorcomp')">Code</button>
-        <button disabled id="editorcompbutton" onclick="buttonChange('editorcomp', 'editorcode')">
+        <button style="opacity: 0.5" disabled id="editorcompbutton" onclick="buttonChange('editorcomp', 'editorcode')">
             Komponente
         </button>
 
@@ -571,7 +571,9 @@
         document.getElementById(own).style.display = 'block';
         document.getElementById(other).style.display = 'none'
         document.getElementById(own + 'button').disabled = true;
+        document.getElementById(own + 'button').style.opacity = "0.5";
         document.getElementById(other + 'button').disabled = false;
+        document.getElementById(other + 'button').style.opacity = "1";
     }
 </script>
 </body>

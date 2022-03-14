@@ -633,7 +633,7 @@
             <details>
                 <summary>Einkaufsliste</summary>
                 <button id="shoppingcodebutton" onclick="buttonChange('shoppingcode','shoppingcomp')">Code</button>
-                <button disabled id="shoppingcompbutton" onclick="buttonChange('shoppingcomp', 'shoppingcode')">
+                <button style="opacity: 0.5" disabled id="shoppingcompbutton" onclick="buttonChange('shoppingcomp', 'shoppingcode')">
                     Komponente
                 </button>
                 <div class="akkordeon-inhalt">
@@ -693,7 +693,7 @@
                         &nbsp;
                         <i class="fas fa-external-link-alt"></i></a></summary>
                 <button id="rednercodebutton" onclick="buttonChange('rednercode','rednercomp')">Code</button>
-                <button disabled id="rednercompbutton" onclick="buttonChange('rednercomp', 'rednercode')">Komponente
+                <button style="opacity: 0.5" disabled id="rednercompbutton" onclick="buttonChange('rednercomp', 'rednercode')">Komponente
                 </button>
                 <div>
                     <div id="rednercomp" class="akkordeon-inhalt">
@@ -810,7 +810,7 @@
             <details>
                 <summary>Tabellenkalkulation</summary>
                 <button id="tabellecodebutton" onclick="buttonChange('tabellecode','tabellecomp')">Code</button>
-                <button disabled id="tabellecompbutton" onclick="buttonChange('tabellecomp', 'tabellecode')">
+                <button style="opacity: 0.5" disabled id="tabellecompbutton" onclick="buttonChange('tabellecomp', 'tabellecode')">
                     Komponente
                 </button>
                 <div class="akkordeon-inhalt">
@@ -906,7 +906,7 @@
             <details>
                 <summary>Statistik-Balkendiagramm</summary>
                 <button id="diagramcodebutton" onclick="buttonChange('diagramcode','diagramcomp')">Code</button>
-                <button disabled id="diagramcompbutton" onclick="buttonChange('diagramcomp', 'diagramcode')">
+                <button style="opacity: 0.5" disabled id="diagramcompbutton" onclick="buttonChange('diagramcomp', 'diagramcode')">
                     Komponente
                 </button>
                 <div class="akkordeon-inhalt">
@@ -1008,7 +1008,7 @@
             <details>
                 <summary>Bezier-Animation</summary>
                 <button id="beziercodebutton" onclick="buttonChange('beziercode','beziercomp')">Code</button>
-                <button disabled id="beziercompbutton" onclick="buttonChange('beziercomp', 'beziercode')">Komponente
+                <button style="opacity: 0.5" disabled id="beziercompbutton" onclick="buttonChange('beziercomp', 'beziercode')">Komponente
                 </button>
                 <div class="akkordeon-inhalt">
                     <bezier-comp id="beziercomp" class="active"></bezier-comp>
@@ -1127,7 +1127,7 @@
         <summary>8.2 LitElement Menü-Komponente</summary>
         <div class="akkordeon-inhalt">
             <button id="menucodebutton" onclick="buttonChange('menucode','menucomp')">Code</button>
-            <button disabled id="menucompbutton" onclick="buttonChange('menucomp', 'menucode')">Komponente</button>
+            <button style="opacity: 0.5" disabled id="menucompbutton" onclick="buttonChange('menucomp', 'menucode')">Komponente</button>
             <div id="menucomp">
                 Anwendung durch: &lt;menu-comp alignment="block" listelements='["block_1", "block_2", "block_3"]'>&lt;/menu-comp>
                 <menu-comp alignment="block" listelements='["block_1", "block_2", "block_3"]'></menu-comp>
@@ -1193,7 +1193,7 @@
         <summary>8.3 LitElement WWW-Navigtaor</summary>
         <div class="akkordeon-inhalt">
             <button id="navigatorcodebutton" onclick="buttonChange('navigatorcode','navigatorcomp')">Code</button>
-            <button disabled id="navigatorcompbutton" onclick="buttonChange('navigatorcomp', 'navigatorcode')">
+            <button style="opacity: 0.5" disabled id="navigatorcompbutton" onclick="buttonChange('navigatorcomp', 'navigatorcode')">
                 Komponente
             </button>
             <div id="navigatorcomp">
@@ -1417,7 +1417,9 @@
         document.getElementById(own).style.display = 'block';
         document.getElementById(other).style.display = 'none'
         document.getElementById(own + 'button').disabled = true;
+        document.getElementById(own + 'button').style.opacity = "0.5";
         document.getElementById(other + 'button').disabled = false;
+        document.getElementById(other + 'button').style.opacity = "1";
     }
 </script>
 

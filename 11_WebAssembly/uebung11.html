@@ -56,7 +56,7 @@
                 &nbsp;
                 <i class="fas fa-external-link-alt"></i></a></summary>
         <button id="gcdcodebutton" onclick="buttonChange('gcdcode','gcdcomp')">Code</button>
-        <button disabled id="gcdcompbutton" onclick="buttonChange('gcdcomp', 'gcdcode')">
+        <button style="opacity: 0.5" disabled id="gcdcompbutton" onclick="buttonChange('gcdcomp', 'gcdcode')">
             Komponente
         </button>
 
@@ -153,7 +153,7 @@
                 Since WASM is closer to the hardware and doesn't have to be interpreted, I expected it to be faster.
                     However, unlike JavaScript, it can't apply improvements (while compiling).</p>
                 <button id="bmcodebutton" onclick="buttonChange('bmcode','bmcomp')">Code</button>
-                <button disabled id="bmcompbutton" onclick="buttonChange('bmcomp', 'bmcode')">
+                <button style="opacity: 0.5" disabled id="bmcompbutton" onclick="buttonChange('bmcomp', 'bmcode')">
                     Komponente
                 </button>
                 <div id="bmcomp">
@@ -404,7 +404,9 @@
         document.getElementById(own).style.display = 'block';
         document.getElementById(other).style.display = 'none'
         document.getElementById(own + 'button').disabled = true;
+        document.getElementById(own + 'button').style.opacity = "0.5";
         document.getElementById(other + 'button').disabled = false;
+        document.getElementById(other + 'button').style.opacity = "1";
     }
 </script>
 
